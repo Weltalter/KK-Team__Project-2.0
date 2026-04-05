@@ -3,7 +3,7 @@ from Code.Logic.AccessPoint import AP
 
 class Runtime():
 	def __init__(self):
-		self.window = AP.Get_UI().MainWindow
+		self.window = AP.getUI().MainWindow
 
-	def Run(self):
+	def run(self):
 		self.window.show()

@@ -6,8 +6,9 @@ class Coordinate():
 	def __init__(self):
 		data = ConfigParser(interpolation=ExtendedInterpolation())
 		data.read("DataFile/Files.ini/Coordinate/MainWindow.ini", encoding='utf-8')
-		self.__MainWindow = AP.Get_Scripts().Data.items_to_dict(items=data.items('MainWindow'),
-														   		type=int)
+		self.__main_window = AP.getScripts().Data.itemsToDict(items=data.items('MainWindow'),
+														   	type=int,
+															coordinate_flag=True)
 
-	def get__MainWindow(self):
-		return self.__MainWindow
+	def get__main_window(self):
+		return self.__main_window

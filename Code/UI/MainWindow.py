@@ -8,17 +8,31 @@ from PyQt6.QtWidgets import (
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		self.setMinimumSize(AP.Get_Const().Coordinate.get__MainWindow()['window_minw'],
-							AP.Get_Const().Coordinate.get__MainWindow()['window_minh'])
-		self.setMaximumSize(AP.Get_Const().Coordinate.get__MainWindow()['window_maxw'],
-							AP.Get_Const().Coordinate.get__MainWindow()['window_maxh'])
-		self.setGeometry(AP.Get_Const().Coordinate.get__MainWindow()['window_x'],
-						 AP.Get_Const().Coordinate.get__MainWindow()['window_y'],
-						 AP.Get_Const().Coordinate.get__MainWindow()['window_w'],
-						 AP.Get_Const().Coordinate.get__MainWindow()['window_h'])
+		self.importData()
+		self.setWindowSize()
+		self.setCentralWidget(self.createUI())
 
-		self.setCentralWidget(self.build_window())
+	def importData(self):
+		self.UI_coordinate = AP.getConst().Coordinate
+		self.main_window_cor = self.UI_coordinate.get__main_window()
 
-	def build_window(self) -> QWidget:
+		self.UI_components = AP.getComponents()
+
+	def setWindowSize(self):
+		self.setMinimumSize(self.main_window_cor['window_minw'],
+							self.main_window_cor['window_minh'])
+		self.setMaximumSize(self.main_window_cor['window_maxw'],
+							self.main_window_cor['window_maxh'])
+		self.setGeometry(self.main_window_cor['window_x'],
+						 self.main_window_cor['window_y'],
+						 self.main_window_cor['window_w'],
+						 self.main_window_cor['window_h'])
+
+	def createUI(self) -> QWidget:
 		window = QWidget()
+
+		button = self.UI_components.IconButton(window)
+		button.setGeometry(0, 0, 100, 100)
+		button.setIcon(path_to_icon="trash.png")
+
 		return window
