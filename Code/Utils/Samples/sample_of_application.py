@@ -1,12 +1,17 @@
-from dataclasses import dataclass
-import copy
+from pydantic import BaseModel, model_validator
 
 
-@dataclass
-class ApplicationSample:
+class ApplicationSample(BaseModel):
     title: str = ''
     description: str = ''
     hashtags: list = None
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def post_init_logic(self):
         self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+
+        return self
+
+class ApplicationLibrary(BaseModel):
+    object_list: list[ApplicationSample]
+    

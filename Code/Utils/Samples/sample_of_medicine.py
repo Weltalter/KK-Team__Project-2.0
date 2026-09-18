@@ -1,10 +1,9 @@
-from dataclasses import dataclass
 from datetime import date
+from pydantic import BaseModel, model_validator
 from Code.Utils.Constants.sample_block import MedicineType, MedicineEffectSize
 
 
-@dataclass
-class MedicineSample:
+class MedicineSample(BaseModel):
     title: str = ''
     description: str = ''
     medicine_type: MedicineType = MedicineType.OTHER
@@ -15,6 +14,12 @@ class MedicineSample:
     instruction: str = ''
     hashtags: list = None
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def post_init_logic(self):
         self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+        
+        return self
+    
+class MedicineLibrary(BaseModel):
+    object_list: list[MedicineSample]
     

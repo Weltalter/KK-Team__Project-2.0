@@ -1,11 +1,10 @@
-from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
+from pydantic import BaseModel, model_validator
 from Code.Utils.Constants.sample_block import GameStatus, GameCoopStatus
 
 
-@dataclass
-class GameSample:
+class GameSample(BaseModel):
     title: str = ''
     poster: Path = None
     description: str = ''
@@ -17,7 +16,13 @@ class GameSample:
     genres: list = None
     hashtags: list = None
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def post_init_logic(self):
         self.genres = [] if self.genres is None else list(self.genres)
         self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+        
+        return self
+    
+class GameLibrary(BaseModel):
+    object_list: list[GameSample]
     

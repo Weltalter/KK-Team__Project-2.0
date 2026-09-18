@@ -1,14 +1,19 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, model_validator
 
 
-@dataclass
-class MovieSample:
+class WebsiteSample(BaseModel):
     title: str = ''
     url: str = ''
     description: str = ''
     vpn: bool = False
     hashtags: list = None
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def post_init_logic(self):
         self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+        
+        return self
+    
+class WebsiteLibrary(BaseModel):
+    object_list: list[WebsiteSample]
     

@@ -1,11 +1,10 @@
-from dataclasses import dataclass
 from datetime import time
 from pathlib import Path
+from pydantic import BaseModel, model_validator
 from Code.Utils.Constants.sample_block import DishType
 
 
-@dataclass
-class GameSample:
+class RecipeSample(BaseModel):
     title: str = ''
     poster: Path = None
     ingredients: list = None
@@ -15,7 +14,13 @@ class GameSample:
     preparation_time: time = time()
     hashtags: list = None
 
-    def __post_init__(self):
+    @model_validator(mode="after")
+    def post_init_logic(self):
         self.ingredients = [] if self.ingredients is None else list(self.ingredients)
         self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+        
+        return self
+    
+class RecipeLibrary(BaseModel):
+    object_list: list[RecipeSample]
     
