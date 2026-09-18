@@ -1,21 +1,5 @@
 from enum import Enum, unique
-from abc import ABC, abstractmethod
-from pydantic import BaseModel, model_validator
-from typing_extensions import Self
 
-
-class BaseSample(BaseModel, ABC):
-	@model_validator(mode="after")
-	def _run_custom_validation(self) -> Self:
-		self.post_init_logic()
-		return self
-
-	@abstractmethod
-	def post_init_logic(self) -> None:
-		pass
-
-class BaseLibrary(BaseModel, ABC):
-	object_list: list
 
 @unique
 class MovieStatus(Enum):
