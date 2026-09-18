@@ -1,9 +1,8 @@
 from pathlib import Path
-from pydantic import BaseModel, model_validator
-from Code.Utils.Constants.sample_block import BookStatus
+from Code.Utils.Constants.sample_block import BaseLibrary, BaseSample, BookStatus
 
 
-class BookSample(BaseModel):
+class BookSample(BaseSample):
 	title: str = ''
 	poster: Path = None
 	annotation: str = ''
@@ -15,13 +14,10 @@ class BookSample(BaseModel):
 	genres: list = None
 	hashtags: list = None
 
-	@model_validator(mode="after")
 	def post_init_logic(self):
 		self.authors = [] if self.authors is None else list(self.authors)
 		self.genres = [] if self.genres is None else list(self.genres)
 		self.hashtags = [] if self.hashtags is None else list(self.hashtags)
-		
-		return self
 
-class BookLibrary(BaseModel):
+class BookLibrary(BaseLibrary):
 	object_list: list[BookSample]

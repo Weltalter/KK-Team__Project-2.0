@@ -1,18 +1,15 @@
-from pydantic import BaseModel, model_validator
+from Code.Utils.Constants.sample_block import BaseLibrary, BaseSample
 
 
-class WebsiteSample(BaseModel):
+class WebsiteSample(BaseSample):
 	title: str = ''
 	url: str = ''
 	description: str = ''
 	vpn: bool = False
 	hashtags: list = None
 
-	@model_validator(mode="after")
 	def post_init_logic(self):
 		self.hashtags = [] if self.hashtags is None else list(self.hashtags)
-		
-		return self
 
-class WebsiteLibrary(BaseModel):
+class WebsiteLibrary(BaseLibrary):
 	object_list: list[WebsiteSample]

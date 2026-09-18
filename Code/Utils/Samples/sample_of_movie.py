@@ -1,10 +1,9 @@
 from datetime import time, date
 from pathlib import Path
-from pydantic import BaseModel, model_validator
-from Code.Utils.Constants.sample_block import MovieStatus
+from Code.Utils.Constants.sample_block import BaseLibrary, BaseSample, MovieStatus
 
 
-class MovieSample(BaseModel):
+class MovieSample(BaseSample):
 	title: str = ''
 	poster: Path = None
 	description: str = ''
@@ -18,14 +17,11 @@ class MovieSample(BaseModel):
 	genres: list = None
 	hashtags: list = None
 
-	@model_validator(mode="after")
 	def post_init_logic(self):
 		self.actors = [] if self.actors is None else list(self.actors)
 		self.directors = [] if self.directors is None else list(self.directors)
 		self.genres = [] if self.genres is None else list(self.genres)
 		self.hashtags = [] if self.hashtags is None else list(self.hashtags)
-		
-		return self
 
-class MovieLibrary(BaseModel):
+class MovieLibrary(BaseLibrary):
 	object_list: list[MovieSample]
