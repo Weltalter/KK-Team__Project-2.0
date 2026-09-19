@@ -6,7 +6,6 @@ from typing_extensions import Self
 from Code.Utils.Constants.enum import *
 
 
-
 class BaseSample(BaseModel, ABC):
 	@model_validator(mode="after")
 	def _run_custom_validation(self) -> Self:
