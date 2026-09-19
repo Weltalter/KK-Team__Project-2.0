@@ -2,6 +2,7 @@ from pathlib import Path
 from pydantic import BaseModel
 from pydantic._internal._model_construction import ModelMetaclass
 from Code.Utils.samples import *
+from Code.Utils.Scripts.id_generator import IdGenerator
 
 
 class LibrarySingletonMeta(ModelMetaclass):
@@ -13,6 +14,8 @@ class LibrarySingletonMeta(ModelMetaclass):
 		return cls._instances[cls]
 
 class LibraryActions():
+	__id_generator: IdGenerator = IdGenerator()
+
 	def export_data(self, file_name: str):
 		json_data = self.model_dump_json()
 
@@ -29,24 +32,31 @@ class LibraryActions():
 
 		return self.model_validate_json(json_data)
 
+	def add(self, sample: BaseSample):
+		sample.sample_id = self.__id_generator.get_id()
+		self.objects[sample.sample_id] = sample
+
+	def remove(self, sample_id: int):
+		self.__id_generator.release_id(sample_id)
+		return self.objects.pop(sample_id, None)
 
 class ApplicationLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[ApplicationSample] = []
+	objects: dict[int, ApplicationSample] = {}
 
 class BookLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[BookSample] = []
+	objects: dict[int, BookSample] = {}
 
 class GameLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[GameSample] = []
+	objects: dict[int, GameSample] = {}
 
 class MedicineLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[MedicineSample] = []
+	objects: dict[int, MedicineSample] = {}
 
 class MovieLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[MovieSample] = []
+	objects: dict[int, MovieSample] = {}
 
 class RecipeLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[RecipeSample] = []
+	objects: dict[int, RecipeSample] = {}
 
 class WebsiteLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
-	object_list: list[WebsiteSample] = []
+	objects: dict[int, WebsiteSample] = {}

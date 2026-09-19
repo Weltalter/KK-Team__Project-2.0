@@ -7,6 +7,7 @@ from Code.Utils.Constants.enum import *
 
 
 class BaseSample(BaseModel, ABC):
+	sample_id: int = None
 	@model_validator(mode="after")
 	def _run_custom_validation(self) -> Self:
 		self.post_init_logic()
