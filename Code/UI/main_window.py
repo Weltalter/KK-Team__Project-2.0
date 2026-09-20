@@ -10,15 +10,13 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.UI.Component.icon_button import IconButton
+from Code.UI.Component.theme_dropdown import ThemeDropdown
 
 
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		self.setWindowFlags(
-			Qt.WindowType.FramelessWindowHint #| 
-			#Qt.WindowType.WindowStaysOnTopHint
-		)
+		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
 		self.setCentralWidget(self.build_window())
@@ -35,25 +33,21 @@ class MainWindow(QMainWindow):
 		sidebar_widget.setStyleSheet("background-color: #606060;")
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(120))
 
-		btn_setting = IconButton(sidebar_widget)
+		btn_setting = IconButton(path_to_icon="./DataFile/Files.img/temp files/settings.svg", parent=sidebar_widget)
 		#btn_setting.clicked.connect(self.close)
 		btn_setting.setGeometry(*MathScripts.coordinate_scaling(20, 20, 80, 80))
-		btn_setting.setIcon(path_to_icon="./DataFile/Files.img/temp files/settings.svg")
 		
-		btn_export = IconButton(sidebar_widget)
+		btn_export = IconButton(path_to_icon="./DataFile/Files.img/temp files/upload-3.svg", parent=sidebar_widget)
 		#btn_export.clicked.connect(self.close)
 		btn_export.setGeometry(*MathScripts.coordinate_scaling(20, 120, 80, 80))
-		btn_export.setIcon(path_to_icon="./DataFile/Files.img/temp files/upload-3.svg")
 		
-		btn_import = IconButton(sidebar_widget)
+		btn_import = IconButton(path_to_icon="./DataFile/Files.img/temp files/download-8.svg", parent=sidebar_widget)
 		#btn_import.clicked.connect(self.close)
 		btn_import.setGeometry(*MathScripts.coordinate_scaling(20, 220, 80, 80))
-		btn_import.setIcon(path_to_icon="./DataFile/Files.img/temp files/download-8.svg")
 		
-		btn_close = IconButton(sidebar_widget)
+		btn_close = IconButton(path_to_icon="./DataFile/Files.img/temp files/create-note.svg", parent=sidebar_widget)
 		btn_close.clicked.connect(self.close)
 		btn_close.setGeometry(*MathScripts.coordinate_scaling(20, 700, 80, 80))
-		btn_close.setIcon(path_to_icon="./DataFile/Files.img/temp files/create-note.svg")
 		
 		main_layout.addWidget(sidebar_widget)
 		#endregion
@@ -69,6 +63,18 @@ class MainWindow(QMainWindow):
 		header_widget.setObjectName("Header")
 		header_widget.setStyleSheet("background-color: #1734cc;") 
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(60)) 
+
+		header_layout = QHBoxLayout(header_widget)
+		
+		padding = MathScripts.coordinate_scaling(10)[0]
+		header_layout.setContentsMargins(padding, padding, padding, padding)
+		header_layout.setSpacing(0)
+
+		scaled_size = MathScripts.coordinate_scaling(40)[0]
+		btn_theme = ThemeDropdown(size=scaled_size)
+
+		header_layout.addStretch()
+		header_layout.addWidget(btn_theme)
 		
 		body_layout.addWidget(header_widget)
 		#endregion
