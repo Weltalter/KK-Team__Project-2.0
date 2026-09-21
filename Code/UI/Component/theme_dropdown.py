@@ -1,9 +1,7 @@
 import time
-from PyQt6.QtGui import QRegion, QPixmap, QPainter, QPen
-from PyQt6.QtCore import Qt, QThread, QObject, pyqtSignal
+from PyQt6.QtCore import QThread, QObject, pyqtSignal
 from PyQt6.sip import isdeleted
-from Code.Utils.Scripts.math_scripts import MathScripts
-from Code.UI.Component.rounded_button import RoundedButton
+from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
 # ==========================================
@@ -29,86 +27,9 @@ class TimerWorker(QObject):
 	def stop(self):
 		self.is_running = False
 
-class ThemeButton(RoundedButton):
-	def __init__(self, size: int = 20, path_to_icon: str = None, parent=None):
-		super().__init__(size=size, parent=parent)
-		
-		self._current_pixmap = None
-		self._base_pixmap = None
-		self._hover_pixmap = None
-		self._pressed_pixmap = None
-
-		if path_to_icon:
-			self.setIcon(path_to_icon)
-
-	def setIcon(self, path_to_icon: str):
-		base = QPixmap(path_to_icon)
-		if base.isNull():
-			return
-		
-		self._base_pixmap = base.scaled(
-			self.size(), 
-			Qt.AspectRatioMode.IgnoreAspectRatio, 
-			Qt.TransformationMode.SmoothTransformation
-		)
-		
-		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, 0.85)
-		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, 0.70)
-		
-		self._current_pixmap = self._base_pixmap
-		self.update()
-
-	def paintEvent(self, event):
-		painter = QPainter(self)
-		painter.setRenderHint(QPainter.RenderHint.Antialiasing) # Включаем идеальное сглаживание
-		
-		if self._current_pixmap:
-			painter.save()
-			
-			clip_region = QRegion(1, 1, self.width() - 2, self.height() - 2, QRegion.RegionType.Ellipse)
-			painter.setClipRegion(clip_region)
-			
-			x = (self.width() - self._current_pixmap.width()) // 2
-			y = (self.height() - self._current_pixmap.height()) // 2
-			painter.drawPixmap(x, y, self._current_pixmap)
-			
-			painter.restore()
-		
-		pen = QPen(Qt.GlobalColor.black, 2)
-		painter.setPen(pen)
-		
-		painter.drawEllipse(1, 1, self.width() - 2, self.height() - 2)
-		
-		painter.end()
-
-	def enterEvent(self, event):
-		super().enterEvent(event)
-		if self._hover_pixmap:
-			self._current_pixmap = self._hover_pixmap
-			self.update()
-
-	def leaveEvent(self, event):
-		super().leaveEvent(event)
-		if self._base_pixmap:
-			self._current_pixmap = self._base_pixmap
-			self.update()
-
-	def mousePressEvent(self, event):
-		if event.button() == Qt.MouseButton.LeftButton:
-			if self._pressed_pixmap:
-				self._current_pixmap = self._pressed_pixmap
-				self.update()
-		super().mousePressEvent(event)
-
-	def mouseReleaseEvent(self, event):
-		super().mouseReleaseEvent(event)
-		if self._hover_pixmap:
-			self._current_pixmap = self._hover_pixmap
-			self.update()
-
-class ThemeSubButton(ThemeButton):
+class ThemeSubButton(RoundedIconButton):
 	def __init__(self, theme_id: int = 0, size: int = 20, path_to_icon: str = None, theme_button=None, parent=None):
-		super().__init__(size=size, path_to_icon=path_to_icon, parent=parent)
+		super().__init__(width=size, height=size, radius=size//2, path_to_icon=path_to_icon, parent=parent)
 		self.id = theme_id
 		self.theme_button = theme_button
 		
@@ -117,9 +38,9 @@ class ThemeSubButton(ThemeButton):
 	def __pick_theme(self):
 		self.theme_button.change_theme(self.id)
 
-class ThemeDropdown(ThemeButton):
+class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
-		super().__init__(size=size, parent=parent)
+		super().__init__(width=size, height=size, radius=size//2, parent=parent)
 		
 		self.__size = size
 		self.__drop_thread = None
@@ -189,6 +110,8 @@ class ThemeDropdown(ThemeButton):
 			del self.__spawned_btn[key]
 
 	def change_theme(self, theme_id: int):
+		if self.__drop_thread and not isdeleted(self.__drop_thread) and self.__drop_thread.isRunning():
+			self.__drop_worker.stop()
 		self.current_theme_icon = self.__icons[theme_id]
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.__hide_theme_subbutton()

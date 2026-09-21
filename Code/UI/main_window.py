@@ -14,6 +14,7 @@ from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
+from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
 
 
 class MainWindow(QMainWindow):
@@ -92,57 +93,12 @@ class MainWindow(QMainWindow):
 		# ========================================================
 		# 1. ЗАДАЕМ ОТСТУПЫ 40 ПИКСЕЛЕЙ ОТ КРАЕВ С УЧЕТОМ МАСШТАБА
 		# ========================================================
-		margin_40 = MathScripts.coordinate_scaling(40)[0]
-		content_layout.setContentsMargins(margin_40, margin_40, margin_40, margin_40)
+		content_layout.setContentsMargins(*MathScripts.coordinate_scaling(40, 40, 40, 40))
 		content_layout.setSpacing(0)
 
 		# Создаем QScrollArea (область прокрутки)
-		scroll_area = QScrollArea()
-		scroll_area.setWidgetResizable(True)
-		
-		scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-		scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-		scroll_area.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
-
-		scroll_content = QWidget()
-		scroll_content.setStyleSheet("background-color: transparent;")
-
-		# Внутренние отступы самого скролла сбрасываем в 0, 
-		# так как внешние 40 пикселей мы уже настроили в content_layout
-		scroll_layout = QHBoxLayout(scroll_content)
-		scroll_layout.setContentsMargins(0, 0, 0, 0)
-		scroll_layout.setSpacing(15)
-
-		btn_w, btn_h = MathScripts.coordinate_scaling(265, 600)
-
-		for i in range(1, 8):
-			btn = IconButton(path_to_icon="./DataFile/Files.img/temp files/right-square.svg")
-			btn.clicked.connect(lambda checked, num=i: print(f"Клик по кнопке {num}!"))
-			btn.setFixedSize(btn_w, btn_h)
-			scroll_layout.addWidget(btn)
-
-		scroll_area.setWidget(scroll_content)
-
-		# Высоту скролла делаем строго равной высоте кнопок, 
-		# так как отступы теперь контролируются внешним макетом
-		scroll_area.setFixedHeight(btn_h)
-
-		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---
-		QScroller.grabGesture(
-			scroll_area.viewport(), 
-			QScroller.ScrollerGestureType.LeftMouseButtonGesture
-		)
-		scroller = QScroller.scroller(scroll_area.viewport())
-		props = QScrollerProperties()
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, 0.15)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, 0.25)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, 0.5)
-		scroller.setScrollerProperties(props)
-
-		# ========================================================
-		# 2. УБИРАЕМ ALIGNMENT, ЧТОБЫ СКРОЛЛ РАСТЯНУЛСЯ ПО ШИРИНЕ
-		# ========================================================
-		content_layout.addWidget(scroll_area)
+		mm_scroll_area = MainMenuScrollArea(parent=content_widget)
+		content_layout.addWidget(mm_scroll_area)
 		
 		body_layout.addWidget(content_widget)
 		#endregion
