@@ -17,6 +17,23 @@ from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
+class SwipeWidget(QWidget):
+	def __init__(self, parent=None):
+		super().__init__(parent=parent)
+		self.setStyleSheet("background-color: transparent;")
+		
+		self.layout = QVBoxLayout(parent)
+		self.layout.setContentsMargins(0, 0, 0, 0)
+		self.layout.setSpacing(15)
+	
+	def set_button(self, width: int = 20, height: int = 20, radius: int = 10, path_to_icon="./DataFile/Files.img/ThemeIcons/reload.svg"):
+		btn = RoundedIconButton(width=width, height=height, radius=radius, path_to_icon=path_to_icon)
+		self.layout.addWidget(btn)
+
+	def set_label(self, text: str = ''):
+		lbl = QLabel(text)
+		self.layout.addWidget(lbl)
+
 class MainMenuScrollArea(QScrollArea):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
@@ -54,10 +71,13 @@ class MainMenuScrollArea(QScrollArea):
 		scroll_layout.setSpacing(15)
 
 		for i in range(1, 8):
-			btn = RoundedIconButton(width=btn_w, height=btn_h, radius=50, path_to_icon="./DataFile/Files.img/ThemeIcons/reload.svg")
-			btn.clicked.connect(lambda checked, num=i: print(f"Клик по кнопке {btn.width()} {btn.height()}!"))
-
-			scroll_layout.addWidget(btn)
+			sw = SwipeWidget(scroll_content)
+			sw.set_button(width=btn_w, height=btn_h, radius=50, path_to_icon="./DataFile/Files.img/ThemeIcons/reload.svg")
+			sw.set_label(text='pssss')
+			scroll_layout.addWidget(sw)
+			#btn = RoundedIconButton(width=btn_w, height=btn_h, radius=50, path_to_icon="./DataFile/Files.img/ThemeIcons/reload.svg")
+			#btn.clicked.connect(lambda checked, num=i: print(f"Клик по кнопке {btn.width()} {btn.height()}!"))
+			#scroll_layout.addWidget(btn)
 
 		
 		self.setWidget(scroll_content)
