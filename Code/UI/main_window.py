@@ -34,7 +34,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 1: Боковое меню (Sidebar)
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
-		sidebar_widget.setStyleSheet("background-color: #606060;")
+		sidebar_widget.setStyleSheet("background-color: #20cd8d;")
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(120))
 
 		btn_setting = IconButton(path_to_icon="./DataFile/Files.img/temp files/settings.svg", parent=sidebar_widget)
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 2: Верхняя панель (Header)
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
-		header_widget.setStyleSheet("background-color: #1734cc;") 
+		header_widget.setStyleSheet("background-color: #172627;") 
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(60)) 
 
 		header_layout = QHBoxLayout(header_widget)
@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 3: Главный контент (Main Content)
 		content_widget = QWidget()
 		content_widget.setObjectName("Content")
-		content_widget.setStyleSheet("background-color: #2ecc71;")
+		content_widget.setStyleSheet("background-color: #172627;")
 
 		content_layout = QHBoxLayout(content_widget)
 		
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 4: Нижняя панель (Footer)
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
-		footer_widget.setStyleSheet("background-color: #e74c3c;") 
+		footer_widget.setStyleSheet("background-color: #172627;") 
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(40))
 
 		footer_layout = QVBoxLayout(footer_widget)

@@ -59,7 +59,7 @@ class MainMenuScrollArea(QScrollArea):
 		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---
 		QScroller.grabGesture(
 			self.viewport(),
-			QScroller.ScrollerGestureType.LeftMouseButtonGesture
+			QScroller.ScrollerGestureType.MiddleMouseButtonGesture
 		)
 		scroller = QScroller.scroller(self.viewport())
 		props = QScrollerProperties()
@@ -67,15 +67,17 @@ class MainMenuScrollArea(QScrollArea):
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, 0.25)
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, 0.5)
 		scroller.setScrollerProperties(props)
-		
-		self.__swipes: dict[int, str] = {
-			0: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Фильмы"),
-			1: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Игры"),
-			2: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Рецепты"),
-			3: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Книги"),
-			4: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Лекарства"),
-			5: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Сайты"),
-			6: ("./DataFile/Files.img/ThemeIcons/reload.svg", "Приложения"),
+
+		self.__swipes_link: dict[int, SwipeWidget] = {}
+		self.__swipes_info: dict[int, str] = {
+			0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Фильмы"),
+			1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Игры"),
+			2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Рецепты"),
+			3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Книги"),
+			4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Лекарства"),
+			5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Сайты"),
+			6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Приложения"),
+			7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Счета"),
 		}
 
 	def resizeEvent(self, event):
@@ -94,11 +96,15 @@ class MainMenuScrollArea(QScrollArea):
 		scroll_layout.setContentsMargins(0, 0, 0, 0)
 		scroll_layout.setSpacing(15)
 		
-		for i in range(7):
-			sw = SwipeWidget(scroll_content)
-			sw.setFixedSize(card_w, card_h)
-			sw.set_button(width=btn_w, height=btn_h, radius=45, path_to_icon=self.__swipes[i][0])
-			sw.set_label(text=self.__swipes[i][1])
-			scroll_layout.addWidget(sw)
+		for i in range(8):
+			if self.__swipes_link.get(i) is not None:
+				self.__swipes_link[i].show()
+			else:
+				sw = SwipeWidget(scroll_content)
+				sw.setFixedSize(card_w, card_h)
+				sw.set_button(width=btn_w, height=btn_h, radius=45, path_to_icon=self.__swipes_info[i][0])
+				sw.set_label(text=self.__swipes_info[i][1])
+				self.__swipes_link[i] = sw
+				scroll_layout.addWidget(self.__swipes_link[i])
 		
 		self.setWidget(scroll_content)
