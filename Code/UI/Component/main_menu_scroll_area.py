@@ -1,4 +1,3 @@
-import os
 from PyQt6.QtWidgets import (
 	QWidget,
 	QVBoxLayout,
@@ -9,14 +8,15 @@ from PyQt6.QtWidgets import (
 	QScrollerProperties,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFontDatabase, QFont
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.theme import Theme
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
 class SwipeWidget(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
+		self.theme = Theme()
 		self.setStyleSheet("background-color: transparent;")
 		
 		self.swipe_layout = QVBoxLayout(self)
@@ -33,21 +33,28 @@ class SwipeWidget(QWidget):
 	def set_label(self, text: str = ''):
 		self.lbl = QLabel(text)
 		self.lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-		font_size = MathScripts.coordinate_scaling(24)[0]
-		font_path = os.path.abspath("./DataFile/Files.font/Shantell Sans/ShantellSans-Medium.ttf")
+
+		self.lbl.setFont(self.theme.get_title_font())
 		
-		font_id = QFontDatabase.addApplicationFont(font_path)
-		font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-		
-		font = QFont(font_family, font_size)
-		font.setWeight(QFont.Weight.Medium)
-		self.lbl.setFont(font)
-		
-		self.lbl.setStyleSheet("QLabel { color: #ffffff; }")
+		self.lbl.setStyleSheet(f"QLabel {{ color: {self.theme.font_color}; }}")
 
 		self.swipe_layout.addWidget(self.lbl)
 
 class MainMenuScrollArea(QScrollArea):
+	__swipes_link: dict[int, SwipeWidget] = {}
+	__swipes_info: dict[int, str] = {
+		0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Фильмы"),
+		1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Игры"),
+		2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Рецепты"),
+		3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Книги"),
+		4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Лекарства"),
+		5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Сайты"),
+		6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Приложения"),
+		7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Счета"),
+	}
+	swipes_radius: int = 45
+	swipes_width: int = 265
+
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
 		self.setWidgetResizable(True)
@@ -68,41 +75,27 @@ class MainMenuScrollArea(QScrollArea):
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, 0.5)
 		scroller.setScrollerProperties(props)
 
-		self.__swipes_link: dict[int, SwipeWidget] = {}
-		self.__swipes_info: dict[int, str] = {
-			0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Фильмы"),
-			1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Игры"),
-			2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Рецепты"),
-			3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Книги"),
-			4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Лекарства"),
-			5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Сайты"),
-			6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Приложения"),
-			7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Счета"),
-		}
-
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
 		
-		card_w = btn_w = MathScripts.coordinate_scaling(265)[0]
+		card_w = btn_w = MathScripts.coordinate_scaling(self.swipes_width)[0]
 		card_h = self.viewport().height()
 		btn_h = card_h - 30
 		
 		scroll_content = QWidget()
 		scroll_content.setStyleSheet("background-color: transparent;")
 		
-		# Внутренние отступы самого скролла сбрасываем в 0, 
-		# так как внешние 40 пикселей мы уже настроили в content_layout
 		scroll_layout = QHBoxLayout(scroll_content)
 		scroll_layout.setContentsMargins(0, 0, 0, 0)
 		scroll_layout.setSpacing(15)
 		
-		for i in range(8):
+		for i in range(len(self.__swipes_info)):
 			if self.__swipes_link.get(i) is not None:
 				self.__swipes_link[i].show()
 			else:
 				sw = SwipeWidget(scroll_content)
 				sw.setFixedSize(card_w, card_h)
-				sw.set_button(width=btn_w, height=btn_h, radius=45, path_to_icon=self.__swipes_info[i][0])
+				sw.set_button(width=btn_w, height=btn_h, radius=self.swipes_radius, path_to_icon=self.__swipes_info[i][0])
 				sw.set_label(text=self.__swipes_info[i][1])
 				self.__swipes_link[i] = sw
 				scroll_layout.addWidget(self.__swipes_link[i])

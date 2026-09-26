@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.theme import Theme
 from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
 from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
@@ -20,6 +21,7 @@ from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
+		self.theme = Theme()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
@@ -34,7 +36,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 1: Боковое меню (Sidebar)
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
-		sidebar_widget.setStyleSheet("background-color: #20cd8d;")
+		sidebar_widget.setStyleSheet(f"background-color: {self.theme.sub_background_color};")
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(120))
 
 		btn_setting = IconButton(path_to_icon="./DataFile/Files.img/temp files/settings.svg", parent=sidebar_widget)
@@ -65,7 +67,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 2: Верхняя панель (Header)
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
-		header_widget.setStyleSheet("background-color: #172627;") 
+		header_widget.setStyleSheet(f"background-color: {self.theme.main_background_color};") 
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(60)) 
 
 		header_layout = QHBoxLayout(header_widget)
@@ -86,7 +88,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 3: Главный контент (Main Content)
 		content_widget = QWidget()
 		content_widget.setObjectName("Content")
-		content_widget.setStyleSheet("background-color: #172627;")
+		content_widget.setStyleSheet(f"background-color: {self.theme.main_background_color};")
 
 		content_layout = QHBoxLayout(content_widget)
 		
@@ -106,7 +108,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 4: Нижняя панель (Footer)
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
-		footer_widget.setStyleSheet("background-color: #172627;") 
+		footer_widget.setStyleSheet(f"background-color: {self.theme.main_background_color};") 
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(40))
 
 		footer_layout = QVBoxLayout(footer_widget)

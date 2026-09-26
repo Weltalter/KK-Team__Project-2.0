@@ -1,13 +1,16 @@
-from PyQt6.QtGui import QPixmap, QPainter, QPen, QPainterPath
+from PyQt6.QtGui import QPixmap, QPainter, QPen, QColor, QPainterPath
 from PyQt6.QtCore import Qt, QRectF
 from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.theme import Theme
 
 
 class RoundedIconButton(QPushButton):
 	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, path_to_icon: str = None, parent=None):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)
+
+		self.theme = Theme()
 
 		self.radius = radius
 		self._current_pixmap = None
@@ -53,7 +56,7 @@ class RoundedIconButton(QPushButton):
 			painter.drawPixmap(x, y, self._current_pixmap)
 			painter.restore()
 		
-		pen = QPen(Qt.GlobalColor.black, 2)
+		pen = QPen(QColor(self.theme.main_border_color), 2)
 		painter.setPen(pen)
 		
 		painter.drawPath(path)
