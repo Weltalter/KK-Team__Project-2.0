@@ -112,7 +112,11 @@ class MainWindow(QMainWindow):
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(40))
 
 		footer_layout = QVBoxLayout(footer_widget)
-		footer_layout.addWidget(QLabel("Версия и создатели"), alignment=Qt.AlignmentFlag.AlignRight)
+
+		creator_lbl = QLabel("Версия и создатели")
+		creator_lbl.setFont(self.theme.get_main_font(14))
+		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.theme.font_color}; }}")
+		footer_layout.addWidget(creator_lbl, alignment=Qt.AlignmentFlag.AlignRight)
 		
 		body_layout.addWidget(footer_widget)
 		#endregion

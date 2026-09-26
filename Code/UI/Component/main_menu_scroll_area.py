@@ -34,7 +34,7 @@ class SwipeWidget(QWidget):
 		self.lbl = QLabel(text)
 		self.lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-		self.lbl.setFont(self.theme.get_title_font())
+		self.lbl.setFont(self.theme.get_main_font(font_size=24))
 		
 		self.lbl.setStyleSheet(f"QLabel {{ color: {self.theme.font_color}; }}")
 
