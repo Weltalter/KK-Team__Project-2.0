@@ -14,10 +14,10 @@ class TimerWorker(QObject):
 	def __init__(self, theme_count):
 		super().__init__()
 		self.is_running = True
-		self.theme_count = theme_count
+		self.__theme_count = theme_count
 
 	def run(self):
-		for i in range(1, self.theme_count):
+		for i in range(1, self.__theme_count):
 			if self.is_running:
 				self.spawn_button_signal.emit(i)
 				time.sleep(0.1)
@@ -31,12 +31,12 @@ class ThemeSubButton(RoundedIconButton):
 	def __init__(self, theme_id: int = 0, size: int = 20, path_to_icon: str = None, theme_button=None, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, path_to_icon=path_to_icon, parent=parent)
 		self.id = theme_id
-		self.theme_button = theme_button
+		self.__theme_button = theme_button
 		
 		self.clicked.connect(self.__pick_theme)
 
 	def __pick_theme(self):
-		self.theme_button.change_theme(self.id)
+		self.__theme_button.change_theme(self.id)
 
 class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):

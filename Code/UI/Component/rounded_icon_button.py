@@ -10,7 +10,7 @@ class RoundedIconButton(QPushButton):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)
 
-		self.theme = Theme()
+		self.__theme = Theme()
 
 		self.radius = radius
 		self._current_pixmap = None
@@ -56,7 +56,7 @@ class RoundedIconButton(QPushButton):
 			painter.drawPixmap(x, y, self._current_pixmap)
 			painter.restore()
 		
-		pen = QPen(QColor(self.theme.main_border_color), 2)
+		pen = QPen(QColor(self.__theme.main_border_color), 2)
 		painter.setPen(pen)
 		
 		painter.drawPath(path)

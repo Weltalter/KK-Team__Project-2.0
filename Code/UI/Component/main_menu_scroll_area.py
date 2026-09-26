@@ -10,13 +10,14 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.setting import Setting
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
 class SwipeWidget(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
-		self.theme = Theme()
+		self.__theme = Theme()
 		self.setStyleSheet("background-color: transparent;")
 		
 		self.swipe_layout = QVBoxLayout(self)
@@ -34,9 +35,9 @@ class SwipeWidget(QWidget):
 		self.lbl = QLabel(text)
 		self.lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-		self.lbl.setFont(self.theme.get_main_font(font_size=24))
+		self.lbl.setFont(self.__theme.get_main_font(font_size=24))
 		
-		self.lbl.setStyleSheet(f"QLabel {{ color: {self.theme.font_color}; }}")
+		self.lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
 
 		self.swipe_layout.addWidget(self.lbl)
 
@@ -57,6 +58,7 @@ class MainMenuScrollArea(QScrollArea):
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
+		self.__setting = Setting()
 		self.setWidgetResizable(True)
 		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -70,9 +72,9 @@ class MainMenuScrollArea(QScrollArea):
 		)
 		scroller = QScroller.scroller(self.viewport())
 		props = QScrollerProperties()
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, 0.15)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, 0.25)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, 0.5)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, self.__setting.MaximumVelocity)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self.__setting.DecelerationFactor)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self.__setting.MousePressEventDelay)
 		scroller.setScrollerProperties(props)
 
 	def resizeEvent(self, event):
