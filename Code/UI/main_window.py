@@ -9,6 +9,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.message import Message
 from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
 from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
@@ -18,6 +19,7 @@ class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		self.__theme = Theme()
+		self.__message = Message()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
@@ -109,7 +111,7 @@ class MainWindow(QMainWindow):
 
 		footer_layout = QVBoxLayout(footer_widget)
 
-		creator_lbl = QLabel("Версия и создатели")
+		creator_lbl = QLabel(self.__message.version)
 		creator_lbl.setFont(self.__theme.get_main_font(14))
 		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
 		footer_layout.addWidget(creator_lbl, alignment=Qt.AlignmentFlag.AlignRight)

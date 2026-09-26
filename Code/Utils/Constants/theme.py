@@ -7,8 +7,6 @@ from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
 
 
-
-
 class Theme(metaclass=MetaSingleton):
 	def __init__(self):
 		file_path = Path().theme_path

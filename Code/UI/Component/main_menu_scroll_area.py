@@ -11,6 +11,7 @@ from PyQt6.QtCore import Qt
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.setting import Setting
+from Code.Utils.Constants.message import Message
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
@@ -43,27 +44,30 @@ class SwipeWidget(QWidget):
 
 class MainMenuScrollArea(QScrollArea):
 	__swipes_link: dict[int, SwipeWidget] = {}
-	__swipes_info: dict[int, str] = {
-		0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Фильмы"),
-		1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Игры"),
-		2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Рецепты"),
-		3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Книги"),
-		4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Лекарства"),
-		5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Сайты"),
-		6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Приложения"),
-		7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", "Счета"),
-	}
-	swipes_radius: int = 45
-	swipes_width: int = 265
+
+	__swipes_radius: int = 45
+	__swipes_width: int = 265
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
 		self.__setting = Setting()
+		self.__message = Message()
 		self.setWidgetResizable(True)
 		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
+
+		self.__swipes_info: dict[int, str] = {
+			0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_0),
+			1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_1),
+			2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_2),
+			3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_3),
+			4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_4),
+			5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_5),
+			6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_6),
+			7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_7),
+		}
 
 		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---
 		QScroller.grabGesture(
@@ -80,7 +84,7 @@ class MainMenuScrollArea(QScrollArea):
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
 		
-		card_w = btn_w = MathScripts.coordinate_scaling(self.swipes_width)[0]
+		card_w = btn_w = MathScripts.coordinate_scaling(self.__swipes_width)[0]
 		card_h = self.viewport().height()
 		btn_h = card_h - 30
 		
@@ -97,7 +101,7 @@ class MainMenuScrollArea(QScrollArea):
 			else:
 				sw = SwipeWidget(scroll_content)
 				sw.setFixedSize(card_w, card_h)
-				sw.set_button(width=btn_w, height=btn_h, radius=self.swipes_radius, path_to_icon=self.__swipes_info[i][0])
+				sw.set_button(width=btn_w, height=btn_h, radius=self.__swipes_radius, path_to_icon=self.__swipes_info[i][0])
 				sw.set_label(text=self.__swipes_info[i][1])
 				self.__swipes_link[i] = sw
 				scroll_layout.addWidget(self.__swipes_link[i])

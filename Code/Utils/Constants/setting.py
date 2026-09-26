@@ -14,6 +14,7 @@ class Setting(metaclass=MetaSingleton):
 	def __read_conf(self):
 		if 'currect' in self.__config:
 			self.theme = self.__config.get('currect', 'theme')
+			self.language = self.__config.get('currect', 'language')
 			self.MaximumVelocity = self.__config.getfloat('currect', 'MaximumVelocity', fallback=0.15)
 			self.DecelerationFactor = self.__config.getfloat('currect', 'DecelerationFactor', fallback=0.25)
 			self.MousePressEventDelay = self.__config.getfloat('currect', 'MousePressEventDelay', fallback=0.5)
