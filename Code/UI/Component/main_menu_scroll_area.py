@@ -52,7 +52,7 @@ class MainMenuScrollArea(QScrollArea):
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
-		logging.info('Инициализация виджета "MainMenuScrollArea"...')
+		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
 		self.__setting = Setting()
 		self.__message = Message()
 		self.__icon = Icon()
@@ -84,7 +84,7 @@ class MainMenuScrollArea(QScrollArea):
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self.__setting.deceleration_factor)
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self.__setting.mouse_press_event_delay)
 		scroller.setScrollerProperties(props)
-		logging.info('Инициализация виджета "MainMenuScrollArea" завершена')
+		logging.info('Виджет "MainMenuScrollArea": Инициализация завершена')
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)

@@ -19,7 +19,7 @@ class Logger():
 		
 		logger.handlers.clear()
 
-		log_format = '%(asctime)s | %(levelname)-7s | %(file_and_line)s > %(message)s'
+		log_format = '%(asctime)s | %(levelname)-8s | %(file_and_line)s > %(message)s'
 		formatter = ColumnAlignedFormatter(log_format, datefmt='%Y-%m-%d %H:%M:%S')
 
 		file_name = f'Logs/{datetime.now().strftime("%d.%m.%Y_%H-%M-%S.log")}'

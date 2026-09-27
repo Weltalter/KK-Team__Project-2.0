@@ -10,7 +10,7 @@ from Code.Utils.Constants.setting import Setting
 
 class Theme(metaclass=MetaSingleton):
 	def __init__(self):
-		logging.info('Инициализация модуля Theme...')
+		logging.info('Модуль "Theme": Инициализация...')
 		file_path = Path().theme_path
 		self.font_dir_path = Path().font_dir_path
 
@@ -19,7 +19,7 @@ class Theme(metaclass=MetaSingleton):
 		self.__config.read(file_path, encoding='utf-8')
 
 		self.__read_conf()
-		logging.info('Инициализация модуля Theme завершена')
+		logging.info('Модуль "Theme": Инициализация завершена')
 
 	def __read_conf(self):
 		if 'font_styles' in self.__config:

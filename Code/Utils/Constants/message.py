@@ -7,7 +7,7 @@ from Code.Utils.Constants.setting import Setting
 
 class Message(metaclass=MetaSingleton):
 	def __init__(self):
-		logging.info('Инициализация модуля Message...')
+		logging.info('Модуль "Message": Инициализация...')
 		file_path = Path().language_path
 
 		self.__current_language = Setting().language
@@ -15,7 +15,7 @@ class Message(metaclass=MetaSingleton):
 		self.__config.read(f'{file_path}/{self.__current_language}.ini', encoding='utf-8')
 
 		self.__read_conf()
-		logging.info('Инициализация модуля Message завершена')
+		logging.info('Модуль "Message": Инициализация завершена')
 
 	def __read_conf(self):
 		if 'main_menu' in self.__config:

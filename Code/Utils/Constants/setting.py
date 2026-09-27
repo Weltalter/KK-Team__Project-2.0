@@ -6,13 +6,13 @@ from Code.Utils.Constants.path import Path
 
 class Setting(metaclass=MetaSingleton):
 	def __init__(self):
-		logging.info('Инициализация модуля Setting...')
+		logging.info('Модуль "Setting": Инициализация...')
 		file_path = Path().setting_path
 		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
 		self.__config.read(file_path, encoding='utf-8')
 
 		self.__read_conf()
-		logging.info('Инициализация модуля Setting завершена')
+		logging.info('Модуль "Setting": Инициализация завершена')
 
 	def __read_conf(self):
 		if 'current' in self.__config:

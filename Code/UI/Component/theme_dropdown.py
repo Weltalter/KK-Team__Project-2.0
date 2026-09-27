@@ -43,7 +43,7 @@ class ThemeSubButton(RoundedIconButton):
 class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, parent=parent)
-		logging.info('Инициализация виджета "ThemeDropdown"...')
+		logging.info('Виджет "ThemeDropdown": Инициализация...')
 		self.__icon = Icon()
 		
 		self.__size = size
@@ -64,7 +64,7 @@ class ThemeDropdown(RoundedIconButton):
 		
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.clicked.connect(self.__dropdown)
-		logging.info('Инициализация виджета "ThemeDropdown" завершена')
+		logging.info('Виджет "ThemeDropdown": Инициализация завершена')
 
 	def __dropdown(self):
 		logging.info('Раскрытие списка тем "ThemeDropdown"')

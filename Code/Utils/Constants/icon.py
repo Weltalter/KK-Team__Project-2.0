@@ -7,14 +7,14 @@ from Code.Utils.Constants.setting import Setting
 
 class Icon(metaclass=MetaSingleton):
 	def __init__(self):
-		logging.info('Инициализация модуля Icon...')
+		logging.info('Модуль "Icon": Инициализация...')
 		file_path = Path().icon_path
 
 		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
 		self.__config.read(f'{file_path}', encoding='utf-8')
 
 		self.__read_conf()
-		logging.info('Инициализация модуля Icon завершена')
+		logging.info('Модуль "Icon": Инициализация завершена')
 
 	def __read_conf(self):
 		if 'swipes' in self.__config:
