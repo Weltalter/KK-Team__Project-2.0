@@ -47,7 +47,7 @@ class MainMenuScrollArea(QScrollArea):
 	__swipes_link: dict[int, SwipeWidget] = {}
 
 	__swipes_radius: int = 45
-	__swipes_width: int = 265
+	__swipes_width: int = 272
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
