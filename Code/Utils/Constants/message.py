@@ -19,14 +19,7 @@ class Message(metaclass=MetaSingleton):
 
 	def __read_conf(self):
 		if 'main_menu' in self.__config:
-			self.swipe_0 = self.__config.get('main_menu', 'swipe_0')
-			self.swipe_1 = self.__config.get('main_menu', 'swipe_1')
-			self.swipe_2 = self.__config.get('main_menu', 'swipe_2')
-			self.swipe_3 = self.__config.get('main_menu', 'swipe_3')
-			self.swipe_4 = self.__config.get('main_menu', 'swipe_4')
-			self.swipe_5 = self.__config.get('main_menu', 'swipe_5')
-			self.swipe_6 = self.__config.get('main_menu', 'swipe_6')
-			self.swipe_7 = self.__config.get('main_menu', 'swipe_7')
-			self.version = self.__config.get('main_menu', 'version')
+			self.m_swipes = [self.__config.get('main_menu', f'swipe_{i}') for i in range(len(self.__config['main_menu'].keys() - self.__config['DEFAULT'].keys()) - 1)]
+			self.m_version = self.__config.get('main_menu', 'version')
 		else:
 			logging.critical('Секция "main_menu" не найдена')

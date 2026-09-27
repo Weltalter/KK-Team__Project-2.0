@@ -62,16 +62,7 @@ class MainMenuScrollArea(QScrollArea):
 		self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
 
-		self.__swipes_info: dict[int, str] = {
-			0: (self.__icon.i_swipe_0, self.__message.swipe_0),
-			1: (self.__icon.i_swipe_1, self.__message.swipe_1),
-			2: (self.__icon.i_swipe_2, self.__message.swipe_2),
-			3: (self.__icon.i_swipe_3, self.__message.swipe_3),
-			4: (self.__icon.i_swipe_4, self.__message.swipe_4),
-			5: (self.__icon.i_swipe_5, self.__message.swipe_5),
-			6: (self.__icon.i_swipe_6, self.__message.swipe_6),
-			7: (self.__icon.i_swipe_7, self.__message.swipe_7),
-		}
+		self.__swipes_info: dict[int, str] = {i: (self.__icon.i_swipes[i], self.__message.m_swipes[i]) for i in range(len(self.__icon.i_swipes))}
 
 		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---
 		QScroller.grabGesture(

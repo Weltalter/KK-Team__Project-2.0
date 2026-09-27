@@ -2,6 +2,7 @@ import time
 import logging
 from PyQt6.QtCore import QThread, QObject, pyqtSignal
 from PyQt6.sip import isdeleted
+from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
@@ -19,7 +20,7 @@ class TimerWorker(QObject):
 		self.__theme_count = theme_count
 
 	def run(self):
-		for i in range(1, self.__theme_count):
+		for i in range(0, self.__theme_count):
 			if self.is_running:
 				self.spawn_button_signal.emit(i)
 				time.sleep(0.1)
@@ -44,23 +45,17 @@ class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, parent=parent)
 		logging.info('Виджет "ThemeDropdown": Инициализация...')
+		self.__setting = Setting()
 		self.__icon = Icon()
 		
 		self.__size = size
 		self.__drop_thread = None
 		self.__drop_worker = None
 		self.__spawned_btn: dict[int, ThemeSubButton] = {}
-		self.__icons: dict[int, str] = {
-			0: self.__icon.i_theme_0,
-			1: self.__icon.i_theme_1,
-			2: self.__icon.i_theme_2,
-			3: self.__icon.i_theme_0,
-			4: self.__icon.i_theme_1,
-			5: self.__icon.i_theme_2,
-		}
+		self.__icons: dict[int, str] = {i: self.__icon.i_themes[i] for i in range(len(self.__icon.i_themes))}
 		self.reload_mode_flag = False
 		self.reload_mode_icon = self.__icon.i_reload
-		self.current_theme_icon = self.__icon.i_theme_0
+		self.current_theme_icon = self.__icons[self.__setting.theme_id]
 		
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.clicked.connect(self.__dropdown)
@@ -95,7 +90,7 @@ class ThemeDropdown(RoundedIconButton):
 
 	def __show_theme_subbutton(self, index: int):
 		current_geo = self.geometry()
-		new_x = current_geo.x() - index * (current_geo.width() + 10)
+		new_x = current_geo.x() - (index + 1) * (current_geo.width() + 10)
 		new_y = current_geo.y()
 		
 		new_btn = ThemeSubButton(theme_id=index,
@@ -119,6 +114,8 @@ class ThemeDropdown(RoundedIconButton):
 	def change_theme(self, theme_id: int):
 		if self.__drop_thread and not isdeleted(self.__drop_thread) and self.__drop_thread.isRunning():
 			self.__drop_worker.stop()
+
+		self.__setting.theme_id = theme_id
 		self.current_theme_icon = self.__icons[theme_id]
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.reload_mode_flag = False

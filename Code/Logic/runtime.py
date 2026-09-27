@@ -13,12 +13,18 @@ from Code.Utils.logger import Logger
 class Runtime(metaclass=MetaSingleton):
 	def __init__(self):
 		Logger.initialize()
-		path = Path()
-		setting = Setting()
-		theme = Theme()
-		message = Message()
-		icon = Icon()
+		self.__path = Path()
+		self.__setting = Setting()
+		self.__theme = Theme()
+		self.__message = Message()
+		self.__icon = Icon()
 
 	def run(self):
 		self.test = MainWindow()
 		self.test.show()
+
+	def before_exit(self):
+		logging.info('RT: Завершение работы...')
+		logging.info('RT: Сохранение данных...')
+		self.__setting.save_conf()
+		logging.info('RT: Данные сохранены')

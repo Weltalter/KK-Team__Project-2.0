@@ -18,14 +18,7 @@ class Icon(metaclass=MetaSingleton):
 
 	def __read_conf(self):
 		if 'swipes' in self.__config:
-			self.i_swipe_0 = self.__config.get('swipes', 'swipe_0')
-			self.i_swipe_1 = self.__config.get('swipes', 'swipe_1')
-			self.i_swipe_2 = self.__config.get('swipes', 'swipe_2')
-			self.i_swipe_3 = self.__config.get('swipes', 'swipe_3')
-			self.i_swipe_4 = self.__config.get('swipes', 'swipe_4')
-			self.i_swipe_5 = self.__config.get('swipes', 'swipe_5')
-			self.i_swipe_6 = self.__config.get('swipes', 'swipe_6')
-			self.i_swipe_7 = self.__config.get('swipes', 'swipe_7')
+			self.i_swipes = [self.__config.get('swipes', f'swipe_{i}') for i in range(len(self.__config['swipes'].keys() - self.__config['DEFAULT'].keys()))]
 		else:
 			logging.critical('Секция "swipes" не найдена')
 		
@@ -39,8 +32,6 @@ class Icon(metaclass=MetaSingleton):
 		
 		if 'theme' in self.__config:
 			self.i_reload = self.__config.get('theme', 'reload')
-			self.i_theme_0 = self.__config.get('theme', 'theme_0')
-			self.i_theme_1 = self.__config.get('theme', 'theme_1')
-			self.i_theme_2 = self.__config.get('theme', 'theme_2')
+			self.i_themes = [self.__config.get('theme', f'theme_{i}') for i in range(len(self.__config['theme'].keys() - self.__config['DEFAULT'].keys()) - 1)]
 		else:
 			logging.critical('Секция "theme" не найдена')

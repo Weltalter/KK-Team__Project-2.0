@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
 
 		footer_layout = QVBoxLayout(footer_widget)
 
-		creator_lbl = QLabel(self.__message.version)
+		creator_lbl = QLabel(self.__message.m_version)
 		creator_lbl.setFont(self.__theme.get_main_font(14))
 		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
 		footer_layout.addWidget(creator_lbl, alignment=Qt.AlignmentFlag.AlignRight)
