@@ -11,6 +11,7 @@ from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.message import Message
+from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
 from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
@@ -22,6 +23,7 @@ class MainWindow(QMainWindow):
 		logging.info('Инициализация экрана "MainWindow"...')
 		self.__theme = Theme()
 		self.__message = Message()
+		self.__icon = Icon()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
@@ -41,18 +43,18 @@ class MainWindow(QMainWindow):
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(80))
 
 		size = MathScripts.coordinate_scaling(40)[0]
-		btn_setting = IconButton(width=size, height=size, path_to_icon="./DataFile/Files.img/temp files/settings.svg", parent=sidebar_widget)
+		btn_setting = IconButton(width=size, height=size, path_to_icon=self.__icon.i_setting, parent=sidebar_widget)
 		btn_setting.move(*MathScripts.coordinate_scaling(20, 20))
 		
-		btn_export = IconButton(width=size, height=size, path_to_icon="./DataFile/Files.img/tmp/e1.svg", parent=sidebar_widget)
+		btn_export = IconButton(width=size, height=size, path_to_icon=self.__icon.i_export, parent=sidebar_widget)
 		btn_export.move(*MathScripts.coordinate_scaling(20, 80))
 		
-		btn_import = IconButton(width=size, height=size, path_to_icon="./DataFile/Files.img/tmp/i1.svg", parent=sidebar_widget)
+		btn_import = IconButton(width=size, height=size, path_to_icon=self.__icon.i_import, parent=sidebar_widget)
 		btn_import.move(*MathScripts.coordinate_scaling(20, 140))
 		
-		btn_close = IconButton(width=size, height=size, path_to_icon="./DataFile/Files.img/tmp/exit.svg", parent=sidebar_widget)
-		btn_close.clicked.connect(self.close)
+		btn_close = IconButton(width=size, height=size, path_to_icon=self.__icon.i_exit, parent=sidebar_widget)
 		btn_close.move(*MathScripts.coordinate_scaling(20, 740))
+		btn_close.clicked.connect(self.close)
 		
 		main_layout.addWidget(sidebar_widget)
 		#endregion

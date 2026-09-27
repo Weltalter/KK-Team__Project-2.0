@@ -13,6 +13,7 @@ from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
+from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
@@ -29,7 +30,7 @@ class SwipeWidget(QWidget):
 		self.btn = None
 		self.lbl = None
 	
-	def set_button(self, width: int = 20, height: int = 20, radius: int = 10, path_to_icon="./DataFile/Files.img/ThemeIcons/reload.svg"):
+	def set_button(self, width: int = 20, height: int = 20, radius: int = 10, path_to_icon=None):
 		self.btn = RoundedIconButton(width=width, height=height, radius=radius, path_to_icon=path_to_icon)
 		self.swipe_layout.addWidget(self.btn)
 
@@ -54,6 +55,7 @@ class MainMenuScrollArea(QScrollArea):
 		logging.info('Инициализация виджета "MainMenuScrollArea"...')
 		self.__setting = Setting()
 		self.__message = Message()
+		self.__icon = Icon()
 		self.setWidgetResizable(True)
 		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -61,14 +63,14 @@ class MainMenuScrollArea(QScrollArea):
 		self.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
 
 		self.__swipes_info: dict[int, str] = {
-			0: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_0),
-			1: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_1),
-			2: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_2),
-			3: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_3),
-			4: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_4),
-			5: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_5),
-			6: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_6),
-			7: ("./DataFile/Files.img/ThemeIcons/tmp.svg", self.__message.swipe_7),
+			0: (self.__icon.i_swipe_0, self.__message.swipe_0),
+			1: (self.__icon.i_swipe_1, self.__message.swipe_1),
+			2: (self.__icon.i_swipe_2, self.__message.swipe_2),
+			3: (self.__icon.i_swipe_3, self.__message.swipe_3),
+			4: (self.__icon.i_swipe_4, self.__message.swipe_4),
+			5: (self.__icon.i_swipe_5, self.__message.swipe_5),
+			6: (self.__icon.i_swipe_6, self.__message.swipe_6),
+			7: (self.__icon.i_swipe_7, self.__message.swipe_7),
 		}
 
 		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---

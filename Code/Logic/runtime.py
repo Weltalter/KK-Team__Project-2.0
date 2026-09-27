@@ -6,6 +6,7 @@ from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.message import Message
+from Code.Utils.Constants.icon import Icon
 from Code.Utils.logger import Logger
 
 
@@ -16,6 +17,7 @@ class Runtime(metaclass=MetaSingleton):
 		setting = Setting()
 		theme = Theme()
 		message = Message()
+		icon = Icon()
 
 	def run(self):
 		self.test = MainWindow()

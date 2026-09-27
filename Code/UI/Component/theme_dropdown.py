@@ -2,6 +2,7 @@ import time
 import logging
 from PyQt6.QtCore import QThread, QObject, pyqtSignal
 from PyQt6.sip import isdeleted
+from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
@@ -43,22 +44,23 @@ class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, parent=parent)
 		logging.info('Инициализация виджета "ThemeDropdown"...')
+		self.__icon = Icon()
 		
 		self.__size = size
 		self.__drop_thread = None
 		self.__drop_worker = None
 		self.__spawned_btn: dict[int, ThemeSubButton] = {}
 		self.__icons: dict[int, str] = {
-			0: "./DataFile/Files.img/ThemeIcons/canvas1.svg",
-			1: "./DataFile/Files.img/ThemeIcons/canvas2.svg",
-			2: "./DataFile/Files.img/ThemeIcons/canvas3.svg",
-			3: "./DataFile/Files.img/ThemeIcons/canvas1.svg",
-			4: "./DataFile/Files.img/ThemeIcons/canvas2.svg",
-			5: "./DataFile/Files.img/ThemeIcons/canvas3.svg",
+			0: self.__icon.i_theme_0,
+			1: self.__icon.i_theme_1,
+			2: self.__icon.i_theme_2,
+			3: self.__icon.i_theme_0,
+			4: self.__icon.i_theme_1,
+			5: self.__icon.i_theme_2,
 		}
 		self.reload_mode_flag = False
-		self.reload_mode_icon = "./DataFile/Files.img/ThemeIcons/reload.svg"
-		self.current_theme_icon = "./DataFile/Files.img/ThemeIcons/canvas1.svg"
+		self.reload_mode_icon = self.__icon.i_reload
+		self.current_theme_icon = self.__icon.i_theme_0
 		
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.clicked.connect(self.__dropdown)

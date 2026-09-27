@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.setting import Setting
+from Code.Utils.Constants.icon import Icon
 
 
 class RoundedIconButton(QPushButton):
@@ -14,6 +15,7 @@ class RoundedIconButton(QPushButton):
 
 		self.__theme = Theme()
 		self.__setting = Setting()
+		self.__icon = Icon()
 
 		self.radius = radius
 		self._current_pixmap = None
@@ -25,6 +27,8 @@ class RoundedIconButton(QPushButton):
 			self.setIcon(path_to_icon)
 
 	def setIcon(self, path_to_icon: str):
+		if path_to_icon is None:
+			path_to_icon = self.__icon.i_reload
 		if path_to_icon.lower().endswith('.svg'):
 			screen = self.screen() if self.window() else None
 			dpr = screen.devicePixelRatio() if screen else 1.0

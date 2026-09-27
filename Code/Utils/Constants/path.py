@@ -24,6 +24,7 @@ class Path(metaclass=MetaSingleton):
 		if 'files' in self.__config:
 			self.setting_path = self.__config.get('files', 'setting_file')
 			self.theme_path = self.__config.get('files', 'theme_file')
+			self.icon_path = self.__config.get('files', 'icon_file')
 		else:
 			logging.critical('Секция "files" не найдена')
 		
