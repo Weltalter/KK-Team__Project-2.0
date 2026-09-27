@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, QRectF
 from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.setting import Setting
 
 
 class RoundedIconButton(QPushButton):
@@ -11,6 +12,7 @@ class RoundedIconButton(QPushButton):
 		self.setFixedSize(width, height)
 
 		self.__theme = Theme()
+		self.__setting = Setting()
 
 		self.radius = radius
 		self._current_pixmap = None
@@ -32,8 +34,8 @@ class RoundedIconButton(QPushButton):
 			Qt.TransformationMode.SmoothTransformation
 		)
 		
-		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, 0.85)
-		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, 0.70)
+		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.hover_pixmap_brightness)
+		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.pressed_pixmap_brightness)
 		
 		self._current_pixmap = self._base_pixmap
 		self.update()

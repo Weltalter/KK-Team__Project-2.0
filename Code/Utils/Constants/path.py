@@ -6,12 +6,12 @@ from Code.Utils.Patterns.singleton_meta import MetaSingleton
 class Path(metaclass=MetaSingleton):
 	path: str = 'DataFile/Files.ini/path.ini'
 	def __init__(self):
-		logging.info('Инициализация данных Path...')
+		logging.info('Инициализация модуля Path...')
 		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
 		self.__config.read(self.path, encoding='utf-8')
 
 		self.__read_conf()
-		logging.info('Инициализация завершена')
+		logging.info('Инициализация модуля Path завершена')
 
 
 	def __read_conf(self):

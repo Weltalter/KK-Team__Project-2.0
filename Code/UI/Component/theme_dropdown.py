@@ -1,11 +1,12 @@
 import time
+import logging
 from PyQt6.QtCore import QThread, QObject, pyqtSignal
 from PyQt6.sip import isdeleted
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
 # ==========================================
-# 1. Класс фонового воркера (таймера)
+#     Класс фонового воркера (таймера)
 # ==========================================
 class TimerWorker(QObject):
 	spawn_button_signal = pyqtSignal(int)
@@ -41,6 +42,7 @@ class ThemeSubButton(RoundedIconButton):
 class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, parent=parent)
+		logging.info('Инициализация виджета "ThemeDropdown"...')
 		
 		self.__size = size
 		self.__drop_thread = None
@@ -60,8 +62,10 @@ class ThemeDropdown(RoundedIconButton):
 		
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		self.clicked.connect(self.__dropdown)
+		logging.info('Инициализация виджета "ThemeDropdown" завершена')
 
 	def __dropdown(self):
+		logging.info('Раскрытие списка тем "ThemeDropdown"')
 		if self.reload_mode_flag:
 			if self.__drop_thread and not isdeleted(self.__drop_thread) and self.__drop_thread.isRunning():
 				self.__drop_worker.stop()
@@ -108,14 +112,16 @@ class ThemeDropdown(RoundedIconButton):
 			self.__spawned_btn[key].hide()
 			self.__spawned_btn[key].deleteLater()
 			del self.__spawned_btn[key]
+		logging.info('Закрытие списка тем "ThemeDropdown"')
 
 	def change_theme(self, theme_id: int):
 		if self.__drop_thread and not isdeleted(self.__drop_thread) and self.__drop_thread.isRunning():
 			self.__drop_worker.stop()
 		self.current_theme_icon = self.__icons[theme_id]
 		self.setIcon(path_to_icon=self.current_theme_icon)
-		self.__hide_theme_subbutton()
 		self.reload_mode_flag = False
+		logging.info(f'Выбрана тема {theme_id}')
+		self.__hide_theme_subbutton()
 
 	def __clear_thread_references(self):
 		self.__drop_thread = None

@@ -1,3 +1,4 @@
+import logging
 from PyQt6.QtWidgets import (
 	QWidget,
 	QVBoxLayout,
@@ -50,6 +51,7 @@ class MainMenuScrollArea(QScrollArea):
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
+		logging.info('Инициализация виджета "MainMenuScrollArea"...')
 		self.__setting = Setting()
 		self.__message = Message()
 		self.setWidgetResizable(True)
@@ -76,10 +78,11 @@ class MainMenuScrollArea(QScrollArea):
 		)
 		scroller = QScroller.scroller(self.viewport())
 		props = QScrollerProperties()
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, self.__setting.MaximumVelocity)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self.__setting.DecelerationFactor)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self.__setting.MousePressEventDelay)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, self.__setting.maximum_velocity)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self.__setting.deceleration_factor)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self.__setting.mouse_press_event_delay)
 		scroller.setScrollerProperties(props)
+		logging.info('Инициализация виджета "MainMenuScrollArea" завершена')
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)

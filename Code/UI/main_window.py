@@ -1,3 +1,4 @@
+import logging
 from PyQt6.QtWidgets import (
 	QMainWindow,
 	QWidget,
@@ -18,12 +19,14 @@ from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
 class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
+		logging.info('Инициализация экрана "MainWindow"...')
 		self.__theme = Theme()
 		self.__message = Message()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
 		self.setCentralWidget(self.build_window())
+		logging.info('Инициализация экрана "MainWindow" завершена')
 
 	def build_window(self) -> QWidget:
 		central_widget = QWidget()
