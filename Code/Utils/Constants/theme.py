@@ -19,11 +19,12 @@ class Theme(metaclass=MetaSingleton):
 		self.__config.read(file_path, encoding='utf-8')
 
 		self.__read_conf()
+		self.__generate_font()
 		logging.info('Модуль "Theme": Инициализация завершена')
 
 	def __read_conf(self):
 		if 'font_styles' in self.__config:
-			self.__shantell_sans = self.__config.get('font_styles', 'shantell_sans')
+			self.__f_shantell_sans = self.__config.get('font_styles', 'shantell_sans')
 		else:
 			logging.critical('Секция "font_styles" не найдена')
 
@@ -36,26 +37,29 @@ class Theme(metaclass=MetaSingleton):
 		else:
 			logging.critical(f'Секция "{self.__current_theme}" не найдена')
 
-	def get_main_font(self, font_size: int = 24) -> QFont:
-		font_size = MathScripts.coordinate_scaling(font_size)[0]
-		font_path = os.path.abspath(f'{self.font_dir_path}/{self.__shantell_sans}/ShantellSans-Medium.ttf')
+	def __generate_font(self):
+		self.__shantell_sans = self.__generate_ShantellSans()
+
+	def __generate_ShantellSans(self) -> str:
+		font_path = os.path.abspath(f'{self.font_dir_path}/{self.__f_shantell_sans}/ShantellSans-Medium.ttf')
 
 		if not os.path.exists(font_path):
 			logging.error(f'Файл шрифта не найден по пути: {font_path}')
-			logging.info('Применен стандартный QFont')
-			return QFont('SansSerif', 11)
+			return QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont).family()
 
 		font_id = QFontDatabase.addApplicationFont(font_path)
 
 		if font_id == -1:
 			logging.error(f'Файл шрифта поврежден или имеет неверный формат: {font_path}')
-			logging.info('Применен стандартный QFont')
-			return QFont('SansSerif', 11)
+			return QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont).family()
 
-		font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-		
-		font = QFont(font_family, font_size)
-		font.setFamilies([font_family, "Arial", "SansSerif"])
+		family = QFontDatabase.applicationFontFamilies(font_id)[0]
+		logging.info(f'Шрифт {family} успешно загружен')
+		return family
+
+	def get_shantell_sans(self, font_size: int = 24) -> QFont:
+		font_size = MathScripts.coordinate_scaling(font_size)[0]
+		font = QFont(self.__shantell_sans, font_size)
+		font.setFamilies([self.__shantell_sans, "SansSerif", "Arial"])
 		font.setWeight(QFont.Weight.Medium)
-		logging.info(f'Шрифт {font_family} успешно загружен')
 		return font

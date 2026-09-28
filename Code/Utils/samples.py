@@ -1,3 +1,5 @@
+import inspect
+from typing import Any
 from pathlib import Path
 from datetime import time, date
 from abc import ABC, abstractmethod
@@ -8,14 +10,47 @@ from Code.Utils.Constants.enum import *
 
 class BaseSample(BaseModel, ABC):
 	sample_id: int = None
+
+	def __init__(self, *args, **kwargs):
+		object.__setattr__(self, '__library_cls', None)
+		super().__init__(*args, **kwargs)
+
+	def bind_to_library(self, library_class):
+		object.__setattr__(self, '__library_cls', library_class)
+
 	@model_validator(mode="after")
-	def _run_custom_validation(self) -> Self:
+	def __run_custom_validation(self) -> Self:
 		self.post_init_logic()
 		return self
 
 	@abstractmethod
 	def post_init_logic(self) -> None:
 		pass
+
+	def __setattr__(self, name: str, value: Any) -> None:
+		is_internal = False
+		frame = inspect.currentframe()
+		try:
+			while frame:
+				func_name = frame.f_code.co_name
+				if func_name in ('__init__', '__run_custom_validation', 'post_init_logic', 'model_validate_json'):
+					is_internal = True
+					break
+				frame = frame.f_back
+		finally:
+			del frame
+
+		if not is_internal:
+			current_value = self.__dict__.get(name, None)
+			if current_value != value:
+				super().__setattr__(name, value)
+				
+				if self.__library_cls:
+					library_instance = self.__library_cls()
+					library_instance.notify_changed()
+				return
+
+		super().__setattr__(name, value)
 
 class ApplicationSample(BaseSample):
 	title: str = ''
