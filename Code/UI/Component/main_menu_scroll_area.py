@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
@@ -20,12 +21,13 @@ from Code.UI.Component.rounded_icon_button import RoundedIconButton
 class SwipeWidget(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
+		self.__coordinate = Coordinate()
 		self.__theme = Theme()
 		self.setStyleSheet("background-color: transparent;")
 		
 		self.swipe_layout = QVBoxLayout(self)
 		self.swipe_layout.setContentsMargins(0, 0, 0, 0)
-		self.swipe_layout.setSpacing(15)
+		self.swipe_layout.setSpacing(self.__coordinate.main_menu_swipe_spacing)
 
 		self.btn = None
 		self.lbl = None
@@ -47,12 +49,10 @@ class SwipeWidget(QWidget):
 class MainMenuScrollArea(QScrollArea):
 	__swipes_link: dict[int, SwipeWidget] = {}
 
-	__swipes_radius: int = 45
-	__swipes_width: int = 272
-
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
 		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
+		self.__coordinate = Coordinate()
 		self.__setting = Setting()
 		self.__message = Message()
 		self.__icon = Icon()
@@ -80,7 +80,7 @@ class MainMenuScrollArea(QScrollArea):
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
 		
-		card_w = btn_w = MathScripts.coordinate_scaling(self.__swipes_width)[0]
+		card_w = btn_w = MathScripts.coordinate_scaling(self.__coordinate.main_menu_swipe_width)[0]
 		card_h = self.viewport().height()
 		btn_h = card_h - 30
 		
@@ -89,7 +89,7 @@ class MainMenuScrollArea(QScrollArea):
 		
 		scroll_layout = QHBoxLayout(scroll_content)
 		scroll_layout.setContentsMargins(0, 0, 0, 0)
-		scroll_layout.setSpacing(15)
+		scroll_layout.setSpacing(self.__coordinate.main_menu_scroll_spacing)
 		
 		for i in range(len(self.__swipes_info)):
 			if self.__swipes_link.get(i) is not None:
@@ -97,7 +97,7 @@ class MainMenuScrollArea(QScrollArea):
 			else:
 				sw = SwipeWidget(scroll_content)
 				sw.setFixedSize(card_w, card_h)
-				sw.set_button(width=btn_w, height=btn_h, radius=self.__swipes_radius, path_to_icon=self.__swipes_info[i][0])
+				sw.set_button(width=btn_w, height=btn_h, radius=self.__coordinate.main_menu_swipe_radius, path_to_icon=self.__swipes_info[i][0])
 				sw.set_label(text=self.__swipes_info[i][1])
 				self.__swipes_link[i] = sw
 				scroll_layout.addWidget(self.__swipes_link[i])

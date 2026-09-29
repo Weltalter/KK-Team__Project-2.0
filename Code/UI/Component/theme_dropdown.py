@@ -2,6 +2,7 @@ import time
 import logging
 from PyQt6.QtCore import QThread, QObject, pyqtSignal
 from PyQt6.sip import isdeleted
+from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
@@ -45,6 +46,7 @@ class ThemeDropdown(RoundedIconButton):
 	def __init__(self, size: int = 20, parent=None):
 		super().__init__(width=size, height=size, radius=size//2, parent=parent)
 		logging.info('Виджет "ThemeDropdown": Инициализация...')
+		self.__coordinate = Coordinate()
 		self.__setting = Setting()
 		self.__icon = Icon()
 		
@@ -90,7 +92,7 @@ class ThemeDropdown(RoundedIconButton):
 
 	def __show_theme_subbutton(self, index: int):
 		current_geo = self.geometry()
-		new_x = current_geo.x() - (index + 1) * (current_geo.width() + 10)
+		new_x = current_geo.x() - (index + 1) * (current_geo.width() + self.__coordinate.header_theme_btn_offset)
 		new_y = current_geo.y()
 		
 		new_btn = ThemeSubButton(theme_id=index,

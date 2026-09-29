@@ -3,6 +3,7 @@ from Code.Utils.Patterns.singleton_meta import MetaSingleton
 from Code.UI.main_window import MainWindow
 from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
+from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
@@ -28,6 +29,7 @@ class Runtime(metaclass=MetaSingleton):
 		logging.info('RT: Инициализация классов доступа...')
 		self.__path = Path()
 		self.__setting = Setting()
+		self.__coordinate = Coordinate()
 		self.__theme = Theme()
 		self.__message = Message()
 		self.__icon = Icon()

@@ -9,6 +9,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
@@ -21,12 +22,18 @@ class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		logging.info('Экран "MainWindow": Инициализация...')
+		self.__coordinate = Coordinate()
 		self.__theme = Theme()
 		self.__message = Message()
 		self.__icon = Icon()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
-		self.setGeometry(*MathScripts.coordinate_scaling(250, 100, 1600, 800))
+		self.setGeometry(*MathScripts.coordinate_scaling(
+			self.__coordinate.window_x,
+			self.__coordinate.window_y,
+			self.__coordinate.window_width,
+			self.__coordinate.window_height
+		))
 		self.setCentralWidget(self.build_window())
 		logging.info('Экран "MainWindow": Инициализация завершена')
 
@@ -40,20 +47,20 @@ class MainWindow(QMainWindow):
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
 		sidebar_widget.setStyleSheet(f"background-color: {self.__theme.sub_background_color};")
-		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(80))
+		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_width))
 
-		size = MathScripts.coordinate_scaling(40)[0]
+		size = MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_size)[0]
 		btn_setting = IconButton(width=size, height=size, path_to_icon=self.__icon.i_setting, parent=sidebar_widget)
-		btn_setting.move(*MathScripts.coordinate_scaling(20, 20))
+		btn_setting.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_setting_btn_y))
 		
 		btn_export = IconButton(width=size, height=size, path_to_icon=self.__icon.i_export, parent=sidebar_widget)
-		btn_export.move(*MathScripts.coordinate_scaling(20, 80))
+		btn_export.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_export_btn_y))
 		
 		btn_import = IconButton(width=size, height=size, path_to_icon=self.__icon.i_import, parent=sidebar_widget)
-		btn_import.move(*MathScripts.coordinate_scaling(20, 140))
+		btn_import.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_import_btn_y))
 		
 		btn_close = IconButton(width=size, height=size, path_to_icon=self.__icon.i_exit, parent=sidebar_widget)
-		btn_close.move(*MathScripts.coordinate_scaling(20, 740))
+		btn_close.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_exit_btn_y))
 		btn_close.clicked.connect(self.close)
 		
 		main_layout.addWidget(sidebar_widget)
@@ -69,16 +76,15 @@ class MainWindow(QMainWindow):
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
 		header_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};") 
-		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(60)) 
+		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.header_height)) 
 
 		header_layout = QHBoxLayout(header_widget)
 		
-		padding = MathScripts.coordinate_scaling(10)[0]
+		padding = MathScripts.coordinate_scaling(self.__coordinate.header_padding)[0]
 		header_layout.setContentsMargins(padding, padding, padding, padding)
 		header_layout.setSpacing(0)
 
-		scaled_size = MathScripts.coordinate_scaling(40)[0]
-		btn_theme = ThemeDropdown(size=scaled_size)
+		btn_theme = ThemeDropdown(size=MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_size)[0])
 
 		header_layout.addStretch()
 		header_layout.addWidget(btn_theme)
@@ -96,7 +102,8 @@ class MainWindow(QMainWindow):
 		# ========================================================
 		# 1. ЗАДАЕМ ОТСТУПЫ 40 ПИКСЕЛЕЙ ОТ КРАЕВ С УЧЕТОМ МАСШТАБА
 		# ========================================================
-		content_layout.setContentsMargins(*MathScripts.coordinate_scaling(40, 40, 40, 40))
+		content_margin = MathScripts.coordinate_scaling(self.__coordinate.main_menu_margin)[0]
+		content_layout.setContentsMargins(content_margin, content_margin, content_margin, content_margin)
 		content_layout.setSpacing(0)
 
 		# Создаем QScrollArea (область прокрутки)
@@ -110,7 +117,7 @@ class MainWindow(QMainWindow):
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
 		footer_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};") 
-		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(40))
+		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.footer_height))
 
 		footer_layout = QVBoxLayout(footer_widget)
 

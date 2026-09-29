@@ -15,13 +15,9 @@ class Path(metaclass=MetaSingleton):
 
 
 	def __read_conf(self):
-		if 'dir' in self.__config:
-			self.coordinate_path = self.__config.get('dir', 'coordinate_dir')
-			self.language_path = self.__config.get('dir', 'language_dir')
-		else:
-			logging.critical('Секция "dir" не найдена')
-
 		if 'files' in self.__config:
+			self.coordinate_path = self.__config.get('files', 'coordinate_file')
+			self.language_path = self.__config.get('files', 'language_file')
 			self.setting_path = self.__config.get('files', 'setting_file')
 			self.theme_path = self.__config.get('files', 'theme_file')
 			self.icon_path = self.__config.get('files', 'icon_file')
