@@ -18,12 +18,12 @@ class Message(metaclass=MetaSingleton):
 		logging.info('Модуль "Message": Инициализация завершена')
 
 	def __read_conf(self):
-		if 'russian.swipes' in self.__config:
-			self.m_swipes = [self.__config.get('russian.swipes', f'swipe_{i}') for i in range(len(self.__config['russian.swipes'].keys()))]
+		if f'{self.__current_language}.swipes' in self.__config:
+			self.m_swipes = [self.__config.get(f'{self.__current_language}.swipes', f'swipe_{i}') for i in range(len(self.__config[f'{self.__current_language}.swipes'].keys()))]
 		else:
-			logging.critical('Секция "russian.swipes" не найдена')
+			logging.critical(f'Секция "{self.__current_language}.swipes" не найдена')
 
-		if 'russian' in self.__config:
-			self.m_version = self.__config.get('russian', 'version')
+		if f'{self.__current_language}' in self.__config:
+			self.m_version = self.__config.get(f'{self.__current_language}', 'version')
 		else:
-			logging.critical('Секция "russian" не найдена')
+			logging.critical(f'Секция "{self.__current_language}" не найдена')
