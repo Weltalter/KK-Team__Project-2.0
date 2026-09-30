@@ -18,13 +18,16 @@ class Setting(PropertyTracker, metaclass=MetaSingleton):
 	def __read_conf(self):
 		if 'current' in self.__config:
 			self.theme_id = self.__config.getint('current', 'theme_id')
-			self.theme = self.__config.get('current', 'theme_title')
-			self.language = self.__config.get('current', 'language')
+			self.theme_title = self.__config.get('current', 'theme_title')
+			self.language_id = self.__config.getint('current', 'language_id')
+			self.language_title = self.__config.get('current', 'language_title')
 			self.maximum_velocity = self.__config.getfloat('current', 'maximum_velocity', fallback=0.15)
 			self.deceleration_factor = self.__config.getfloat('current', 'deceleration_factor', fallback=0.25)
 			self.mouse_press_event_delay = self.__config.getfloat('current', 'mouse_press_event_delay', fallback=0.5)
 			self.hover_pixmap_brightness = self.__config.getfloat('current', 'hover_pixmap_brightness', fallback=0.85)
 			self.pressed_pixmap_brightness = self.__config.getfloat('current', 'pressed_pixmap_brightness', fallback=0.70)
+			self.hover_color_brightness = self.__config.getfloat('current', 'hover_color_brightness', fallback=0.85)
+			self.pressed_color_brightness = self.__config.getfloat('current', 'pressed_color_brightness', fallback=0.70)
 		else:
 			logging.critical('Секция "current" не найдена')
 
@@ -39,8 +42,9 @@ class Setting(PropertyTracker, metaclass=MetaSingleton):
 			self.__config.add_section('current')
 
 		self.__config.set('current', 'theme_id', str(self.theme_id))
-		self.__config.set('current', 'theme_title', str(self.theme))
-		self.__config.set('current', 'language', str(self.language))
+		self.__config.set('current', 'theme_title', str(self.theme_title))
+		self.__config.set('current', 'language_id', str(self.language_id))
+		self.__config.set('current', 'language_title', str(self.language_title))
 		self.__config.set('current', 'maximum_velocity', str(self.maximum_velocity))
 		self.__config.set('current', 'deceleration_factor', str(self.deceleration_factor))
 		self.__config.set('current', 'mouse_press_event_delay', str(self.mouse_press_event_delay))

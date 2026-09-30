@@ -14,7 +14,7 @@ class Theme(metaclass=MetaSingleton):
 		file_path = Path().theme_path
 		self.font_dir_path = Path().font_dir_path
 
-		self.__current_theme = Setting().theme
+		self.__current_theme = Setting().theme_title
 		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
 		self.__config.read(file_path, encoding='utf-8')
 

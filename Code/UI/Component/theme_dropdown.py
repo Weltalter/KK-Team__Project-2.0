@@ -129,11 +129,9 @@ class ThemeDropdown(RoundedIconButton):
 		self.__drop_worker = None
 
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
-		if self.__spawned_btn and not isdeleted(self.__spawned_btn):
-			self.__spawned_btn.deleteLater()
-		if self.__drop_worker:
-			self.__drop_worker.stop()
-		if self.__drop_thread:
-			self.__drop_thread.quit()
-			self.__drop_thread.wait()
+		self.__stop_spawn_process()
+		for btn in list(self.__spawned_btn.values()):
+			if not isdeleted(btn):
+				btn.deleteLater()
+		self.__spawned_btn.clear()
 		super().destroy(destroyWindow, destroySubWindows)

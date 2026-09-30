@@ -44,6 +44,7 @@ class Coordinate(metaclass=MetaSingleton):
 		
 		if 'footer' in self.__config:
 			self.footer_height = self.__config.getint('footer', 'height')
+			self.footer_padding = self.__config.getint('footer', 'padding')
 		else:
 			logging.critical('Секция "footer" не найдена')
 

@@ -15,6 +15,7 @@ from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
+from Code.UI.Component.language_dropdown import LanguageDropdown
 from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
 
 
@@ -119,13 +120,22 @@ class MainWindow(QMainWindow):
 		footer_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};") 
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.footer_height))
 
-		footer_layout = QVBoxLayout(footer_widget)
+		footer_layout = QHBoxLayout(footer_widget)
+
+		padding = MathScripts.coordinate_scaling(self.__coordinate.footer_padding)[0]
+		footer_layout.setContentsMargins(padding, padding, padding, padding)
+		footer_layout.setSpacing(0)
 
 		creator_lbl = QLabel(self.__message.m_version)
 		creator_lbl.setFont(self.__theme.get_shantell_sans(14))
 		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
-		footer_layout.addWidget(creator_lbl, alignment=Qt.AlignmentFlag.AlignRight)
 		
+		btn_theme1 = LanguageDropdown(width=120, height=35, radius=10)
+
+		footer_layout.addWidget(btn_theme1)
+		footer_layout.addStretch()
+		footer_layout.addWidget(creator_lbl)
+
 		body_layout.addWidget(footer_widget)
 		#endregion
 

@@ -18,10 +18,10 @@ class RoundedIconButton(QPushButton):
 		self.__icon = Icon()
 
 		self.radius = radius
-		self._current_pixmap = None
-		self._base_pixmap = None
-		self._hover_pixmap = None
-		self._pressed_pixmap = None
+		self.__current_pixmap = None
+		self.__base_pixmap = None
+		self.__hover_pixmap = None
+		self.__pressed_pixmap = None
 
 		if path_to_icon:
 			self.setIcon(path_to_icon)
@@ -68,11 +68,11 @@ class RoundedIconButton(QPushButton):
 				Qt.TransformationMode.SmoothTransformation
 			)
 
-		self._base_pixmap = base
-		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.hover_pixmap_brightness)
-		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.pressed_pixmap_brightness)
+		self.__base_pixmap = base
+		self.__hover_pixmap = MathScripts.pixmap_brightness(self.__base_pixmap, self.__setting.hover_pixmap_brightness)
+		self.__pressed_pixmap = MathScripts.pixmap_brightness(self.__base_pixmap, self.__setting.pressed_pixmap_brightness)
 		
-		self._current_pixmap = self._base_pixmap
+		self.__current_pixmap = self.__base_pixmap
 		self.update()
 
 	def paintEvent(self, event):
@@ -84,19 +84,19 @@ class RoundedIconButton(QPushButton):
 		path = QPainterPath()
 		path.addRoundedRect(rect, self.radius, self.radius)
 
-		if self._current_pixmap:
+		if self.__current_pixmap:
 			painter.save()
 			painter.setClipPath(path)
 			
-			p_width = float(self._current_pixmap.width())
-			p_height = float(self._current_pixmap.height())
+			p_width = float(self.__current_pixmap.width())
+			p_height = float(self.__current_pixmap.height())
 			
 			x = (float(self.width()) - p_width) / 2.0
 			y = (float(self.height()) - p_height) / 2.0
 			
 			target_rect = QRectF(x, y, p_width, p_height)
 			
-			painter.drawPixmap(target_rect, self._current_pixmap, QRectF(self._current_pixmap.rect()))
+			painter.drawPixmap(target_rect, self.__current_pixmap, QRectF(self.__current_pixmap.rect()))
 			painter.restore()
 
 		pen = QPen(QColor(self.__theme.main_border_color), 2)
@@ -108,25 +108,25 @@ class RoundedIconButton(QPushButton):
 
 	def enterEvent(self, event):
 		super().enterEvent(event)
-		if self._hover_pixmap:
-			self._current_pixmap = self._hover_pixmap
+		if self.__hover_pixmap:
+			self.__current_pixmap = self.__hover_pixmap
 			self.update()
 
 	def leaveEvent(self, event):
 		super().leaveEvent(event)
-		if self._base_pixmap:
-			self._current_pixmap = self._base_pixmap
+		if self.__base_pixmap:
+			self.__current_pixmap = self.__base_pixmap
 			self.update()
 
 	def mousePressEvent(self, event):
 		if event.button() == Qt.MouseButton.LeftButton:
-			if self._pressed_pixmap:
-				self._current_pixmap = self._pressed_pixmap
+			if self.__pressed_pixmap:
+				self.__current_pixmap = self.__pressed_pixmap
 				self.update()
 		super().mousePressEvent(event)
 
 	def mouseReleaseEvent(self, event):
 		super().mouseReleaseEvent(event)
-		if self._hover_pixmap:
-			self._current_pixmap = self._hover_pixmap
+		if self.__hover_pixmap:
+			self.__current_pixmap = self.__hover_pixmap
 			self.update()
