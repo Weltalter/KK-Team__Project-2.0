@@ -6,7 +6,7 @@ from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.theme import Theme
-from Code.UI.Component.button import Button
+from Code.UI.Component.rounded_text_button import RoundedTextButton
 
 
 # ==========================================
@@ -32,7 +32,7 @@ class TimerWorker(QObject):
 	def stop(self):
 		self.is_running = False
 
-class LanguageSubButton(Button):
+class LanguageSubButton(RoundedTextButton):
 	def __init__(self, language_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, language_button=None, parent=None):
 		super().__init__(width=width, height=height, radius=radius, parent=parent)
 		self.id = language_id
@@ -43,7 +43,7 @@ class LanguageSubButton(Button):
 	def __pick_language(self):
 		self.__language_button.change_language(self.id)
 
-class LanguageDropdown(Button):
+class LanguageDropdown(RoundedTextButton):
 	def __init__(self, width: int = 20, height: int = 20, radius: int = 20, parent=None):
 		super().__init__(width=width, height=height, radius=radius, parent=parent)
 		logging.info('Виджет "LanguageDropdown": Инициализация...')
@@ -51,7 +51,9 @@ class LanguageDropdown(Button):
 		self.__setting = Setting()
 		self.__message = Message()
 		self.__theme = Theme()
-		
+
+		self.__parent = parent
+
 		self.__width = width
 		self.__height = height
 		self.__drop_thread = None
@@ -97,15 +99,15 @@ class LanguageDropdown(Button):
 
 	def __show_language_subbutton(self, index: int):
 		current_geo = self.geometry()
-		new_x = current_geo.x()
-		new_y = current_geo.y() - (index + 1) * (current_geo.width() + self.__coordinate.header_theme_btn_offset)
+		new_x = current_geo.x() + (index + 1) * (current_geo.width() + self.__coordinate.header_theme_btn_offset)
+		new_y = current_geo.y()
 		
 		new_btn = LanguageSubButton(language_id=index,
-		                            width=self.__width,
-		                            height=self.__height,
-		                            radius=self.radius,
+									width=self.__width,
+									height=self.__height,
+									radius=self.radius,
 									language_button=self,
-									parent=self.parentWidget())
+									parent=self.__parent)
 		new_btn.set_text(self.__texts[index])
 		new_btn.set_color(self.__theme.sub_background_color)
 		new_btn.setGeometry(new_x, new_y, self.__width, self.__height)

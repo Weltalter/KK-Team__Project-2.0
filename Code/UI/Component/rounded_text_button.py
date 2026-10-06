@@ -1,14 +1,12 @@
 from PyQt6.QtGui import QPainter, QPen, QColor, QPainterPath
 from PyQt6.QtCore import Qt, QRectF
-from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Theme
 from Code.Utils.Constants.setting import Setting
-from Code.Utils.Constants.icon import Icon
 
 
-class Button(QPushButton):
+class RoundedTextButton(QPushButton):
 	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, parent=None):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)

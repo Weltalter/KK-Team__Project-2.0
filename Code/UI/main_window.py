@@ -84,8 +84,9 @@ class MainWindow(QMainWindow):
 		padding = MathScripts.coordinate_scaling(self.__coordinate.header_padding)[0]
 		header_layout.setContentsMargins(padding, padding, padding, padding)
 		header_layout.setSpacing(0)
-
-		btn_theme = ThemeDropdown(size=MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_size)[0])
+		
+		size = MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_size)[0]
+		btn_theme = ThemeDropdown(size=size, parent=header_widget)
 
 		header_layout.addStretch()
 		header_layout.addWidget(btn_theme)
@@ -130,7 +131,7 @@ class MainWindow(QMainWindow):
 		creator_lbl.setFont(self.__theme.get_shantell_sans(14))
 		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
 		
-		btn_theme1 = LanguageDropdown(width=120, height=35, radius=10)
+		btn_theme1 = LanguageDropdown(width=120, height=35, radius=10, parent=footer_widget)
 
 		footer_layout.addWidget(btn_theme1)
 		footer_layout.addStretch()

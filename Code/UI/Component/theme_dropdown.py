@@ -49,6 +49,8 @@ class ThemeDropdown(RoundedIconButton):
 		self.__coordinate = Coordinate()
 		self.__setting = Setting()
 		self.__icon = Icon()
+
+		self.__parent = parent
 		
 		self.__size = size
 		self.__drop_thread = None
@@ -99,7 +101,7 @@ class ThemeDropdown(RoundedIconButton):
 						   		 size=self.__size,
 						   		 path_to_icon=self.__icons[index],
 								 theme_button=self,
-								 parent=self.parentWidget())
+								 parent=self.__parent)
 		new_btn.setGeometry(new_x, new_y, self.__size, self.__size)
 		new_btn.raise_()
 		new_btn.show()
