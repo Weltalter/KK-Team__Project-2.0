@@ -37,14 +37,20 @@ class Coordinate(metaclass=MetaSingleton):
 		if 'header' in self.__config:
 			self.header_height = self.__config.getint('header', 'height')
 			self.header_padding = self.__config.getint('header', 'padding')
-			self.header_theme_btn_size = self.__config.getint('header', 'btn_size')
-			self.header_theme_btn_offset = self.__config.getint('header', 'btn_offset')
+			self.header_theme_btn_width = self.__config.getint('header', 'theme_btn_width')
+			self.header_theme_btn_height = self.__config.getint('header', 'theme_btn_height')
+			self.header_theme_btn_radius = self.__config.getint('header', 'theme_btn_radius')
+			self.header_theme_btn_offset = self.__config.getint('header', 'theme_btn_offset')
 		else:
 			logging.critical('Секция "header" не найдена')
 		
 		if 'footer' in self.__config:
 			self.footer_height = self.__config.getint('footer', 'height')
 			self.footer_padding = self.__config.getint('footer', 'padding')
+			self.footer_language_btn_width = self.__config.getint('footer', 'language_btn_width')
+			self.footer_language_btn_height = self.__config.getint('footer', 'language_btn_height')
+			self.footer_language_btn_radius = self.__config.getint('footer', 'language_btn_radius')
+			self.footer_language_btn_offset = self.__config.getint('footer', 'language_btn_offset')
 		else:
 			logging.critical('Секция "footer" не найдена')
 
