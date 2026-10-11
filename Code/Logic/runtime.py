@@ -15,7 +15,8 @@ from Code.Utils.libraries import (
 	MedicineLibrary,
 	MovieLibrary,
 	RecipeLibrary,
-	WebsiteLibrary
+	WebsiteLibrary,
+	AccountLibrary
 )
 
 
@@ -56,6 +57,9 @@ class Runtime(metaclass=MetaSingleton):
 
 		self.__l_website = WebsiteLibrary()
 		self.__l_website.import_data()
+		
+		self.__l_account = AccountLibrary()
+		self.__l_account.import_data()
 		logging.info('RT: Инициализация библиотек завершена')
 
 	def run(self):
@@ -76,4 +80,5 @@ class Runtime(metaclass=MetaSingleton):
 		self.__l_movie.export_data()
 		self.__l_recipe.export_data()
 		self.__l_website.export_data()
+		self.__l_account.export_data()
 		logging.info('RT: библиотеки сохранены')

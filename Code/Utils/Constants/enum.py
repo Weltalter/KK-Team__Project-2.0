@@ -1,4 +1,4 @@
-from enum import Enum, unique
+from enum import IntEnum, Enum, unique
 
 
 @unique
@@ -49,3 +49,18 @@ class BookStatus(Enum):
 	NOT_RELEASED = 2
 	PLANNING = 3
 	READING = 4
+
+@unique
+class Month(IntEnum):
+	JANUARY = 1
+	FEBRUARY = 2
+	MARCH = 3
+	APRIL = 4
+	MAY = 5
+	JUNE = 6
+	JULY = 7
+	AUGUST = 8
+	SEPTEMBER = 9
+	OCTOBER = 10
+	NOVEMBER = 11
+	DECEMBER = 12

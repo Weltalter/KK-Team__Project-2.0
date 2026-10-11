@@ -150,3 +150,33 @@ class WebsiteSample(BaseSample):
 
 	def post_init_logic(self):
 		self.hashtags = [] if self.hashtags is None else list(self.hashtags)
+
+class AccountSample(BaseSample):
+	company_title: str = ''
+	month: Month
+	year: int = 0
+	is_paid: bool = False
+	address: str = ''
+	payment_amount: int = 0
+	meter: int = None
+	dif_meter: int = None
+
+	def post_init_logic(self):
+		if self.month == Month.JANUARY:
+			prev_month = Month.DECEMBER
+			prev_year = self.year - 1
+		else:
+			prev_month = Month(self.month.value - 1)
+			prev_year = self.year
+
+		from Code.Utils.libraries import AccountLibrary
+		
+		library_instance = AccountLibrary()
+		criteria = {'address': self.address, 'company_title': self.company_title, 'year': prev_year, 'month': prev_month}
+
+		past_records = library_instance.find_by_criteria(criteria)
+
+		if past_records and past_records[0].meter is not None:
+			self.__dict__['dif_meter'] = self.meter - past_records[0].meter
+		else:
+			self.__dict__['dif_meter'] = 0

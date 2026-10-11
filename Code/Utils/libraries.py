@@ -77,6 +77,36 @@ class LibraryActions():
 	def notify_changed(self):
 		object.__setattr__(self, 'is_changed', True)
 
+	def find_by_criteria(self, criteria: dict[str, Any]) -> list[BaseSample]:
+		if not criteria:
+			return list(self.objects.values())
+
+		matched_samples = []
+
+		for sample in self.objects.values():
+			is_match = True
+			
+			for field_name, expected_value in criteria.items():
+				if not hasattr(sample, field_name):
+					is_match = False
+					break
+				
+				actual_value = getattr(sample, field_name)
+
+				if hasattr(actual_value, 'value') and not hasattr(expected_value, 'value'):
+					if actual_value.value != expected_value:
+						is_match = False
+						break
+				else:
+					if actual_value != expected_value:
+						is_match = False
+						break
+			
+			if is_match:
+				matched_samples.append(sample)
+
+		return matched_samples
+
 class ApplicationLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
 	objects: dict[int, ApplicationSample] = {}
 
@@ -97,3 +127,6 @@ class RecipeLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
 
 class WebsiteLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
 	objects: dict[int, WebsiteSample] = {}
+
+class AccountLibrary(BaseModel, LibraryActions, metaclass=LibrarySingletonMeta):
+	objects: dict[int, AccountSample] = {}
