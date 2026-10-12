@@ -8,6 +8,13 @@ from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
 
 
+class ThemeWIP():
+	current_theme_id: int
+	all_theme: list
+
+
+
+
 class Theme(metaclass=MetaSingleton):
 	def __init__(self):
 		logging.info('Модуль "Theme": Инициализация...')
