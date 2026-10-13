@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.coordinate import Coordinate
-from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
@@ -22,7 +22,6 @@ class SwipeWidget(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
 		self.__coordinate = Coordinate()
-		self.__theme = Theme()
 		self.setStyleSheet("background-color: transparent;")
 		
 		self.swipe_layout = QVBoxLayout(self)
@@ -40,9 +39,9 @@ class SwipeWidget(QWidget):
 		self.lbl = QLabel(text)
 		self.lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-		self.lbl.setFont(self.__theme.get_shantell_sans(font_size=24))
+		self.lbl.setFont(Fnt.shantell_sans(24))
 		
-		self.lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
+		self.lbl.setStyleSheet(f"QLabel {{ color: {Clr.font()}; }}")
 
 		self.swipe_layout.addWidget(self.lbl)
 

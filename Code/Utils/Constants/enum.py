@@ -64,3 +64,15 @@ class Month(IntEnum):
 	OCTOBER = 10
 	NOVEMBER = 11
 	DECEMBER = 12
+
+@unique
+class ColorName(Enum):
+	MAIN_BACKGROUND = 1
+	SUB_BACKGROUND = 2
+	ACCENT_BACKGROUND = 3
+	MAIN_BORDER = 4
+	FONT = 5
+
+@unique
+class FontName(Enum):
+	SHANTELL_SANS = 1

@@ -5,7 +5,7 @@ from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
-from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.theme import Clr
 from Code.UI.Component.rounded_text_button import RoundedTextButton
 
 
@@ -26,7 +26,6 @@ class LanguageDropdown(RoundedTextButton):
 		self.__coordinate = Coordinate()
 		self.__setting = Setting()
 		self.__message = Message()
-		self.__theme = Theme()
 
 		self.__parent = parent
 		self.__width = MathScripts.coordinate_scaling(self.__coordinate.footer_language_btn_width)[0]
@@ -45,7 +44,7 @@ class LanguageDropdown(RoundedTextButton):
 		self.__init_subbutton_flag = False
 
 		self.set_text(self.current_language_text)
-		self.set_color(self.__theme.sub_background_color)
+		self.set_color(Clr.sub_bg())
 
 		self.clicked.connect(self.__show_language_subbutton)
 		logging.info('Виджет "LanguageDropdown": Инициализация завершена')
@@ -63,7 +62,7 @@ class LanguageDropdown(RoundedTextButton):
 										language_button=self,
 										parent=self.__parent)
 			new_btn.set_text(self.__texts[index])
-			new_btn.set_color(self.__theme.sub_background_color)
+			new_btn.set_color(Clr.sub_bg())
 			new_btn.setGeometry(new_x, new_y, self.__width, self.__height)
 			new_btn.raise_()
 			self.__spawned_btn[index] = new_btn

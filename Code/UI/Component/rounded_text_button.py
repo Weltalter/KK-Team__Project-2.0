@@ -2,7 +2,7 @@ from PyQt6.QtGui import QPainter, QPen, QColor, QPainterPath
 from PyQt6.QtCore import Qt, QRectF
 from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
-from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.setting import Setting
 
 
@@ -12,10 +12,9 @@ class RoundedTextButton(QPushButton):
 		self.setFixedSize(width, height)
 		self.radius = radius
 
-		self.__theme = Theme()
 		self.__setting = Setting()
 
-		self.setFont(self.__theme.get_shantell_sans(14))
+		self.setFont(Fnt.shantell_sans(14))
 
 		self.__current_color = None
 		self.__base_color = None
@@ -43,7 +42,7 @@ class RoundedTextButton(QPushButton):
 		path = QPainterPath()
 		path.addRoundedRect(rect, self.radius, self.radius)
 
-		pen = QPen(QColor(self.__theme.main_border_color), 2)
+		pen = QPen(QColor(Clr.main_brd()), 2)
 		painter.setPen(pen)
 		painter.drawPath(path)
 
@@ -53,7 +52,7 @@ class RoundedTextButton(QPushButton):
 		self.setStyleSheet(f"""
 			QPushButton {{
 				background-color: {self.__current_color};
-				color: {self.__theme.font_color};
+				color: {Clr.font()};
 				border: none;
 				border-radius: {self.radius}px;
 				padding: 5px;

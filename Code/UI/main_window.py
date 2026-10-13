@@ -7,10 +7,9 @@ from PyQt6.QtWidgets import (
 	QLabel,
 )
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QGuiApplication
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.coordinate import Coordinate
-from Code.Utils.Constants.theme import Theme
+from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
 from Code.UI.Component.icon_button import IconButton
@@ -24,7 +23,6 @@ class MainWindow(QMainWindow):
 		super().__init__()
 		logging.info('Экран "MainWindow": Инициализация...')
 		self.__coordinate = Coordinate()
-		self.__theme = Theme()
 		self.__message = Message()
 		self.__icon = Icon()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
@@ -47,7 +45,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 1: Боковое меню (Sidebar)
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
-		sidebar_widget.setStyleSheet(f"background-color: {self.__theme.sub_background_color};")
+		sidebar_widget.setStyleSheet(f"background-color: {Clr.sub_bg()};")
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_width))
 
 		size = MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_size)[0]
@@ -76,7 +74,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 2: Верхняя панель (Header)
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
-		header_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};") 
+		header_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.header_height)) 
 
 		header_layout = QHBoxLayout(header_widget)
@@ -96,7 +94,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 3: Главный контент (Main Content)
 		content_widget = QWidget()
 		content_widget.setObjectName("Content")
-		content_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};")
+		content_widget.setStyleSheet(f"background-color: {Clr.main_bg()};")
 
 		content_layout = QHBoxLayout(content_widget)
 		
@@ -117,7 +115,7 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 4: Нижняя панель (Footer)
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
-		footer_widget.setStyleSheet(f"background-color: {self.__theme.main_background_color};") 
+		footer_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.footer_height))
 
 		footer_layout = QHBoxLayout(footer_widget)
@@ -127,8 +125,8 @@ class MainWindow(QMainWindow):
 		footer_layout.setSpacing(0)
 
 		creator_lbl = QLabel(self.__message.m_version)
-		creator_lbl.setFont(self.__theme.get_shantell_sans(14))
-		creator_lbl.setStyleSheet(f"QLabel {{ color: {self.__theme.font_color}; }}")
+		creator_lbl.setFont(Fnt.shantell_sans(14))
+		creator_lbl.setStyleSheet(f"QLabel {{ color: {Clr.font()}; }}")
 		
 		btn_language = LanguageDropdown(parent=footer_widget)
 
