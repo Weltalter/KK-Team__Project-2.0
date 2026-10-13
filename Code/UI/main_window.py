@@ -138,5 +138,11 @@ class MainWindow(QMainWindow):
 		#endregion
 
 		main_layout.addLayout(body_layout)
+		self.update_theme()
 
 		return central_widget
+
+	def update_theme(self):
+		self.setStyleSheet(f"""
+			QWidget#Sidebar {{ background-color: {Clr.sub_bg()}; }}
+		""")

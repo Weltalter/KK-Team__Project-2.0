@@ -2,6 +2,7 @@ import logging
 from PyQt6.QtCore import QTimer
 from PyQt6.sip import isdeleted
 from Code.Utils.Scripts.math_scripts import MathScripts
+from Code.Utils.Constants.theme import Clr
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.icon import Icon
@@ -95,6 +96,7 @@ class ThemeDropdown(RoundedIconButton):
 
 	def change_theme(self, theme_id: int):
 		self.__setting.theme_id = theme_id
+		Clr.set_theme_id(theme_id)
 		self.current_theme_icon = self.__icons[theme_id]
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		

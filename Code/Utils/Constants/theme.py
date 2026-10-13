@@ -1,5 +1,7 @@
 import os
 import logging
+import weakref
+from typing import Callable
 from configparser import ConfigParser, ExtendedInterpolation
 from PyQt6.QtGui import QFontDatabase, QFont
 from Code.Utils.Patterns.singleton_meta import MetaSingleton
@@ -10,28 +12,63 @@ from Code.Utils.Constants.setting import Setting
 
 
 class Clr():
-	current_theme_id: int
+	__current_theme_id: int = 0
 	all_theme: list[dict] = [{}, {}, {}]
 
-	@staticmethod
-	def main_bg() -> str:
-		return Clr.all_theme[Clr.current_theme_id][ColorName.MAIN_BACKGROUND]
-	
-	@staticmethod
-	def sub_bg() -> str:
-		return Clr.all_theme[Clr.current_theme_id][ColorName.SUB_BACKGROUND]
+	__subscribers: set[weakref.WeakMethod] = set()
 
-	@staticmethod
-	def accent_bg() -> str:
-		return Clr.all_theme[Clr.current_theme_id][ColorName.ACCENT_BACKGROUND]
-	
-	@staticmethod
-	def main_brd() -> str:
-		return Clr.all_theme[Clr.current_theme_id][ColorName.MAIN_BORDER]
+	@classmethod
+	def get_theme_id(cls) -> int:
+		return cls.__current_theme_id
 
-	@staticmethod
-	def font() -> str:
-		return Clr.all_theme[Clr.current_theme_id][ColorName.FONT]
+	@classmethod
+	def set_theme_id(cls, value: int):
+		if cls.__current_theme_id != value:
+			cls.__current_theme_id = value
+			cls.__notify_subscribers()
+
+	@classmethod
+	def subscribe(cls, callback: Callable[[], None]):
+		if hasattr(callback, '__self__') and callback.__self__ is not None:
+			weak_method = weakref.WeakMethod(callback)
+			cls.__subscribers.add(weak_method)
+
+	@classmethod
+	def __notify_subscribers(cls):
+		dead_subscribers = set()
+
+		for weak_method in cls.__subscribers:
+			callback = weak_method()
+			if callback is not None:
+				try:
+					callback()
+				except RuntimeError:
+					dead_subscribers.add(weak_method)
+			else:
+				dead_subscribers.add(weak_method)
+
+		cls.__subscribers -= dead_subscribers
+
+
+	@classmethod
+	def main_bg(cls) -> str:
+		return cls.all_theme[cls.current_theme_id][ColorName.MAIN_BACKGROUND]
+	
+	@classmethod
+	def sub_bg(cls) -> str:
+		return cls.all_theme[cls.current_theme_id][ColorName.SUB_BACKGROUND]
+
+	@classmethod
+	def accent_bg(cls) -> str:
+		return cls.all_theme[cls.current_theme_id][ColorName.ACCENT_BACKGROUND]
+	
+	@classmethod
+	def main_brd(cls) -> str:
+		return cls.all_theme[cls.current_theme_id][ColorName.MAIN_BORDER]
+
+	@classmethod
+	def font(cls) -> str:
+		return cls.all_theme[cls.current_theme_id][ColorName.FONT]
 
 class Fnt():
 	all_font: dict = {}
