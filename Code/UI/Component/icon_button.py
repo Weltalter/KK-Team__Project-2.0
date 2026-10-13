@@ -12,7 +12,7 @@ class IconButton(QPushButton):
 		self.setFixedSize(width, height)
 		self.setStyleSheet("background-color: transparent; border: none;")
 		
-		self.__setting = Setting()
+		self._setting = Setting()
 
 		self._current_pixmap = None
 		self._base_pixmap = None
@@ -62,8 +62,8 @@ class IconButton(QPushButton):
 			)
 
 		self._base_pixmap = base
-		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.hover_pixmap_brightness)
-		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self.__setting.pressed_pixmap_brightness)
+		self._hover_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self._setting.hover_pixmap_brightness)
+		self._pressed_pixmap = MathScripts.pixmap_brightness(self._base_pixmap, self._setting.pressed_pixmap_brightness)
 		
 		self._current_pixmap = self._base_pixmap
 		self.update()

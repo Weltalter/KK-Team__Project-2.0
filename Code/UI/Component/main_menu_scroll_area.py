@@ -21,12 +21,12 @@ from Code.UI.Component.rounded_icon_button import RoundedIconButton
 class SwipeWidget(QWidget):
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
-		self.__coordinate = Coordinate()
+		self._coordinate = Coordinate()
 		self.setStyleSheet("background-color: transparent;")
 		
 		self.swipe_layout = QVBoxLayout(self)
 		self.swipe_layout.setContentsMargins(0, 0, 0, 0)
-		self.swipe_layout.setSpacing(self.__coordinate.main_menu_swipe_spacing)
+		self.swipe_layout.setSpacing(self._coordinate.main_menu_swipe_spacing)
 
 		self.btn = None
 		self.lbl = None
@@ -46,22 +46,22 @@ class SwipeWidget(QWidget):
 		self.swipe_layout.addWidget(self.lbl)
 
 class MainMenuScrollArea(QScrollArea):
-	__swipes_link: dict[int, SwipeWidget] = {}
+	_swipes_link: dict[int, SwipeWidget] = {}
 
 	def __init__(self, parent=None):
 		super().__init__(parent=parent)
 		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
-		self.__coordinate = Coordinate()
-		self.__setting = Setting()
-		self.__message = Message()
-		self.__icon = Icon()
+		self._coordinate = Coordinate()
+		self._setting = Setting()
+		self._message = Message()
+		self._icon = Icon()
 		self.setWidgetResizable(True)
 		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
 
-		self.__swipes_info: dict[int, str] = {i: (self.__icon.i_swipes[i], self.__message.m_swipes[i]) for i in range(len(self.__icon.i_swipes))}
+		self._swipes_info: dict[int, str] = {i: (self._icon.i_swipes[i], self._message.m_swipes[i]) for i in range(len(self._icon.i_swipes))}
 
 		# --- НАСТРОЙКА ИНТЕНСИВНОСТИ (ФИЗИКИ) ---
 		QScroller.grabGesture(
@@ -70,16 +70,16 @@ class MainMenuScrollArea(QScrollArea):
 		)
 		scroller = QScroller.scroller(self.viewport())
 		props = QScrollerProperties()
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, self.__setting.maximum_velocity)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self.__setting.deceleration_factor)
-		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self.__setting.mouse_press_event_delay)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MaximumVelocity, self._setting.maximum_velocity)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self._setting.deceleration_factor)
+		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self._setting.mouse_press_event_delay)
 		scroller.setScrollerProperties(props)
 		logging.info('Виджет "MainMenuScrollArea": Инициализация завершена')
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
 		
-		card_w = btn_w = MathScripts.coordinate_scaling(self.__coordinate.main_menu_swipe_width)[0]
+		card_w = btn_w = MathScripts.coordinate_scaling(self._coordinate.main_menu_swipe_width)[0]
 		card_h = self.viewport().height()
 		btn_h = card_h - 30
 		
@@ -88,17 +88,17 @@ class MainMenuScrollArea(QScrollArea):
 		
 		scroll_layout = QHBoxLayout(scroll_content)
 		scroll_layout.setContentsMargins(0, 0, 0, 0)
-		scroll_layout.setSpacing(self.__coordinate.main_menu_scroll_spacing)
+		scroll_layout.setSpacing(self._coordinate.main_menu_scroll_spacing)
 		
-		for i in range(len(self.__swipes_info)):
-			if self.__swipes_link.get(i) is not None:
-				self.__swipes_link[i].show()
+		for i in range(len(self._swipes_info)):
+			if self._swipes_link.get(i) is not None:
+				self._swipes_link[i].show()
 			else:
 				sw = SwipeWidget(scroll_content)
 				sw.setFixedSize(card_w, card_h)
-				sw.set_button(width=btn_w, height=btn_h, radius=self.__coordinate.main_menu_swipe_radius, path_to_icon=self.__swipes_info[i][0])
-				sw.set_label(text=self.__swipes_info[i][1])
-				self.__swipes_link[i] = sw
-				scroll_layout.addWidget(self.__swipes_link[i])
+				sw.set_button(width=btn_w, height=btn_h, radius=self._coordinate.main_menu_swipe_radius, path_to_icon=self._swipes_info[i][0])
+				sw.set_label(text=self._swipes_info[i][1])
+				self._swipes_link[i] = sw
+				scroll_layout.addWidget(self._swipes_link[i])
 		
 		self.setWidget(scroll_content)

@@ -10,23 +10,23 @@ class Message(metaclass=MetaSingleton):
 		logging.info('Модуль "Message": Инициализация...')
 		file_path = Path().language_path
 
-		self.__current_language = Setting().language_title
-		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
-		self.__config.read(file_path, encoding='utf-8')
+		self._current_language = Setting().language_title
+		self._config = ConfigParser(interpolation=ExtendedInterpolation())
+		self._config.read(file_path, encoding='utf-8')
 
-		self.__read_conf()
+		self._read_conf()
 		logging.info('Модуль "Message": Инициализация завершена')
 
-	def __read_conf(self):
-		if 'language' in self.__config:
-			self.m_languages = [self.__config.get('language', f'language_{i}') for i in range(len(self.__config['language'].keys() - self.__config['DEFAULT'].keys()))]
+	def _read_conf(self):
+		if 'language' in self._config:
+			self.m_languages = [self._config.get('language', f'language_{i}') for i in range(len(self._config['language'].keys() - self._config['DEFAULT'].keys()))]
 
-		if f'{self.__current_language}.swipes' in self.__config:
-			self.m_swipes = [self.__config.get(f'{self.__current_language}.swipes', f'swipe_{i}') for i in range(len(self.__config[f'{self.__current_language}.swipes'].keys()))]
+		if f'{self._current_language}.swipes' in self._config:
+			self.m_swipes = [self._config.get(f'{self._current_language}.swipes', f'swipe_{i}') for i in range(len(self._config[f'{self._current_language}.swipes'].keys()))]
 		else:
-			logging.critical(f'Секция "{self.__current_language}.swipes" не найдена')
+			logging.critical(f'Секция "{self._current_language}.swipes" не найдена')
 
-		if f'{self.__current_language}' in self.__config:
-			self.m_version = self.__config.get(f'{self.__current_language}', 'version')
+		if f'{self._current_language}' in self._config:
+			self.m_version = self._config.get(f'{self._current_language}', 'version')
 		else:
-			logging.critical(f'Секция "{self.__current_language}" не найдена')
+			logging.critical(f'Секция "{self._current_language}" не найдена')

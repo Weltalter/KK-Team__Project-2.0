@@ -13,100 +13,100 @@ class ThemeSubButton(RoundedIconButton):
 	def __init__(self, theme_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, path_to_icon: str = None, theme_button=None, parent=None):
 		super().__init__(width=width, height=height, radius=radius, path_to_icon=path_to_icon, parent=parent)
 		self.id = theme_id
-		self.__theme_button = theme_button
+		self._theme_button = theme_button
 		
-		self.clicked.connect(self.__pick_theme)
+		self.clicked.connect(self._pick_theme)
 
-	def __pick_theme(self):
-		self.__theme_button.change_theme(self.id)
+	def _pick_theme(self):
+		self._theme_button.change_theme(self.id)
 
 class ThemeDropdown(RoundedIconButton):
 	def __init__(self, parent=None):
 		logging.info('Виджет "ThemeDropdown": Инициализация...')
-		self.__coordinate = Coordinate()
-		self.__setting = Setting()
-		self.__icon = Icon()
+		self._coordinate = Coordinate()
+		self._setting = Setting()
+		self._icon = Icon()
 
-		self.__parent = parent
-		self.__width = MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_width)[0]
-		self.__height = MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_height)[0]
-		self.__radius = MathScripts.coordinate_scaling(self.__coordinate.header_theme_btn_radius)[0]
+		self._parent = parent
+		self._width = MathScripts.coordinate_scaling(self._coordinate.header_theme_btn_width)[0]
+		self._height = MathScripts.coordinate_scaling(self._coordinate.header_theme_btn_height)[0]
+		self._radius = MathScripts.coordinate_scaling(self._coordinate.header_theme_btn_radius)[0]
 
-		super().__init__(width=self.__width, height=self.__height, radius=self.__radius, parent=self.__parent)
+		super().__init__(width=self._width, height=self._height, radius=self._radius, parent=self._parent)
 		
-		self.__spawned_btn: dict[int, ThemeSubButton] = {}
-		self.__icons: dict[int, str] = {i: self.__icon.i_themes[i] for i in range(len(self.__icon.i_themes))}
-		self.current_theme_icon = self.__icons[self.__setting.theme_id]
+		self._spawned_btn: dict[int, ThemeSubButton] = {}
+		self._icons: dict[int, str] = {i: self._icon.i_themes[i] for i in range(len(self._icon.i_themes))}
+		self.current_theme_icon = self._icons[self._setting.theme_id]
 
-		self.__reload_mode_flag = False
-		self.__reload_mode_icon = self.__icon.i_reload
+		self._reload_mode_flag = False
+		self._reload_mode_icon = self._icon.i_reload
 		
-		self.__init_subbutton_flag = False
+		self._init_subbutton_flag = False
 
 		self.setIcon(path_to_icon=self.current_theme_icon)
 
-		self.clicked.connect(self.__show_theme_subbutton)
+		self.clicked.connect(self._show_theme_subbutton)
 		logging.info('Виджет "ThemeDropdown": Инициализация завершена')
 
-	def __init_theme_subbutton(self):
-		for index in list(self.__icons.keys()):
+	def _init_theme_subbutton(self):
+		for index in list(self._icons.keys()):
 			current_geo = self.geometry()
-			new_x = current_geo.x() - (index + 1) * (current_geo.width() + self.__coordinate.header_theme_btn_offset)
+			new_x = current_geo.x() - (index + 1) * (current_geo.width() + self._coordinate.header_theme_btn_offset)
 			new_y = current_geo.y()
 			
 			new_btn = ThemeSubButton(theme_id=index,
-			                         width=self.__width,
-									 height=self.__height,
-									 radius=self.__radius,
-									 path_to_icon=self.__icons[index],
+			                         width=self._width,
+									 height=self._height,
+									 radius=self._radius,
+									 path_to_icon=self._icons[index],
 									 theme_button=self,
-									 parent=self.__parent)
-			new_btn.setGeometry(new_x, new_y, self.__width, self.__height)
+									 parent=self._parent)
+			new_btn.setGeometry(new_x, new_y, self._width, self._height)
 			new_btn.raise_()
 			
-			self.__spawned_btn[index] = new_btn
+			self._spawned_btn[index] = new_btn
 
-	def __show_theme_subbutton(self):
-		if not self.__init_subbutton_flag:
-			self.__init_theme_subbutton()
-			self.__init_subbutton_flag = True
+	def _show_theme_subbutton(self):
+		if not self._init_subbutton_flag:
+			self._init_theme_subbutton()
+			self._init_subbutton_flag = True
 
-		if self.__reload_mode_flag:
-			self.__hide_theme_subbutton()
+		if self._reload_mode_flag:
+			self._hide_theme_subbutton()
 			self.setIcon(path_to_icon=self.current_theme_icon)
 			return
 		
 		logging.info('Раскрытие списка тем "ThemeDropdown"')
 
-		self.__reload_mode_flag = True
-		self.setIcon(path_to_icon=self.__reload_mode_icon)
+		self._reload_mode_flag = True
+		self.setIcon(path_to_icon=self._reload_mode_icon)
 
-		delay_step = 150 // len(self.__spawned_btn) if self.__spawned_btn else 0
-		for index, key in enumerate(list(self.__spawned_btn.keys())):
-			btn = self.__spawned_btn[key]
+		delay_step = 150 // len(self._spawned_btn) if self._spawned_btn else 0
+		for index, key in enumerate(list(self._spawned_btn.keys())):
+			btn = self._spawned_btn[key]
 			current_delay = index * delay_step
 			
 			QTimer.singleShot(current_delay, btn.show)
 
-	def __hide_theme_subbutton(self):
-		for key in list(self.__spawned_btn.keys()):
-			self.__spawned_btn[key].hide()
-		self.__reload_mode_flag = False
+	def _hide_theme_subbutton(self):
+		for key in list(self._spawned_btn.keys()):
+			self._spawned_btn[key].hide()
+		self._reload_mode_flag = False
 		logging.info('Закрытие списка тем "ThemeDropdown"')
 
 	def change_theme(self, theme_id: int):
-		self.__setting.theme_id = theme_id
+		self._setting.theme_id = theme_id
 		Clr.set_theme_id(theme_id)
-		self.current_theme_icon = self.__icons[theme_id]
+		self.current_theme_icon = self._icons[theme_id]
 		self.setIcon(path_to_icon=self.current_theme_icon)
 		
 		logging.info(f'Выбрана тема {theme_id}')
-		self.__hide_theme_subbutton()
+		self._hide_theme_subbutton()
 
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
-		self.__stop_spawn_process()
-		for btn in list(self.__spawned_btn.values()):
+		self._stop_spawn_process()
+		for btn in list(self._spawned_btn.values()):
 			if not isdeleted(btn):
 				btn.deleteLater()
-		self.__spawned_btn.clear()
+		self._spawned_btn.clear()
 		super().destroy(destroyWindow, destroySubWindows)

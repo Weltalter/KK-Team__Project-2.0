@@ -10,28 +10,28 @@ class Icon(metaclass=MetaSingleton):
 		logging.info('Модуль "Icon": Инициализация...')
 		file_path = Path().icon_path
 
-		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
-		self.__config.read(f'{file_path}', encoding='utf-8')
+		self._config = ConfigParser(interpolation=ExtendedInterpolation())
+		self._config.read(f'{file_path}', encoding='utf-8')
 
-		self.__read_conf()
+		self._read_conf()
 		logging.info('Модуль "Icon": Инициализация завершена')
 
-	def __read_conf(self):
-		if 'swipes' in self.__config:
-			self.i_swipes = [self.__config.get('swipes', f'swipe_{i}') for i in range(len(self.__config['swipes'].keys() - self.__config['DEFAULT'].keys()))]
+	def _read_conf(self):
+		if 'swipes' in self._config:
+			self.i_swipes = [self._config.get('swipes', f'swipe_{i}') for i in range(len(self._config['swipes'].keys() - self._config['DEFAULT'].keys()))]
 		else:
 			logging.critical('Секция "swipes" не найдена')
 		
-		if 'sidebar' in self.__config:
-			self.i_setting = self.__config.get('sidebar', 'setting')
-			self.i_export = self.__config.get('sidebar', 'export')
-			self.i_import = self.__config.get('sidebar', 'import')
-			self.i_exit = self.__config.get('sidebar', 'exit')
+		if 'sidebar' in self._config:
+			self.i_setting = self._config.get('sidebar', 'setting')
+			self.i_export = self._config.get('sidebar', 'export')
+			self.i_import = self._config.get('sidebar', 'import')
+			self.i_exit = self._config.get('sidebar', 'exit')
 		else:
 			logging.critical('Секция "sidebar" не найдена')
 		
-		if 'theme' in self.__config:
-			self.i_reload = self.__config.get('theme', 'reload')
-			self.i_themes = [self.__config.get('theme', f'theme_{i}') for i in range(len(self.__config['theme'].keys() - self.__config['DEFAULT'].keys()) - 1)]
+		if 'theme' in self._config:
+			self.i_reload = self._config.get('theme', 'reload')
+			self.i_themes = [self._config.get('theme', f'theme_{i}') for i in range(len(self._config['theme'].keys() - self._config['DEFAULT'].keys()) - 1)]
 		else:
 			logging.critical('Секция "theme" не найдена')

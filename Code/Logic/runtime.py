@@ -22,44 +22,44 @@ from Code.Utils.libraries import (
 
 class Runtime(metaclass=MetaSingleton):
 	def __init__(self):
-		self.__initialize()
+		self._initialize()
 
-	def __initialize(self):
+	def _initialize(self):
 		Logger.initialize()
 		
 		logging.info('RT: Инициализация классов доступа...')
-		self.__path = Path()
-		self.__setting = Setting()
-		self.__coordinate = Coordinate()
-		self.__theme = Theme()
-		self.__message = Message()
-		self.__icon = Icon()
+		self._path = Path()
+		self._setting = Setting()
+		self._coordinate = Coordinate()
+		self._theme = Theme()
+		self._message = Message()
+		self._icon = Icon()
 		logging.info('RT: Инициализация классов доступа завершена')
 
 		logging.info('RT: Инициализация библиотек...')
-		self.__l_application = ApplicationLibrary()
-		self.__l_application.import_data()
+		self._l_application = ApplicationLibrary()
+		self._l_application.import_data()
 
-		self.__l_book = BookLibrary()
-		self.__l_book.import_data()
+		self._l_book = BookLibrary()
+		self._l_book.import_data()
 
-		self.__l_game = GameLibrary()
-		self.__l_game.import_data()
+		self._l_game = GameLibrary()
+		self._l_game.import_data()
 
-		self.__l_medicine = MedicineLibrary()
-		self.__l_medicine.import_data()
+		self._l_medicine = MedicineLibrary()
+		self._l_medicine.import_data()
 
-		self.__l_movie = MovieLibrary()
-		self.__l_movie.import_data()
+		self._l_movie = MovieLibrary()
+		self._l_movie.import_data()
 
-		self.__l_recipe = RecipeLibrary()
-		self.__l_recipe.import_data()
+		self._l_recipe = RecipeLibrary()
+		self._l_recipe.import_data()
 
-		self.__l_website = WebsiteLibrary()
-		self.__l_website.import_data()
+		self._l_website = WebsiteLibrary()
+		self._l_website.import_data()
 		
-		self.__l_account = AccountLibrary()
-		self.__l_account.import_data()
+		self._l_account = AccountLibrary()
+		self._l_account.import_data()
 		logging.info('RT: Инициализация библиотек завершена')
 
 	def run(self):
@@ -70,15 +70,15 @@ class Runtime(metaclass=MetaSingleton):
 		logging.info('RT: Завершение работы...')
 		logging.info('RT: Сохранение данных...')
 		
-		self.__setting.save_conf()
+		self._setting.save_conf()
 		logging.info('RT: Настройки сохранены')
 
-		self.__l_application.export_data()
-		self.__l_book.export_data()
-		self.__l_game.export_data()
-		self.__l_medicine.export_data()
-		self.__l_movie.export_data()
-		self.__l_recipe.export_data()
-		self.__l_website.export_data()
-		self.__l_account.export_data()
+		self._l_application.export_data()
+		self._l_book.export_data()
+		self._l_game.export_data()
+		self._l_medicine.export_data()
+		self._l_movie.export_data()
+		self._l_recipe.export_data()
+		self._l_website.export_data()
+		self._l_account.export_data()
 		logging.info('RT: библиотеки сохранены')

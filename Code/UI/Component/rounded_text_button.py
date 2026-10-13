@@ -12,25 +12,25 @@ class RoundedTextButton(QPushButton):
 		self.setFixedSize(width, height)
 		self.radius = radius
 
-		self.__setting = Setting()
+		self._setting = Setting()
 
 		self.setFont(Fnt.shantell_sans(14))
 
-		self.__current_color = None
-		self.__base_color = None
-		self.__hover_color = None
-		self.__pressed_color = None
+		self._current_color = None
+		self._base_color = None
+		self._hover_color = None
+		self._pressed_color = None
 
 	def set_text(self, text: str = ''):
 		self.setText(text)
-		self.__update_style()
+		self._update_style()
 
 	def set_color(self, color: str = '#000000'):
-		self.__current_color = color
-		self.__base_color = color
-		self.__hover_color = MathScripts.adjust_brightness(self.__base_color, self.__setting.hover_color_brightness)
-		self.__pressed_color = MathScripts.adjust_brightness(self.__base_color, self.__setting.pressed_color_brightness)
-		self.__update_style()
+		self._current_color = color
+		self._base_color = color
+		self._hover_color = MathScripts.adjust_brightness(self._base_color, self._setting.hover_color_brightness)
+		self._pressed_color = MathScripts.adjust_brightness(self._base_color, self._setting.pressed_color_brightness)
+		self._update_style()
 
 	def paintEvent(self, event):
 		super().paintEvent(event)
@@ -48,10 +48,10 @@ class RoundedTextButton(QPushButton):
 
 		painter.end()
 
-	def __update_style(self):
+	def _update_style(self):
 		self.setStyleSheet(f"""
 			QPushButton {{
-				background-color: {self.__current_color};
+				background-color: {self._current_color};
 				color: {Clr.font()};
 				border: none;
 				border-radius: {self.radius}px;
@@ -61,25 +61,25 @@ class RoundedTextButton(QPushButton):
 
 	def enterEvent(self, event):
 		super().enterEvent(event)
-		if self.__hover_color:
-			self.__current_color = self.__hover_color
-			self.__update_style()
+		if self._hover_color:
+			self._current_color = self._hover_color
+			self._update_style()
 
 	def leaveEvent(self, event):
 		super().leaveEvent(event)
-		if self.__base_color:
-			self.__current_color = self.__base_color
-			self.__update_style()
+		if self._base_color:
+			self._current_color = self._base_color
+			self._update_style()
 
 	def mousePressEvent(self, event):
 		if event.button() == Qt.MouseButton.LeftButton:
-			if self.__pressed_color:
-				self.__current_color = self.__pressed_color
-				self.__update_style()
+			if self._pressed_color:
+				self._current_color = self._pressed_color
+				self._update_style()
 		super().mousePressEvent(event)
 
 	def mouseReleaseEvent(self, event):
 		super().mouseReleaseEvent(event)
-		if self.__hover_color:
-			self.__current_color = self.__hover_color
-			self.__update_style()
+		if self._hover_color:
+			self._current_color = self._hover_color
+			self._update_style()

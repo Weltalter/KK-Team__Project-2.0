@@ -22,16 +22,16 @@ class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
 		logging.info('Экран "MainWindow": Инициализация...')
-		self.__coordinate = Coordinate()
-		self.__message = Message()
-		self.__icon = Icon()
+		self._coordinate = Coordinate()
+		self._message = Message()
+		self._icon = Icon()
 		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(
-			self.__coordinate.window_x,
-			self.__coordinate.window_y,
-			self.__coordinate.window_width,
-			self.__coordinate.window_height
+			self._coordinate.window_x,
+			self._coordinate.window_y,
+			self._coordinate.window_width,
+			self._coordinate.window_height
 		))
 		self.setCentralWidget(self.build_window())
 		logging.info('Экран "MainWindow": Инициализация завершена')
@@ -46,20 +46,20 @@ class MainWindow(QMainWindow):
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
 		sidebar_widget.setStyleSheet(f"background-color: {Clr.sub_bg()};")
-		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_width))
+		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self._coordinate.sidebar_width))
 
-		size = MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_size)[0]
-		btn_setting = IconButton(width=size, height=size, path_to_icon=self.__icon.i_setting, parent=sidebar_widget)
-		btn_setting.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_setting_btn_y))
+		size = MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_size)[0]
+		btn_setting = IconButton(width=size, height=size, path_to_icon=self._icon.i_setting, parent=sidebar_widget)
+		btn_setting.move(*MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_x, self._coordinate.sidebar_setting_btn_y))
 		
-		btn_export = IconButton(width=size, height=size, path_to_icon=self.__icon.i_export, parent=sidebar_widget)
-		btn_export.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_export_btn_y))
+		btn_export = IconButton(width=size, height=size, path_to_icon=self._icon.i_export, parent=sidebar_widget)
+		btn_export.move(*MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_x, self._coordinate.sidebar_export_btn_y))
 		
-		btn_import = IconButton(width=size, height=size, path_to_icon=self.__icon.i_import, parent=sidebar_widget)
-		btn_import.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_import_btn_y))
+		btn_import = IconButton(width=size, height=size, path_to_icon=self._icon.i_import, parent=sidebar_widget)
+		btn_import.move(*MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_x, self._coordinate.sidebar_import_btn_y))
 		
-		btn_close = IconButton(width=size, height=size, path_to_icon=self.__icon.i_exit, parent=sidebar_widget)
-		btn_close.move(*MathScripts.coordinate_scaling(self.__coordinate.sidebar_btn_x, self.__coordinate.sidebar_exit_btn_y))
+		btn_close = IconButton(width=size, height=size, path_to_icon=self._icon.i_exit, parent=sidebar_widget)
+		btn_close.move(*MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_x, self._coordinate.sidebar_exit_btn_y))
 		btn_close.clicked.connect(self.close)
 		
 		main_layout.addWidget(sidebar_widget)
@@ -75,11 +75,11 @@ class MainWindow(QMainWindow):
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
 		header_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
-		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.header_height)) 
+		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.header_height)) 
 
 		header_layout = QHBoxLayout(header_widget)
 		
-		padding = MathScripts.coordinate_scaling(self.__coordinate.header_padding)[0]
+		padding = MathScripts.coordinate_scaling(self._coordinate.header_padding)[0]
 		header_layout.setContentsMargins(padding, padding, padding, padding)
 		header_layout.setSpacing(0)
 		
@@ -101,7 +101,7 @@ class MainWindow(QMainWindow):
 		# ========================================================
 		# 1. ЗАДАЕМ ОТСТУПЫ 40 ПИКСЕЛЕЙ ОТ КРАЕВ С УЧЕТОМ МАСШТАБА
 		# ========================================================
-		content_margin = MathScripts.coordinate_scaling(self.__coordinate.main_menu_margin)[0]
+		content_margin = MathScripts.coordinate_scaling(self._coordinate.main_menu_margin)[0]
 		content_layout.setContentsMargins(content_margin, content_margin, content_margin, content_margin)
 		content_layout.setSpacing(0)
 
@@ -116,15 +116,15 @@ class MainWindow(QMainWindow):
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
 		footer_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
-		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self.__coordinate.footer_height))
+		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.footer_height))
 
 		footer_layout = QHBoxLayout(footer_widget)
 
-		padding = MathScripts.coordinate_scaling(self.__coordinate.footer_padding)[0]
+		padding = MathScripts.coordinate_scaling(self._coordinate.footer_padding)[0]
 		footer_layout.setContentsMargins(padding, padding, padding, padding)
 		footer_layout.setSpacing(0)
 
-		creator_lbl = QLabel(self.__message.m_version)
+		creator_lbl = QLabel(self._message.m_version)
 		creator_lbl.setFont(Fnt.shantell_sans(14))
 		creator_lbl.setStyleSheet(f"QLabel {{ color: {Clr.font()}; }}")
 		

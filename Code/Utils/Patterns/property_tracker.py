@@ -16,7 +16,7 @@ class PropertyTracker:
 		try:
 			while frame:
 				func_name = frame.f_code.co_name
-				if func_name in ('__init__', '__read_conf'):
+				if func_name in ('__init__', '_read_conf'):
 					is_internal = True
 					break
 				frame = frame.f_back

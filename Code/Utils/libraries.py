@@ -15,7 +15,7 @@ class LibrarySingletonMeta(ModelMetaclass):
 		return cls._instances[cls]
 
 class LibraryActions():
-	__id_generator: IdGenerator = IdGenerator()
+	_id_generator: IdGenerator = IdGenerator()
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
@@ -61,14 +61,14 @@ class LibraryActions():
 		return imported_library
 
 	def add(self, sample: BaseSample):
-		sample.sample_id = self.__id_generator.get_id()
+		sample.sample_id = self._id_generator.get_id()
 		sample.bind_to_library(self.__class__)
 		self.objects[sample.sample_id] = sample
 
 		object.__setattr__(self, 'is_changed', True)
 
 	def remove(self, sample_id: int):
-		self.__id_generator.release_id(sample_id)
+		self._id_generator.release_id(sample_id)
 		removed = self.objects.pop(sample_id, None)
 		if removed:
 			object.__setattr__(self, 'is_changed', True)

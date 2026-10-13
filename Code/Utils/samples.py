@@ -12,14 +12,14 @@ class BaseSample(BaseModel, ABC):
 	sample_id: int = None
 
 	def __init__(self, *args, **kwargs):
-		object.__setattr__(self, '__library_cls', None)
+		object.__setattr__(self, '_library_cls', None)
 		super().__init__(*args, **kwargs)
 
 	def bind_to_library(self, library_class):
-		object.__setattr__(self, '__library_cls', library_class)
+		object.__setattr__(self, '_library_cls', library_class)
 
 	@model_validator(mode="after")
-	def __run_custom_validation(self) -> Self:
+	def _run_custom_validation(self) -> Self:
 		self.post_init_logic()
 		return self
 
@@ -33,7 +33,7 @@ class BaseSample(BaseModel, ABC):
 		try:
 			while frame:
 				func_name = frame.f_code.co_name
-				if func_name in ('__init__', '__run_custom_validation', 'post_init_logic', 'model_validate_json'):
+				if func_name in ('__init__', '_run_custom_validation', 'post_init_logic', 'model_validate_json'):
 					is_internal = True
 					break
 				frame = frame.f_back
@@ -45,8 +45,8 @@ class BaseSample(BaseModel, ABC):
 			if current_value != value:
 				super().__setattr__(name, value)
 				
-				if self.__library_cls:
-					library_instance = self.__library_cls()
+				if self._library_cls:
+					library_instance = self._library_cls()
 					library_instance.notify_changed()
 				return
 

@@ -12,32 +12,32 @@ from Code.Utils.Constants.setting import Setting
 
 
 class Clr():
-	__current_theme_id: int = 0
+	_current_theme_id: int = 0
 	all_theme: list[dict] = [{}, {}, {}]
 
-	__subscribers: set[weakref.WeakMethod] = set()
+	_subscribers: set[weakref.WeakMethod] = set()
 
 	@classmethod
 	def get_theme_id(cls) -> int:
-		return cls.__current_theme_id
+		return cls._current_theme_id
 
 	@classmethod
 	def set_theme_id(cls, value: int):
-		if cls.__current_theme_id != value:
-			cls.__current_theme_id = value
-			cls.__notify_subscribers()
+		if cls._current_theme_id != value:
+			cls._current_theme_id = value
+			cls._notify_subscribers()
 
 	@classmethod
 	def subscribe(cls, callback: Callable[[], None]):
 		if hasattr(callback, '__self__') and callback.__self__ is not None:
 			weak_method = weakref.WeakMethod(callback)
-			cls.__subscribers.add(weak_method)
+			cls._subscribers.add(weak_method)
 
 	@classmethod
-	def __notify_subscribers(cls):
+	def _notify_subscribers(cls):
 		dead_subscribers = set()
 
-		for weak_method in cls.__subscribers:
+		for weak_method in cls._subscribers:
 			callback = weak_method()
 			if callback is not None:
 				try:
@@ -47,7 +47,7 @@ class Clr():
 			else:
 				dead_subscribers.add(weak_method)
 
-		cls.__subscribers -= dead_subscribers
+		cls._subscribers -= dead_subscribers
 
 
 	@classmethod
@@ -88,51 +88,51 @@ class Theme(metaclass=MetaSingleton):
 		self.font_dir_path = Path().font_dir_path
 
 		Clr.current_theme_id = Setting().theme_id
-		self.__config = ConfigParser(interpolation=ExtendedInterpolation())
-		self.__config.read(file_path, encoding='utf-8')
+		self._config = ConfigParser(interpolation=ExtendedInterpolation())
+		self._config.read(file_path, encoding='utf-8')
 
-		self.__read_conf()
-		self.__generate_font()
+		self._read_conf()
+		self._generate_font()
 		logging.info('Модуль "Theme": Инициализация завершена')
 
-	def __read_conf(self):
-		if 'font_styles' in self.__config:
-			self.__f_shantell_sans = self.__config.get('font_styles', 'shantell_sans')
+	def _read_conf(self):
+		if 'font_styles' in self._config:
+			self._f_shantell_sans = self._config.get('font_styles', 'shantell_sans')
 		else:
 			logging.critical('Секция "font_styles" не найдена')
 
-		if 'blue' in self.__config:
-			Clr.all_theme[0][ColorName.MAIN_BACKGROUND] = self.__config.get('blue', 'main_background_color')
-			Clr.all_theme[0][ColorName.SUB_BACKGROUND] = self.__config.get('blue', 'sub_background_color')
-			Clr.all_theme[0][ColorName.ACCENT_BACKGROUND] = self.__config.get('blue', 'accent_background_color')
-			Clr.all_theme[0][ColorName.MAIN_BORDER] = self.__config.get('blue', 'main_border_color')
-			Clr.all_theme[0][ColorName.FONT] = self.__config.get('blue', 'font_color')
+		if 'blue' in self._config:
+			Clr.all_theme[0][ColorName.MAIN_BACKGROUND] = self._config.get('blue', 'main_background_color')
+			Clr.all_theme[0][ColorName.SUB_BACKGROUND] = self._config.get('blue', 'sub_background_color')
+			Clr.all_theme[0][ColorName.ACCENT_BACKGROUND] = self._config.get('blue', 'accent_background_color')
+			Clr.all_theme[0][ColorName.MAIN_BORDER] = self._config.get('blue', 'main_border_color')
+			Clr.all_theme[0][ColorName.FONT] = self._config.get('blue', 'font_color')
 		else:
 			logging.critical('Секция "green" не найдена')
 		
-		if 'green' in self.__config:
-			Clr.all_theme[1][ColorName.MAIN_BACKGROUND] = self.__config.get('green', 'main_background_color')
-			Clr.all_theme[1][ColorName.SUB_BACKGROUND] = self.__config.get('green', 'sub_background_color')
-			Clr.all_theme[1][ColorName.ACCENT_BACKGROUND] = self.__config.get('green', 'accent_background_color')
-			Clr.all_theme[1][ColorName.MAIN_BORDER] = self.__config.get('green', 'main_border_color')
-			Clr.all_theme[1][ColorName.FONT] = self.__config.get('green', 'font_color')
+		if 'green' in self._config:
+			Clr.all_theme[1][ColorName.MAIN_BACKGROUND] = self._config.get('green', 'main_background_color')
+			Clr.all_theme[1][ColorName.SUB_BACKGROUND] = self._config.get('green', 'sub_background_color')
+			Clr.all_theme[1][ColorName.ACCENT_BACKGROUND] = self._config.get('green', 'accent_background_color')
+			Clr.all_theme[1][ColorName.MAIN_BORDER] = self._config.get('green', 'main_border_color')
+			Clr.all_theme[1][ColorName.FONT] = self._config.get('green', 'font_color')
 		else:
 			logging.critical('Секция "red" не найдена')
 		
-		if 'red' in self.__config:
-			Clr.all_theme[2][ColorName.MAIN_BACKGROUND] = self.__config.get('red', 'main_background_color')
-			Clr.all_theme[2][ColorName.SUB_BACKGROUND] = self.__config.get('red', 'sub_background_color')
-			Clr.all_theme[2][ColorName.ACCENT_BACKGROUND] = self.__config.get('red', 'accent_background_color')
-			Clr.all_theme[2][ColorName.MAIN_BORDER] = self.__config.get('red', 'main_border_color')
-			Clr.all_theme[2][ColorName.FONT] = self.__config.get('red', 'font_color')
+		if 'red' in self._config:
+			Clr.all_theme[2][ColorName.MAIN_BACKGROUND] = self._config.get('red', 'main_background_color')
+			Clr.all_theme[2][ColorName.SUB_BACKGROUND] = self._config.get('red', 'sub_background_color')
+			Clr.all_theme[2][ColorName.ACCENT_BACKGROUND] = self._config.get('red', 'accent_background_color')
+			Clr.all_theme[2][ColorName.MAIN_BORDER] = self._config.get('red', 'main_border_color')
+			Clr.all_theme[2][ColorName.FONT] = self._config.get('red', 'font_color')
 		else:
 			logging.critical('Секция "blue" не найдена')
 
-	def __generate_font(self):
-		Fnt.all_font[FontName.SHANTELL_SANS] = self.__generate_ShantellSans()
+	def _generate_font(self):
+		Fnt.all_font[FontName.SHANTELL_SANS] = self._generate_ShantellSans()
 
-	def __generate_ShantellSans(self) -> str:
-		font_path = os.path.abspath(f'{self.font_dir_path}/{self.__f_shantell_sans}/ShantellSans-Medium.ttf')
+	def _generate_ShantellSans(self) -> str:
+		font_path = os.path.abspath(f'{self.font_dir_path}/{self._f_shantell_sans}/ShantellSans-Medium.ttf')
 
 		if not os.path.exists(font_path):
 			logging.error(f'Файл шрифта не найден по пути: {font_path}')
