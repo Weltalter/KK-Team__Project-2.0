@@ -41,10 +41,6 @@ class ThemeDropdown(RoundedIconButton):
 		self._reload_mode_flag = False
 		self._reload_mode_icon = self._icon.i_reload
 		
-		self._init_subbutton_flag = False
-
-		self.setIcon(path_to_icon=self.current_theme_icon)
-
 		self.clicked.connect(self._show_theme_subbutton)
 		logging.info('Виджет "ThemeDropdown": Инициализация завершена')
 
@@ -55,10 +51,9 @@ class ThemeDropdown(RoundedIconButton):
 			new_y = current_geo.y()
 			
 			new_btn = ThemeSubButton(theme_id=index,
-			                         width=self._width,
+									width=self._width,
 									 height=self._height,
 									 radius=self._radius,
-									 path_to_icon=self._icons[index],
 									 theme_button=self,
 									 parent=self._parent)
 			new_btn.setGeometry(new_x, new_y, self._width, self._height)
@@ -67,10 +62,6 @@ class ThemeDropdown(RoundedIconButton):
 			self._spawned_btn[index] = new_btn
 
 	def _show_theme_subbutton(self):
-		if not self._init_subbutton_flag:
-			self._init_theme_subbutton()
-			self._init_subbutton_flag = True
-
 		if self._reload_mode_flag:
 			self._hide_theme_subbutton()
 			self.setIcon(path_to_icon=self.current_theme_icon)
@@ -102,6 +93,13 @@ class ThemeDropdown(RoundedIconButton):
 		
 		logging.info(f'Выбрана тема {theme_id}')
 		self._hide_theme_subbutton()
+	
+	def showEvent(self, event):
+		super().showEvent(event)
+		self._init_theme_subbutton()
+		self.setIcon(path_to_icon=self.current_theme_icon)
+		for index in list(self._spawned_btn.keys()):
+			self._spawned_btn[index].setIcon(path_to_icon=self._icons[index])
 
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
 		self._stop_spawn_process()

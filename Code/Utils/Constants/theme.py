@@ -52,23 +52,23 @@ class Clr():
 
 	@classmethod
 	def main_bg(cls) -> str:
-		return cls.all_theme[cls.current_theme_id][ColorName.MAIN_BACKGROUND]
+		return cls.all_theme[cls._current_theme_id][ColorName.MAIN_BACKGROUND]
 	
 	@classmethod
 	def sub_bg(cls) -> str:
-		return cls.all_theme[cls.current_theme_id][ColorName.SUB_BACKGROUND]
+		return cls.all_theme[cls._current_theme_id][ColorName.SUB_BACKGROUND]
 
 	@classmethod
 	def accent_bg(cls) -> str:
-		return cls.all_theme[cls.current_theme_id][ColorName.ACCENT_BACKGROUND]
+		return cls.all_theme[cls._current_theme_id][ColorName.ACCENT_BACKGROUND]
 	
 	@classmethod
 	def main_brd(cls) -> str:
-		return cls.all_theme[cls.current_theme_id][ColorName.MAIN_BORDER]
+		return cls.all_theme[cls._current_theme_id][ColorName.MAIN_BORDER]
 
 	@classmethod
 	def font(cls) -> str:
-		return cls.all_theme[cls.current_theme_id][ColorName.FONT]
+		return cls.all_theme[cls._current_theme_id][ColorName.FONT]
 
 class Fnt():
 	all_font: dict = {}
@@ -87,7 +87,7 @@ class Theme(metaclass=MetaSingleton):
 		file_path = Path().theme_path
 		self.font_dir_path = Path().font_dir_path
 
-		Clr.current_theme_id = Setting().theme_id
+		Clr.set_theme_id(Setting().theme_id)
 		self._config = ConfigParser(interpolation=ExtendedInterpolation())
 		self._config.read(file_path, encoding='utf-8')
 

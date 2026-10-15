@@ -45,7 +45,6 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 1: Боковое меню (Sidebar)
 		sidebar_widget = QWidget()
 		sidebar_widget.setObjectName("Sidebar")
-		sidebar_widget.setStyleSheet(f"background-color: {Clr.sub_bg()};")
 		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self._coordinate.sidebar_width))
 
 		size = MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_size)[0]
@@ -74,7 +73,6 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 2: Верхняя панель (Header)
 		header_widget = QWidget()
 		header_widget.setObjectName("Header")
-		header_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.header_height)) 
 
 		header_layout = QHBoxLayout(header_widget)
@@ -94,7 +92,6 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 3: Главный контент (Main Content)
 		content_widget = QWidget()
 		content_widget.setObjectName("Content")
-		content_widget.setStyleSheet(f"background-color: {Clr.main_bg()};")
 
 		content_layout = QHBoxLayout(content_widget)
 		
@@ -115,7 +112,6 @@ class MainWindow(QMainWindow):
 		#region СЕКТОР 4: Нижняя панель (Footer)
 		footer_widget = QWidget()
 		footer_widget.setObjectName("Footer")
-		footer_widget.setStyleSheet(f"background-color: {Clr.main_bg()};") 
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.footer_height))
 
 		footer_layout = QHBoxLayout(footer_widget)
@@ -125,8 +121,8 @@ class MainWindow(QMainWindow):
 		footer_layout.setSpacing(0)
 
 		creator_lbl = QLabel(self._message.m_version)
+		creator_lbl.setObjectName("VersionLabel")
 		creator_lbl.setFont(Fnt.shantell_sans(14))
-		creator_lbl.setStyleSheet(f"QLabel {{ color: {Clr.font()}; }}")
 		
 		btn_language = LanguageDropdown(parent=footer_widget)
 
@@ -138,11 +134,29 @@ class MainWindow(QMainWindow):
 		#endregion
 
 		main_layout.addLayout(body_layout)
-		self.update_theme()
 
 		return central_widget
 
 	def update_theme(self):
-		self.setStyleSheet(f"""
-			QWidget#Sidebar {{ background-color: {Clr.sub_bg()}; }}
-		""")
+		self.setStyleSheet(f'''
+			#Sidebar {{
+				background-color: {Clr.sub_bg()};
+			}}
+			#Header {{
+				background-color: {Clr.main_bg()};
+			}}
+			#Content {{
+				background-color: {Clr.main_bg()};
+			}}
+			#Footer {{
+				background-color: {Clr.main_bg()};
+			}}
+			#VersionLabel {{
+				color: {Clr.font()};
+			}}
+		''')
+	
+	def showEvent(self, event):
+		super().showEvent(event)
+		self.update_theme()
+		Clr.subscribe(self.update_theme)

@@ -41,10 +41,7 @@ class LanguageDropdown(RoundedTextButton):
 		self._reload_mode_flag = False
 		self._reload_mode_text = ''
 
-		self._init_subbutton_flag = False
-
 		self.set_text(self.current_language_text)
-		self.set_color(Clr.sub_bg())
 
 		self.clicked.connect(self._show_language_subbutton)
 		logging.info('Виджет "LanguageDropdown": Инициализация завершена')
@@ -62,16 +59,11 @@ class LanguageDropdown(RoundedTextButton):
 										language_button=self,
 										parent=self._parent)
 			new_btn.set_text(self._texts[index])
-			new_btn.set_color(Clr.sub_bg())
 			new_btn.setGeometry(new_x, new_y, self._width, self._height)
 			new_btn.raise_()
 			self._spawned_btn[index] = new_btn
 
 	def _show_language_subbutton(self):
-		if not self._init_subbutton_flag:
-			self._init_language_subbutton()
-			self._init_subbutton_flag = True
-
 		if self._reload_mode_flag:
 			self._hide_language_subbutton()
 			self.set_text(text=self.current_language_text)
@@ -102,6 +94,17 @@ class LanguageDropdown(RoundedTextButton):
 
 		logging.info(f'Выбран язык {language_id}')
 		self._hide_language_subbutton()
+
+	def update_theme(self):
+		self.set_color(Clr.sub_bg())
+		for sub_btn in list(self._spawned_btn.values()):
+			sub_btn.set_color(Clr.sub_bg())
+	
+	def showEvent(self, event):
+		super().showEvent(event)
+		self._init_language_subbutton()
+		self.update_theme()
+		Clr.subscribe(self.update_theme)
 
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
 		self._stop_spawn_process()
