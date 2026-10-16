@@ -24,7 +24,8 @@ class Coordinate(metaclass=MetaSingleton):
 			logging.critical('Секция "main_window" не найдена')
 
 		if 'sidebar' in self._config:
-			self.sidebar_width = self._config.getint('sidebar', 'width')
+			self.sidebar_collapsed_width = self._config.getint('sidebar', 'collapsed_width')
+			self.sidebar_expanded_width = self._config.getint('sidebar', 'expanded_width')
 			self.sidebar_btn_size = self._config.getint('sidebar', 'btn_size')
 			self.sidebar_btn_x = self._config.getint('sidebar', 'btn_x')
 			self.sidebar_setting_btn_y = self._config.getint('sidebar', 'btn_1_y')

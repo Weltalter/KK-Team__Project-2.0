@@ -16,6 +16,7 @@ from Code.UI.Component.icon_button import IconButton
 from Code.UI.Component.theme_dropdown import ThemeDropdown
 from Code.UI.Component.language_dropdown import LanguageDropdown
 from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
+from Code.UI.Component.main_sidebar import MainSidebar
 
 
 class MainWindow(QMainWindow):
@@ -43,9 +44,9 @@ class MainWindow(QMainWindow):
 		main_layout.setSpacing(0)
 
 		#region СЕКТОР 1: Боковое меню (Sidebar)
-		sidebar_widget = QWidget()
+		sidebar_collaps_w, sidebar_expand_w = MathScripts.coordinate_scaling(self._coordinate.sidebar_collapsed_width, self._coordinate.sidebar_expanded_width)
+		sidebar_widget = MainSidebar(collaps_width=sidebar_collaps_w, expand_width=sidebar_expand_w)
 		sidebar_widget.setObjectName("Sidebar")
-		sidebar_widget.setFixedWidth(*MathScripts.coordinate_scaling(self._coordinate.sidebar_width))
 
 		size = MathScripts.coordinate_scaling(self._coordinate.sidebar_btn_size)[0]
 		btn_setting = IconButton(width=size, height=size, path_to_icon=self._icon.i_setting, parent=sidebar_widget)
@@ -103,7 +104,9 @@ class MainWindow(QMainWindow):
 		content_layout.setSpacing(0)
 
 		# Создаем QScrollArea (область прокрутки)
-		mm_scroll_area = MainMenuScrollArea(parent=content_widget)
+		mm_scroll_area_width = self.width() - sidebar_expand_w - 2*content_margin
+		mm_scroll_area = MainMenuScrollArea(width=mm_scroll_area_width, parent=content_widget)
+		#content_layout.addStretch()
 		content_layout.addWidget(mm_scroll_area)
 		
 		body_layout.addWidget(content_widget)

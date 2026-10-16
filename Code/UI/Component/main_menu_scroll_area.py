@@ -48,13 +48,14 @@ class SwipeWidget(QWidget):
 class MainMenuScrollArea(QScrollArea):
 	_swipes_link: dict[int, SwipeWidget] = {}
 
-	def __init__(self, parent=None):
+	def __init__(self, width: int=800, parent=None):
 		super().__init__(parent=parent)
 		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
 		self._coordinate = Coordinate()
 		self._setting = Setting()
 		self._message = Message()
 		self._icon = Icon()
+		self.setFixedWidth(width)
 		self.setWidgetResizable(True)
 		
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
