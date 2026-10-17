@@ -25,7 +25,7 @@ class Logger():
 		file_name = f'Logs/{datetime.now().strftime("%d.%m.%Y_%H-%M-%S.log")}'
 		handlers = [
 			logging.FileHandler(file_name, encoding="utf-8"),
-			logging.StreamHandler()
+			#logging.StreamHandler()
 		]
 
 		for handler in handlers:
