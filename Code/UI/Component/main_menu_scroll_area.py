@@ -15,11 +15,12 @@ from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
+from Code.Utils.Constants.enum import MenuId
 from Code.UI.Component.rounded_icon_button import RoundedIconButton
 
 
 class SwipeWidget(QWidget):
-	def __init__(self, parent=None):
+	def __init__(self, manager, parent=None):
 		super().__init__(parent=parent)
 		self._coordinate = Coordinate()
 		self.setStyleSheet("background-color: transparent;")
@@ -45,16 +46,20 @@ class SwipeWidget(QWidget):
 
 		self.swipe_layout.addWidget(self.lbl)
 
+	def set_clicked(self, action):
+		self.btn.clicked.connect(action)
+
 class MainMenuScrollArea(QScrollArea):
 	_swipes_link: dict[int, SwipeWidget] = {}
 
-	def __init__(self, width: int=800, parent=None):
+	def __init__(self, width: int=800, manager = None, parent=None):
 		super().__init__(parent=parent)
 		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
 		self._coordinate = Coordinate()
 		self._setting = Setting()
 		self._message = Message()
 		self._icon = Icon()
+		self._menu_manager = manager
 		self.setFixedWidth(width)
 		self.setWidgetResizable(True)
 		
@@ -100,6 +105,7 @@ class MainMenuScrollArea(QScrollArea):
 				sw.set_button(width=btn_w, height=btn_h, radius=self._coordinate.main_menu_swipe_radius, path_to_icon=self._swipes_info[i][0])
 				sw.set_label(text=self._swipes_info[i][1])
 				self._swipes_link[i] = sw
+				self._swipes_link[i].set_clicked(lambda checked=False, current_i=i: self._menu_manager.switch_menu(MenuId(current_i + 1)))
 				scroll_layout.addWidget(self._swipes_link[i])
 		
 		self.setWidget(scroll_content)

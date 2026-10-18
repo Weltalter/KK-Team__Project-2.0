@@ -2,7 +2,6 @@ import logging
 from configparser import ConfigParser, ExtendedInterpolation
 from Code.Utils.Patterns.singleton_meta import MetaSingleton
 from Code.Utils.Constants.path import Path
-from Code.Utils.Constants.setting import Setting
 
 
 class Icon(metaclass=MetaSingleton):

@@ -2,9 +2,7 @@ import logging
 from PyQt6.QtWidgets import (
 	QMainWindow,
 	QWidget,
-	QVBoxLayout,
-	QHBoxLayout,
-	QLabel,
+	QHBoxLayout
 )
 from PyQt6.QtCore import Qt
 from Code.Utils.Scripts.math_scripts import MathScripts
@@ -12,11 +10,10 @@ from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
+from Code.Utils.Constants.enum import MenuId
 from Code.UI.Component.icon_button import IconButton
-from Code.UI.Component.theme_dropdown import ThemeDropdown
-from Code.UI.Component.language_dropdown import LanguageDropdown
-from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
 from Code.UI.Component.main_sidebar import MainSidebar
+from Code.UI.Menu.menu_manager import MenuManager
 
 
 class MainWindow(QMainWindow):
@@ -26,7 +23,7 @@ class MainWindow(QMainWindow):
 		self._coordinate = Coordinate()
 		self._message = Message()
 		self._icon = Icon()
-		self.setWindowFlags( Qt.WindowType.FramelessWindowHint)
+		self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
 
 		self.setGeometry(*MathScripts.coordinate_scaling(
 			self._coordinate.window_x,
@@ -34,6 +31,9 @@ class MainWindow(QMainWindow):
 			self._coordinate.window_width,
 			self._coordinate.window_height
 		))
+		self._menu_manager = MenuManager()
+		self._menu_manager.set_screen_geometry(self.geometry())
+		self._menu_manager.build_menu()
 		self.setCentralWidget(self.build_window())
 		logging.info('Экран "MainWindow": Инициализация завершена')
 
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
 		main_layout.setContentsMargins(0, 0, 0, 0)
 		main_layout.setSpacing(0)
 
-		#region СЕКТОР 1: Боковое меню (Sidebar)
+		#region Боковое меню (Sidebar)
 		sidebar_collaps_w, sidebar_expand_w = MathScripts.coordinate_scaling(self._coordinate.sidebar_collapsed_width, self._coordinate.sidebar_expanded_width)
 		sidebar_widget = MainSidebar(collaps_width=sidebar_collaps_w, expand_width=sidebar_expand_w)
 		sidebar_widget.setObjectName("Sidebar")
@@ -65,97 +65,15 @@ class MainWindow(QMainWindow):
 		main_layout.addWidget(sidebar_widget)
 		#endregion
 
-		#region ПРОМЕЖУТОЧНЫЙ LAYOUT (Для разделения на основной контент и низ)
-		body_layout = QVBoxLayout()
-		body_layout.setSpacing(0)
-		body_layout.setContentsMargins(0, 0, 0, 0)
-		#endregion
+		main_layout.addWidget(self._menu_manager.widget, stretch=1)
 
-		#region СЕКТОР 2: Верхняя панель (Header)
-		header_widget = QWidget()
-		header_widget.setObjectName("Header")
-		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.header_height)) 
-
-		header_layout = QHBoxLayout(header_widget)
-		
-		padding = MathScripts.coordinate_scaling(self._coordinate.header_padding)[0]
-		header_layout.setContentsMargins(padding, padding, padding, padding)
-		header_layout.setSpacing(0)
-		
-		btn_theme = ThemeDropdown(parent=header_widget)
-
-		header_layout.addStretch()
-		header_layout.addWidget(btn_theme)
-		
-		body_layout.addWidget(header_widget)
-		#endregion
-
-		#region СЕКТОР 3: Главный контент (Main Content)
-		content_widget = QWidget()
-		content_widget.setObjectName("Content")
-
-		content_layout = QHBoxLayout(content_widget)
-		
-		# ========================================================
-		# 1. ЗАДАЕМ ОТСТУПЫ 40 ПИКСЕЛЕЙ ОТ КРАЕВ С УЧЕТОМ МАСШТАБА
-		# ========================================================
-		content_margin = MathScripts.coordinate_scaling(self._coordinate.main_menu_margin)[0]
-		content_layout.setContentsMargins(content_margin, content_margin, content_margin, content_margin)
-		content_layout.setSpacing(0)
-
-		# Создаем QScrollArea (область прокрутки)
-		mm_scroll_area_width = self.width() - sidebar_expand_w - 2*content_margin
-		mm_scroll_area = MainMenuScrollArea(width=mm_scroll_area_width, parent=content_widget)
-		#content_layout.addStretch()
-		content_layout.addWidget(mm_scroll_area)
-		
-		body_layout.addWidget(content_widget)
-		#endregion
-
-		#region СЕКТОР 4: Нижняя панель (Footer)
-		footer_widget = QWidget()
-		footer_widget.setObjectName("Footer")
-		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.footer_height))
-
-		footer_layout = QHBoxLayout(footer_widget)
-
-		padding = MathScripts.coordinate_scaling(self._coordinate.footer_padding)[0]
-		footer_layout.setContentsMargins(padding, padding, padding, padding)
-		footer_layout.setSpacing(0)
-
-		creator_lbl = QLabel(self._message.m_version)
-		creator_lbl.setObjectName("VersionLabel")
-		creator_lbl.setFont(Fnt.shantell_sans(14))
-		
-		btn_language = LanguageDropdown(parent=footer_widget)
-
-		footer_layout.addWidget(btn_language)
-		footer_layout.addStretch()
-		footer_layout.addWidget(creator_lbl)
-
-		body_layout.addWidget(footer_widget)
-		#endregion
-
-		main_layout.addLayout(body_layout)
-
+		btn_setting.clicked.connect(lambda: self._menu_manager.switch_menu(MenuId.MAIN))
 		return central_widget
 
 	def update_theme(self):
 		self.setStyleSheet(f'''
 			#Sidebar {{
 				background-color: {Clr.sub_bg()};
-			}}
-			#Header {{
-				background-color: {Clr.main_bg()};
-			}}
-			#Content {{
-				background-color: {Clr.main_bg()};
-			}}
-			#Footer {{
-				background-color: {Clr.main_bg()};
-			}}
-			#VersionLabel {{
-				color: {Clr.font()};
 			}}
 		''')
 	

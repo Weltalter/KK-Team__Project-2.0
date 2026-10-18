@@ -1,6 +1,7 @@
 import logging
 from Code.Utils.Patterns.singleton_meta import MetaSingleton
 from Code.UI.main_window import MainWindow
+from Code.UI.Menu.menu_manager import MenuManager
 from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.coordinate import Coordinate
@@ -26,7 +27,7 @@ class Runtime(metaclass=MetaSingleton):
 
 	def _initialize(self):
 		Logger.initialize()
-		
+
 		logging.info('RT: Инициализация классов доступа...')
 		self._path = Path()
 		self._setting = Setting()
@@ -35,7 +36,11 @@ class Runtime(metaclass=MetaSingleton):
 		self._message = Message()
 		self._icon = Icon()
 		logging.info('RT: Инициализация классов доступа завершена')
-
+		
+		logging.info('RT: Инициализация менеджера меню...')
+		self.menu_manager = MenuManager()
+		logging.info('RT: Инициализация менеджера меню завершена')
+		
 		logging.info('RT: Инициализация библиотек...')
 		self._l_application = ApplicationLibrary()
 		self._l_application.import_data()

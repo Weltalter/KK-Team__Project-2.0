@@ -76,3 +76,15 @@ class ColorName(Enum):
 @unique
 class FontName(Enum):
 	SHANTELL_SANS = 1
+
+@unique
+class MenuId(IntEnum):
+	MAIN = 0
+	MOVIE = 1
+	GAME = 2
+	RECIPE = 3
+	BOOK = 4
+	MEDICINE = 5
+	WEBSITE = 6
+	APPLICATION = 7
+	ACCOUNT = 8
