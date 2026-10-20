@@ -41,17 +41,11 @@ class LanguageDropdown(RoundedTextButton):
 		self._reload_mode_flag = False
 		self._reload_mode_text = ''
 
-		self.set_text(self.current_language_text)
-
 		self.clicked.connect(self._show_language_subbutton)
 		logging.info('Виджет "LanguageDropdown": Инициализация завершена')
 
 	def _init_language_subbutton(self):
 		for index in list(self._texts.keys()):
-			current_geo = self.geometry()
-			new_x = current_geo.x() + (index + 1) * (current_geo.width() + self._coordinate.footer_language_btn_offset)
-			new_y = current_geo.y()
-			
 			new_btn = LanguageSubButton(language_id=index,
 										width=self._width,
 										height=self._height,
@@ -59,9 +53,9 @@ class LanguageDropdown(RoundedTextButton):
 										language_button=self,
 										parent=self._parent)
 			new_btn.set_text(self._texts[index])
-			new_btn.setGeometry(new_x, new_y, self._width, self._height)
 			new_btn.raise_()
 			self._spawned_btn[index] = new_btn
+			self._reposition_subbuttons()
 
 	def _show_language_subbutton(self):
 		if self._reload_mode_flag:
@@ -87,6 +81,13 @@ class LanguageDropdown(RoundedTextButton):
 		self._reload_mode_flag = False
 		logging.info('Закрытие списка тем "LanguageDropdown"')
 
+	def _reposition_subbuttons(self):
+		current_geo = self.geometry()
+		for index, btn in self._spawned_btn.items():
+			new_x = current_geo.x() + (index + 1) * (current_geo.width() + self._coordinate.footer_language_btn_offset)
+			new_y = current_geo.y()
+			btn.setGeometry(new_x, new_y, self._width, self._height)
+
 	def change_language(self, language_id: int):
 		self._setting.language_id = language_id
 		self.current_language_text = self._texts[language_id]
@@ -103,9 +104,24 @@ class LanguageDropdown(RoundedTextButton):
 	def showEvent(self, event):
 		super().showEvent(event)
 		self._init_language_subbutton()
+		self.set_text(self.current_language_text)
 		self.update_theme()
 		Clr.subscribe(self.update_theme)
 
+	def hideEvent(self, event):
+		self._hide_language_subbutton()
+		self.set_text(text=self.current_language_text)
+		
+		super().hideEvent(event)
+
+	def moveEvent(self, event):
+		super().moveEvent(event)
+		self._reposition_subbuttons()
+
+	def resizeEvent(self, event):
+		super().resizeEvent(event)
+		self._reposition_subbuttons()
+	
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
 		self._stop_spawn_process()
 		for btn in list(self._spawned_btn.values()):

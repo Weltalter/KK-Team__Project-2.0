@@ -46,20 +46,15 @@ class ThemeDropdown(RoundedIconButton):
 
 	def _init_theme_subbutton(self):
 		for index in list(self._icons.keys()):
-			current_geo = self.geometry()
-			new_x = current_geo.x() - (index + 1) * (current_geo.width() + self._coordinate.header_theme_btn_offset)
-			new_y = current_geo.y()
-			
 			new_btn = ThemeSubButton(theme_id=index,
-									width=self._width,
+									 width=self._width,
 									 height=self._height,
 									 radius=self._radius,
 									 theme_button=self,
 									 parent=self._parent)
-			new_btn.setGeometry(new_x, new_y, self._width, self._height)
 			new_btn.raise_()
-			
 			self._spawned_btn[index] = new_btn
+			self._reposition_subbuttons()
 
 	def _show_theme_subbutton(self):
 		if self._reload_mode_flag:
@@ -85,6 +80,13 @@ class ThemeDropdown(RoundedIconButton):
 		self._reload_mode_flag = False
 		logging.info('Закрытие списка тем "ThemeDropdown"')
 
+	def _reposition_subbuttons(self):
+		current_geo = self.geometry()
+		for index, btn in self._spawned_btn.items():
+			new_x = current_geo.x() - (index + 1) * (current_geo.width() + self._coordinate.header_theme_btn_offset)
+			new_y = current_geo.y()
+			btn.setGeometry(new_x, new_y, self._width, self._height)
+
 	def change_theme(self, theme_id: int):
 		self._setting.theme_id = theme_id
 		Clr.set_theme_id(theme_id)
@@ -101,6 +103,20 @@ class ThemeDropdown(RoundedIconButton):
 		for index in list(self._spawned_btn.keys()):
 			self._spawned_btn[index].setIcon(path_to_icon=self._icons[index])
 
+	def hideEvent(self, event):
+		self._hide_theme_subbutton()
+		self.setIcon(path_to_icon=self.current_theme_icon) 
+		
+		super().hideEvent(event)
+
+	def moveEvent(self, event):
+		super().moveEvent(event)
+		self._reposition_subbuttons()
+
+	def resizeEvent(self, event):
+		super().resizeEvent(event)
+		self._reposition_subbuttons()
+	
 	def destroy(self, destroyWindow=True, destroySubWindows=True):
 		self._stop_spawn_process()
 		for btn in list(self._spawned_btn.values()):
