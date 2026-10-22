@@ -6,7 +6,7 @@ from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.theme import Clr
-from Code.UI.Component.rounded_text_button import RoundedTextButton
+from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 
 
 class LanguageSubButton(RoundedTextButton):

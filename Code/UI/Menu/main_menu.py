@@ -10,7 +10,7 @@ from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.UI.Component.theme_dropdown import ThemeDropdown
 from Code.UI.Component.language_dropdown import LanguageDropdown
-from Code.UI.Component.main_menu_scroll_area import MainMenuScrollArea
+from Code.UI.Component.swipe_scroll_area import SwipeScrollArea
 
 
 class MainMenu(QWidget):
@@ -61,7 +61,7 @@ class MainMenu(QWidget):
 		# Создаем QScrollArea (область прокрутки)
 		sidebar_expand_w = MathScripts.coordinate_scaling(self._coordinate.sidebar_expanded_width)[0]
 		mm_scroll_area_width = self.manager.get_screen_geometry().width() - sidebar_expand_w - 2*content_margin
-		mm_scroll_area = MainMenuScrollArea(width=mm_scroll_area_width, manager=self.manager, parent=content_widget)
+		mm_scroll_area = SwipeScrollArea(width=mm_scroll_area_width, manager=self.manager, parent=content_widget)
 		content_layout.addWidget(mm_scroll_area)
 		
 		body_layout.addWidget(content_widget)

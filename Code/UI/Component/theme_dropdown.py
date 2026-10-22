@@ -6,7 +6,7 @@ from Code.Utils.Constants.theme import Clr
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.icon import Icon
-from Code.UI.Component.rounded_icon_button import RoundedIconButton
+from Code.UI.Component.CommonWidget.rounded_icon_button import RoundedIconButton
 
 
 class ThemeSubButton(RoundedIconButton):

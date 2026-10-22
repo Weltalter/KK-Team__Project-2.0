@@ -16,7 +16,7 @@ from Code.Utils.Constants.setting import Setting
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
 from Code.Utils.Constants.enum import MenuId
-from Code.UI.Component.rounded_icon_button import RoundedIconButton
+from Code.UI.Component.CommonWidget.rounded_icon_button import RoundedIconButton
 
 
 class SwipeWidget(QWidget):
@@ -49,12 +49,12 @@ class SwipeWidget(QWidget):
 	def set_clicked(self, action):
 		self.btn.clicked.connect(action)
 
-class MainMenuScrollArea(QScrollArea):
+class SwipeScrollArea(QScrollArea):
 	_swipes_link: dict[int, SwipeWidget] = {}
 
 	def __init__(self, width: int=800, manager = None, parent=None):
 		super().__init__(parent=parent)
-		logging.info('Виджет "MainMenuScrollArea": Инициализация...')
+		logging.info('Виджет "SwipeScrollArea": Инициализация...')
 		self._coordinate = Coordinate()
 		self._setting = Setting()
 		self._message = Message()
@@ -80,7 +80,7 @@ class MainMenuScrollArea(QScrollArea):
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.DecelerationFactor, self._setting.deceleration_factor)
 		props.setScrollMetric(QScrollerProperties.ScrollMetric.MousePressEventDelay, self._setting.mouse_press_event_delay)
 		scroller.setScrollerProperties(props)
-		logging.info('Виджет "MainMenuScrollArea": Инициализация завершена')
+		logging.info('Виджет "SwipeScrollArea": Инициализация завершена')
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)

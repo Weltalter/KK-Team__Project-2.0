@@ -54,31 +54,16 @@ class MovieMenu(QWidget):
 		#endregion
 
 		#region Область размера иконок
-		element_view_mode_1_widget = QWidget()
-		element_view_mode_1_widget.setObjectName("ElementViewMode1")
+		element_view_mode_widget = QWidget()
+		element_view_mode_widget.setObjectName("ElementViewMode1")
 
-		element_view_mode_1_widget.setFixedWidth(100)
-		element_view_mode_1_widget.setStyleSheet("background-color: #0000ff;")
+		element_view_mode_widget.setFixedWidth(300)
+		element_view_mode_widget.setStyleSheet("background-color: #0000ff;")
 
-		
-		element_view_mode_2_widget = QWidget()
-		element_view_mode_2_widget.setObjectName("ElementViewMode2")
-
-		element_view_mode_2_widget.setFixedWidth(100)
-		element_view_mode_2_widget.setStyleSheet("background-color: #0000cc;")
-
-		
-		element_view_mode_3_widget = QWidget()
-		element_view_mode_3_widget.setObjectName("ElementViewMode3")
-
-		element_view_mode_3_widget.setFixedWidth(100)
-		element_view_mode_3_widget.setStyleSheet("background-color: #0000aa;")
 		#endregion
 
 		filter_area_layout.addWidget(hashtag_choice_widget, stretch=1)
-		filter_area_layout.addWidget(element_view_mode_1_widget, stretch=0)
-		filter_area_layout.addWidget(element_view_mode_2_widget, stretch=0)
-		filter_area_layout.addWidget(element_view_mode_3_widget, stretch=0)
+		filter_area_layout.addWidget(element_view_mode_widget, stretch=0)
 		#endregion
 
 		search_area_layout.addWidget(searching_line_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)

@@ -11,7 +11,7 @@ from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.icon import Icon
 from Code.Utils.Constants.enum import MenuId
-from Code.UI.Component.icon_button import IconButton
+from Code.UI.Component.CommonWidget.icon_button import IconButton
 from Code.UI.Component.main_sidebar import MainSidebar
 from Code.UI.Menu.menu_manager import MenuManager
 
