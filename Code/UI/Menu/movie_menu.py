@@ -9,11 +9,12 @@ from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.UI.Component.element_view_mode_manager import ElementViewModeManager
-from Code.Utils.Constants.enum import ElementViewMode
+from Code.Utils.Constants.enum import ElementViewMode, FilterState
 
 
 class MovieMenu(QWidget):
 	_element_view_mode: ElementViewMode = ElementViewMode.LIST
+	_hashtag_filter: dict[FilterState, list[str]] = {FilterState.DISABLE: [], FilterState.ENABLE: []}
 
 	def __init__(self, manager):
 		self.manager = manager
