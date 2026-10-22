@@ -9,7 +9,8 @@ from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
 from Code.UI.Component.element_view_mode_manager import ElementViewModeManager
-from Code.Utils.Constants.enum import ElementViewMode
+from Code.UI.Component.hashtag_filter_manager import HashtagFilterManager
+from Code.Utils.Constants.enum import ElementViewMode, FilterState
 
 
 class MovieMenu(QWidget):
@@ -50,8 +51,8 @@ class MovieMenu(QWidget):
 		filter_area_layout.setSpacing(0)
 
 		#region Область хэштегов
-		hashtag_choice_widget = QWidget()
-		hashtag_choice_widget.setObjectName("HashtagChoice")
+		hashtag_choice_widget = HashtagFilterManager()
+		hashtag_choice_widget.setObjectName("HashtagFilter")
 
 		searching_line_widget.setStyleSheet("background-color: #a0a0a0;")
 		#endregion

@@ -98,8 +98,8 @@ class LanguageDropdown(RoundedTextButton):
 
 	def update_theme(self):
 		self.set_color(Clr.sub_bg())
-		for sub_btn in list(self._spawned_btn.values()):
-			sub_btn.set_color(Clr.sub_bg())
+		for btn in list(self._spawned_btn.values()):
+			btn.set_color(Clr.sub_bg())
 	
 	def showEvent(self, event):
 		super().showEvent(event)

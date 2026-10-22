@@ -94,3 +94,9 @@ class ElementViewMode(Enum):
 	LIST = 0
 	POSTER = 1
 	INFO = 2
+
+@unique
+class FilterState(Enum):
+	NEUTRAL = 0
+	DISABLE = 1
+	ENABLE = 2

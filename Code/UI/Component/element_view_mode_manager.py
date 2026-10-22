@@ -46,7 +46,6 @@ class ElementViewModeManager(QWidget):
 											radius=10,
 											parent=self)
 			new_btn.set_text(str(mode.value)) # TODO: Поменять на иконки
-			new_btn.set_color(Clr.sub_bg())
 			new_btn.raise_()
 			self._modes[mode] = new_btn
 			self.main_layout.addWidget(new_btn)
@@ -56,3 +55,11 @@ class ElementViewModeManager(QWidget):
 		opt.initFrom(self)
 		painter = QPainter(self)
 		self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
+	
+	def update_theme(self):
+		for btn in list(self._modes.values()):
+			btn.set_color(Clr.sub_bg())
+	
+	def showEvent(self, event):
+		super().showEvent(event)
+		self.update_theme()
