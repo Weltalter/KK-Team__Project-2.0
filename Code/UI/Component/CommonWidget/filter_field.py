@@ -16,7 +16,7 @@ from Code.Utils.Constants.enum import ElementViewMode, FilterState
 
 
 class FilterField(QWidget):
-	_filter: dict[FilterState, list[str]] = {FilterState.DISABLE: [], FilterState.ENABLE: []}
+	_filter: dict[FilterState, list[str]] = {FilterState.NEUTRAL: [], FilterState.DISABLE: [], FilterState.ENABLE: []}
 
 	def __init__(self):
 		super().__init__()
