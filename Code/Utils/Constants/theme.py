@@ -73,11 +73,11 @@ class Clr():
 class Fnt():
 	all_font: dict = {}
 
-	@staticmethod
-	def shantell_sans(font_size: int = 24) -> QFont:
+	@classmethod
+	def shantell_sans(cls, font_size: int = 24) -> QFont:
 		font_size = MathScripts.coordinate_scaling(font_size)[0]
-		font = QFont(Fnt.all_font[FontName.SHANTELL_SANS], font_size)
-		font.setFamilies([Fnt.all_font[FontName.SHANTELL_SANS], "SansSerif", "Arial"])
+		font = QFont(cls.all_font[FontName.SHANTELL_SANS], font_size)
+		font.setFamilies([cls.all_font[FontName.SHANTELL_SANS], "SansSerif", "Arial"])
 		font.setWeight(QFont.Weight.Medium)
 		return font
 
