@@ -88,3 +88,9 @@ class MenuId(IntEnum):
 	WEBSITE = 6
 	APPLICATION = 7
 	ACCOUNT = 8
+
+@unique
+class ElementViewMode(Enum):
+	LIST = 0
+	POSTER = 1
+	INFO = 2

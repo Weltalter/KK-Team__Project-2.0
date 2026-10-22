@@ -8,9 +8,13 @@ from PyQt6.QtCore import Qt
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Constants.message import Message
+from Code.UI.Component.element_view_mode_manager import ElementViewModeManager
+from Code.Utils.Constants.enum import ElementViewMode
 
 
 class MovieMenu(QWidget):
+	_element_view_mode: ElementViewMode = ElementViewMode.LIST
+
 	def __init__(self, manager):
 		self.manager = manager
 		super().__init__()
@@ -40,7 +44,6 @@ class MovieMenu(QWidget):
 		#region Область фильтра
 		filter_area_widget = QWidget()
 		filter_area_widget.setObjectName("FilterArea")
-		filter_area_widget.setFixedHeight(100)
 		
 		filter_area_layout = QHBoxLayout(filter_area_widget)
 		filter_area_layout.setContentsMargins(0, 0, 0, 0)
@@ -54,16 +57,15 @@ class MovieMenu(QWidget):
 		#endregion
 
 		#region Область размера иконок
-		element_view_mode_widget = QWidget()
-		element_view_mode_widget.setObjectName("ElementViewMode1")
+		element_view_mode_widget = ElementViewModeManager()
+		element_view_mode_widget.setObjectName("ElementViewMode")
 
-		element_view_mode_widget.setFixedWidth(300)
-		element_view_mode_widget.setStyleSheet("background-color: #0000ff;")
-
+		element_view_mode_widget.register_modes(modes=[ElementViewMode.LIST, ElementViewMode.POSTER, ElementViewMode.INFO])
+		element_view_mode_widget.mode_changed.connect(self._element_view_mode_changed)
 		#endregion
 
 		filter_area_layout.addWidget(hashtag_choice_widget, stretch=1)
-		filter_area_layout.addWidget(element_view_mode_widget, stretch=0)
+		filter_area_layout.addWidget(element_view_mode_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 		#endregion
 
 		search_area_layout.addWidget(searching_line_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -81,7 +83,11 @@ class MovieMenu(QWidget):
 
 		main_layout.addWidget(search_area_widget, stretch=0)
 		main_layout.addWidget(content_area_widget, stretch=1)
-		
+
+	def _element_view_mode_changed(self, new_mode: ElementViewMode):
+		if self._element_view_mode != new_mode:
+			self._element_view_mode = new_mode
+	
 	def update_theme(self):
 		self.setStyleSheet(f'''
 			#SearchArea {{
@@ -92,6 +98,9 @@ class MovieMenu(QWidget):
 			}}
 			#FilterArea {{
 				background-color: #ffff00;
+			}}
+			#ElementViewMode {{
+				background-color: {Clr.main_bg()};
 			}}
 		''')
 
