@@ -3,6 +3,9 @@ from PyQt6.QtWidgets import (
 	QHBoxLayout,
 	QVBoxLayout,
 	QLabel,
+	QScrollArea,
+	QScroller,
+	QScrollerProperties,
 )
 from PyQt6.QtWidgets import QStyle, QStyleOption
 from PyQt6.QtCore import Qt, pyqtSignal
@@ -15,13 +18,17 @@ from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 from Code.Utils.Constants.enum import ElementViewMode, FilterState
 
 
-class FilterField(QWidget):
+class FilterField(QScrollArea):
 	_filter: dict[FilterState, list[str]] = {FilterState.NEUTRAL: [], FilterState.DISABLE: [], FilterState.ENABLE: []}
 
-	def __init__(self):
+	def __init__(self, height=100):
 		super().__init__()
 		self._coordinate = Coordinate()
 		self._message = Message()
+		
+		self.setFixedHeight(height)
+		self.setWidgetResizable(True)
+		self.setStyleSheet("QScrollArea { border: none; background-color: #0fa1a1; }")
 
 	def paintEvent(self, event):
 		opt = QStyleOption()
