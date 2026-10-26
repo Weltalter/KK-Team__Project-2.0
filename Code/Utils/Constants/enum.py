@@ -96,7 +96,7 @@ class ElementViewMode(Enum):
 	INFO = 2
 
 @unique
-class FilterState(Enum):
+class FilterState(IntEnum):
 	NEUTRAL = 0
-	DISABLE = 1
-	ENABLE = 2
+	ENABLE = 1
+	DISABLE = 2

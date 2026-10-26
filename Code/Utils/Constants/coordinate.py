@@ -20,6 +20,7 @@ class Coordinate(metaclass=MetaSingleton):
 			self.window_y = self._config.getint('main_window', 'y')
 			self.window_width = self._config.getint('main_window', 'width')
 			self.window_height = self._config.getint('main_window', 'height')
+			self.button_padding = self._config.getint('main_window', 'button_padding')
 		else:
 			logging.critical('Секция "main_window" не найдена')
 

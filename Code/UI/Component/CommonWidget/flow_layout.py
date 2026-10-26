@@ -1,89 +1,77 @@
-from PyQt6.QtWidgets import QLayout, QLayoutItem
-from PyQt6.QtCore import Qt, QPoint, QRect, QSize
+from PyQt6.QtWidgets import QLayout, QWidgetItem
+from PyQt6.QtCore import QSize, QRect
 
+
+class FlowItem:
+	def __init__(self, item: QWidgetItem, x: int, y: int):
+		self.item = item
+		self.x = x
+		self.y = y
 
 class FlowLayout(QLayout):
-	def __init__(self, parent=None, margin=-1, spacing=-1):
+	def __init__(self, parent=None):
 		super().__init__(parent)
-		if margin >= 0:
-			self.setContentsMargins(margin, margin, margin, margin)
-		self.setSpacing(spacing if spacing >= 0 else 6)
-		self._items = []
+		self._items: list[FlowItem] = []
 
 	def __del__(self):
-		del self._items
+		item = self.takeAt(0)
+		while item:
+			item = self.takeAt(0)
 
-	def addItem(self, item: QLayoutItem):
-		self._items.append(item)
+	def addWidget(self, widget, x: int = 0, y: int = 0):
+		self.addChildWidget(widget)
+		self.addItem(QWidgetItem(widget), x, y)
+
+	def addItem(self, item: QWidgetItem, x: int = 0, y: int = 0):
+		self._items.append(FlowItem(item, x, y))
+		self.invalidate()
 
 	def count(self) -> int:
 		return len(self._items)
 
-	def itemAt(self, index: int) -> QLayoutItem:
+	def itemAt(self, index: int) -> QWidgetItem | None:
 		if 0 <= index < len(self._items):
-			return self._items[index]
+			return self._items[index].item
 		return None
 
-	def takeAt(self, index: int) -> QLayoutItem:
+	def takeAt(self, index: int) -> QWidgetItem | None:
 		if 0 <= index < len(self._items):
-			return self._items.pop(index)
+			coord_item = self._items.pop(index)
+			return coord_item.item
 		return None
-
-	def expandingDirections(self) -> Qt.Orientation:
-		return Qt.Orientation(0)
-
-	def hasHeightForWidth(self) -> bool:
-		return True
-
-	def heightForWidth(self, width: int) -> int:
-		return self._do_layout(QRect(0, 0, width, 0), test_only=True)
 
 	def setGeometry(self, rect: QRect):
 		super().setGeometry(rect)
-		self._do_layout(rect, test_only=False)
+		
+		for coord_item in self._items:
+			item_size = coord_item.item.sizeHint()
+			coord_item.item.setGeometry(
+				QRect(
+					rect.x() + coord_item.x, 
+					rect.y() + coord_item.y, 
+					item_size.width(), 
+					item_size.height()
+				)
+			)
 
 	def sizeHint(self) -> QSize:
-		return self._minimum_size()
+		if not self._items:
+			return QSize(100, 100)
+
+		max_x = 0
+		max_y = 0
+
+		for coord_item in self._items:
+			hint = coord_item.item.sizeHint()
+			right_edge = coord_item.x + hint.width()
+			bottom_edge = coord_item.y + hint.height()
+			
+			if right_edge > max_x:
+				max_x = right_edge
+			if bottom_edge > max_y:
+				max_y = bottom_edge
+
+		return QSize(max_x, max_y)
 
 	def minimumSize(self) -> QSize:
-		return self._minimum_size()
-
-	def _do_layout(self, rect: QRect, test_only: bool) -> int:
-		left, top, right, bottom = self.getContentsMargins()
-		effective_rect = rect.adjusted(+left, +top, -right, -bottom)
-		x = effective_rect.x()
-		y = effective_rect.y()
-		line_height = 0
-		spacing = self.spacing()
-
-		for item in self._items:
-			widget = item.widget()
-			space_x = spacing
-			space_y = spacing
-			
-			# Рассчитываем идеальный размер для элемента
-			size = item.sizeHint()
-			next_x = x + size.width() + space_x
-			
-			# Если элемент выходит за границы по ширине, переносим на новую строку
-			if next_x - space_x > effective_rect.right() and line_height > 0:
-				x = effective_rect.x()
-				y = y + line_height + space_y
-				next_x = x + size.width() + space_x
-				line_height = 0
-
-			if not test_only:
-				item.setGeometry(QRect(QPoint(x, y), size))
-
-			x = next_x
-			line_height = max(line_height, size.height())
-
-		return y + line_height - rect.y() + bottom
-
-	def _minimum_size(self) -> QSize:
-		size = QSize()
-		for item in self._items:
-			size = size.expandedTo(item.minimumSize())
-		left, top, right, bottom = self.getContentsMargins()
-		size += QSize(left + right, top + bottom)
-		return size
+		return self.sizeHint()

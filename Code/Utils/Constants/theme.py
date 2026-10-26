@@ -3,17 +3,18 @@ import logging
 import weakref
 from typing import Callable
 from configparser import ConfigParser, ExtendedInterpolation
-from PyQt6.QtGui import QFontDatabase, QFont
+from PyQt6.QtGui import QFontDatabase, QFont, QFontMetrics
 from Code.Utils.Patterns.singleton_meta import MetaSingleton
 from Code.Utils.Scripts.math_scripts import MathScripts
-from Code.Utils.Constants.enum import ColorName, FontName
+from Code.Utils.Constants.enum import ColorName, FontName, FilterState
 from Code.Utils.Constants.path import Path
 from Code.Utils.Constants.setting import Setting
 
 
 class Clr():
 	_current_theme_id: int = 0
-	all_theme: list[dict] = [{}, {}, {}]
+	all_theme: list[dict[ColorName, str]] = [{}, {}, {}]
+	filter_field: dict[FilterState, str] = {}
 
 	_subscribers: set[weakref.WeakMethod] = set()
 
@@ -70,6 +71,10 @@ class Clr():
 	def font(cls) -> str:
 		return cls.all_theme[cls._current_theme_id][ColorName.FONT]
 
+	@classmethod
+	def filter_bg(cls, state: FilterState) -> str:
+		return cls.filter_field[state]
+	
 class Fnt():
 	all_font: dict = {}
 
@@ -80,6 +85,11 @@ class Fnt():
 		font.setFamilies([cls.all_font[FontName.SHANTELL_SANS], "SansSerif", "Arial"])
 		font.setWeight(QFont.Weight.Medium)
 		return font
+
+	@classmethod
+	def px_size(cls, font: QFont, text: str) -> tuple[int, int]:
+		font_metrics = QFontMetrics(font)
+		return font_metrics.horizontalAdvance(text), font_metrics.height()
 
 class Theme(metaclass=MetaSingleton):
 	def __init__(self):
@@ -100,6 +110,13 @@ class Theme(metaclass=MetaSingleton):
 			self._f_shantell_sans = self._config.get('font_styles', 'shantell_sans')
 		else:
 			logging.critical('Секция "font_styles" не найдена')
+			
+		if 'other' in self._config:
+			Clr.filter_field[FilterState.NEUTRAL] = self._config.get('other', 'filter_neutral_background_color')
+			Clr.filter_field[FilterState.DISABLE] = self._config.get('other', 'filter_disable_background_color')
+			Clr.filter_field[FilterState.ENABLE] = self._config.get('other', 'filter_enable_background_color')
+		else:
+			logging.critical('Секция "other" не найдена')
 
 		if 'blue' in self._config:
 			Clr.all_theme[0][ColorName.MAIN_BACKGROUND] = self._config.get('blue', 'main_background_color')

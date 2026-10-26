@@ -3,18 +3,20 @@ from PyQt6.QtCore import Qt, QRectF
 from PyQt6.QtWidgets import QPushButton
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.theme import Clr, Fnt
+from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.setting import Setting
 
 
 class RoundedTextButton(QPushButton):
-	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, parent=None):
+	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, font_size: int = 14, parent=None):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)
 		self.radius = radius
 
 		self._setting = Setting()
+		self._coordinate = Coordinate()
 
-		self.setFont(Fnt.shantell_sans(14))
+		self.setFont(Fnt.shantell_sans(font_size))
 
 		self._current_color = None
 		self._base_color = None
@@ -55,7 +57,7 @@ class RoundedTextButton(QPushButton):
 				color: {Clr.font()};
 				border: none;
 				border-radius: {self.radius}px;
-				padding: 5px;
+				padding: {self._coordinate.button_padding}px;
 			}}
 		""")
 
