@@ -8,10 +8,11 @@ from Code.Utils.Constants.setting import Setting
 
 
 class RoundedTextButton(QPushButton):
-	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, font_size: int = 14, parent=None):
+	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, border_flag: bool = False, font_size: int = 14, parent=None):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)
 		self.radius = radius
+		self._border_flag = border_flag
 
 		self._setting = Setting()
 		self._coordinate = Coordinate()
@@ -44,9 +45,10 @@ class RoundedTextButton(QPushButton):
 		path = QPainterPath()
 		path.addRoundedRect(rect, self.radius, self.radius)
 
-		pen = QPen(QColor(Clr.main_brd()), 2)
-		painter.setPen(pen)
-		painter.drawPath(path)
+		if self._border_flag:
+			pen = QPen(QColor(Clr.main_brd()), 2)
+			painter.setPen(pen)
+			painter.drawPath(path)
 
 		painter.end()
 
@@ -57,7 +59,7 @@ class RoundedTextButton(QPushButton):
 				color: {Clr.font()};
 				border: none;
 				border-radius: {self.radius}px;
-				padding: {self._coordinate.button_padding}px;
+				padding: {self._coordinate.button_margin}px;
 			}}
 		""")
 

@@ -16,7 +16,7 @@ from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 
 class ElementViewModeButton(RoundedTextButton): # TODO: Поменять RoundedTextButton на RoundedIconButton
 	def __init__(self, mode, width: int = 20, height: int = 20, radius: int = 20, parent=None):
-		super().__init__(width=width, height=height, radius=radius, parent=parent)
+		super().__init__(width=width, height=height, radius=radius, border_flag=True, parent=parent)
 		self._mode: ElementViewMode = mode
 		self._parent: ElementViewModeManager = parent
 		
@@ -41,7 +41,7 @@ class ElementViewModeManager(QWidget):
 	def register_modes(self, modes: list[ElementViewMode]):
 		for mode in modes:
 			new_btn = ElementViewModeButton(mode=mode,
-			                                width=50, # TODO: Поменять на файловые константы
+											width=50, # TODO: Поменять на файловые константы
 											height=50,
 											radius=10,
 											parent=self)

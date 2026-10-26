@@ -98,7 +98,7 @@ class MovieMenu(QWidget):
 				background-color: #00ff00;
 			}}
 			#FilterArea {{
-				background-color: #ffff00;
+				background-color: {Clr.main_bg()};
 			}}
 			#ElementViewMode {{
 				background-color: {Clr.main_bg()};

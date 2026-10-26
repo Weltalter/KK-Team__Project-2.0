@@ -75,3 +75,11 @@ class FlowLayout(QLayout):
 
 	def minimumSize(self) -> QSize:
 		return self.sizeHint()
+
+	def update_item_position(self, widget, new_x: int, new_y: int):
+		for coord_item in self._items:
+			if coord_item.item.widget() == widget:
+				coord_item.x = new_x
+				coord_item.y = new_y
+				break
+		self.invalidate()

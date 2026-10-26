@@ -11,7 +11,7 @@ from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 
 class LanguageSubButton(RoundedTextButton):
 	def __init__(self, language_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, language_button=None, parent=None):
-		super().__init__(width=width, height=height, radius=radius, parent=parent)
+		super().__init__(width=width, height=height, radius=radius, border_flag=True, parent=parent)
 		self.id = language_id
 		self._language_button = language_button
 		
@@ -32,7 +32,7 @@ class LanguageDropdown(RoundedTextButton):
 		self._height = MathScripts.coordinate_scaling(self._coordinate.footer_language_btn_height)[0]
 		self._radius = MathScripts.coordinate_scaling(self._coordinate.footer_language_btn_radius)[0]
 
-		super().__init__(width=self._width, height=self._height, radius=self._radius, parent=self._parent)
+		super().__init__(width=self._width, height=self._height, radius=self._radius, border_flag=True, parent=self._parent)
 
 		self._spawned_btn: dict[int, LanguageSubButton] = {}
 		self._texts: dict[int, str] = {i: self._message.m_languages[i] for i in range(len(self._message.m_languages))}

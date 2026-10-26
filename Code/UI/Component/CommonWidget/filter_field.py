@@ -19,10 +19,11 @@ class FilterButton(RoundedTextButton):
 	def __init__(self, index: int, text: str):
 		self._coordinate = Coordinate()
 
-		width, height = Fnt.px_size(Fnt.shantell_sans(14), text)
-		btn_padding = self._coordinate.button_padding * 2
+		width, height = Fnt.px_size(Fnt.shantell_sans(10), text)
+		btn_width_margin = self._coordinate.button_margin * 6
+		btn_height_margin = self._coordinate.button_margin * 3
 
-		super().__init__(width=width+btn_padding, height=height+btn_padding, radius=-1, font_size=10)
+		super().__init__(width=width+btn_width_margin, height=height+btn_height_margin, radius=(height+btn_height_margin)//2, border_flag=False, font_size=10)
 
 		self._index = index
 		self.set_text(text)
@@ -31,6 +32,11 @@ class FilterButton(RoundedTextButton):
 
 	def change_index(self, new_index: int):
 		self._index = new_index
+
+	def clear_state(self):
+		self.filter_changed.emit(self._index, FilterState(1))
+		self._filter_state = FilterState(0)
+		self.set_color(Clr.filter_bg(self._filter_state))
 
 	def _change_state(self):
 		self.filter_changed.emit(self._index, self._filter_state)
@@ -42,20 +48,20 @@ class FilterField(QScrollArea):
 		super().__init__()
 		self._coordinate = Coordinate()
 
-		self._filter = {FilterState.NEUTRAL: {}, FilterState.DISABLE: {}, FilterState.ENABLE: {}}
-		self._all_btn = []
-		self._generator = {FilterState.NEUTRAL: IdGenerator(), FilterState.DISABLE: IdGenerator(), FilterState.ENABLE: IdGenerator()}
+		self._filter: dict[FilterState, dict[int, FilterButton]] = {FilterState.NEUTRAL: {}, FilterState.DISABLE: {}, FilterState.ENABLE: {}}
+		self._all_btn: list[FilterButton] = []
+		self._generator: dict[FilterState, IdGenerator] = {FilterState.NEUTRAL: IdGenerator(), FilterState.DISABLE: IdGenerator(), FilterState.ENABLE: IdGenerator()}
 		
 		self.setFixedHeight(height)
 		self.setWidgetResizable(True)
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-		self.setStyleSheet("QScrollArea { border: none; background-color: #0fa1a1; }")
+		self.setStyleSheet("QScrollArea { border: none; background-color: transparent; }")
 
 		self.container = QWidget()
 		self.container.setStyleSheet("background-color: transparent;") 
 		
-		self.layout = FlowLayout(self.container)
+		self.flow_layout = FlowLayout(self.container)
 		
 		self.setWidget(self.container)
 
@@ -68,9 +74,7 @@ class FilterField(QScrollArea):
 			self._filter[FilterState.NEUTRAL][btn_id] = btn
 			self._all_btn.append(btn)
 			
-			self.layout.addWidget(btn, 0, 0)
-		QTimer.singleShot(0, self._reposition_buttons)
-
+			self.flow_layout.addWidget(btn, 0, 0)
 
 	def _reposition_buttons(self):
 		padding = 10
@@ -79,12 +83,15 @@ class FilterField(QScrollArea):
 		max_width = self.viewport().width()
 
 		for btn in self._all_btn:
-			btn.move(x_cor, y_cor)
+			self.flow_layout.update_item_position(btn, x_cor, y_cor)
 
 			x_cor += btn.width() + padding
 			if x_cor + btn.width() + padding > max_width:
 				x_cor = padding
 				y_cor += btn.height() + padding
+
+		self.flow_layout.activate()
+		self.container.adjustSize()
 
 	def filter_changed(self, index: int, state: FilterState):
 		btn_state = FilterState((state + 1) % 3)
@@ -95,6 +102,10 @@ class FilterField(QScrollArea):
 
 		del self._filter[state][index]
 		self._generator[state].release_id(index)
+
+	def clear_filter(self):
+		for btn in self._all_btn:
+			btn.clear_state()
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
