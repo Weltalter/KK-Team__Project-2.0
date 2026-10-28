@@ -11,6 +11,8 @@ from Code.Utils.Constants.theme import Clr
 from Code.Utils.Constants.message import Message
 from Code.UI.Component.element_view_mode_manager import ElementViewModeManager
 from Code.UI.Component.hashtag_filter_manager import HashtagFilterManager
+from Code.UI.Component.CommonWidget.search_line import SearchLine
+from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 from Code.Utils.Constants.enum import ElementViewMode
 
 
@@ -30,25 +32,31 @@ class MovieMenu(QWidget):
 		main_layout.setSpacing(0)
 
 		#region Область поиска
-		search_area_widget = QWidget()
-		search_area_widget.setObjectName("SearchArea")
-		search_area_widget.setStyleSheet("background-color: transparent;")
+		search_filter_area_widget = QWidget()
+		search_filter_area_widget.setStyleSheet("background-color: transparent;")
 		
-		search_area_layout = QVBoxLayout(search_area_widget)
-		search_area_layout.setContentsMargins(0, 0, 0, 0)
-		search_area_layout.setSpacing(0)
+		search_filter_area_layout = QVBoxLayout(search_filter_area_widget)
+		search_filter_area_layout.setContentsMargins(0, 0, 0, 0)
+		search_filter_area_layout.setSpacing(0)
 
 		#region Область поисковой строки
-		searching_line_widget = QWidget()
-		searching_line_widget.setObjectName("SearchingLine")
-		searching_line_widget.setStyleSheet("background-color: #a0a0a0;")
+		search_area_widget = QWidget()
+		search_area_widget.setStyleSheet("background-color: transparent;")
 
-		searching_line_widget.setFixedSize(600, 40)
+		search_area_layout = QHBoxLayout(search_area_widget)
+		search_area_layout.setContentsMargins(0, 0, 0, 0)
+		search_area_layout.setSpacing(10)
+
+		test = RoundedTextButton(width=40, height=40, radius=5, border_flag=True)
+		test.set_text("X")
+		test.set_color(Clr.black())
+
+		test_line = SearchLine(width=600, height=40)
+		test_line.setStyleSheet("background-color: red;")
 		#endregion
 		
 		#region Область фильтра
 		filter_area_widget = QWidget()
-		filter_area_widget.setObjectName("FilterArea")
 		filter_area_widget.setStyleSheet("background-color: transparent;")
 		
 		filter_area_layout = QHBoxLayout(filter_area_widget)
@@ -57,37 +65,41 @@ class MovieMenu(QWidget):
 
 		#region Область хэштегов
 		hashtag_choice_widget = HashtagFilterManager()
-		hashtag_choice_widget.setObjectName("HashtagFilter")
 		hashtag_choice_widget.setStyleSheet("background-color: transparent;")
+		
+		test.clicked.connect(hashtag_choice_widget.filter_field.clear_filter)
 		#endregion
 
 		#region Область размера иконок
 		element_view_mode_widget = ElementViewModeManager()
-		element_view_mode_widget.setObjectName("ElementViewMode")
 		element_view_mode_widget.setStyleSheet("background-color: transparent;")
 
 		element_view_mode_widget.register_modes(modes=[ElementViewMode.LIST, ElementViewMode.POSTER, ElementViewMode.INFO])
 		element_view_mode_widget.mode_changed.connect(self._element_view_mode_changed)
 		#endregion
 
-		filter_area_layout.addWidget(hashtag_choice_widget, stretch=1)
-		filter_area_layout.addWidget(element_view_mode_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 		#endregion
 
-		search_area_layout.addWidget(searching_line_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
-		search_area_layout.addWidget(filter_area_widget, stretch=1)
 		#endregion
 
 		#region Область контента
 		content_area_widget = QWidget()
-		content_area_widget.setObjectName("ContentArea")
 		
 		content_area_layout = QVBoxLayout(content_area_widget)
 		content_area_layout.setContentsMargins(0, 0, 0, 0)
 		content_area_layout.setSpacing(0)
 		#endregion
 
-		main_layout.addWidget(search_area_widget, stretch=0)
+		search_area_layout.addWidget(test, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
+		search_area_layout.addWidget(test_line, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
+
+		filter_area_layout.addWidget(hashtag_choice_widget, stretch=1)
+		filter_area_layout.addWidget(element_view_mode_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
+
+		search_filter_area_layout.addWidget(search_area_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
+		search_filter_area_layout.addWidget(filter_area_widget, stretch=1)
+
+		main_layout.addWidget(search_filter_area_widget, stretch=0)
 		main_layout.addWidget(content_area_widget, stretch=1)
 
 	def _element_view_mode_changed(self, new_mode: ElementViewMode):

@@ -32,7 +32,6 @@ class MainMenu(QWidget):
 
 		#region СЕКТОР 2: Верхняя панель (Header)
 		header_widget = QWidget()
-		header_widget.setObjectName("Header")
 		header_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.header_height)) 
 
 		header_layout = QHBoxLayout(header_widget)
@@ -43,15 +42,10 @@ class MainMenu(QWidget):
 		
 		btn_theme = ThemeDropdown(parent=header_widget)
 
-		header_layout.addStretch()
-		header_layout.addWidget(btn_theme)
-		
-		body_layout.addWidget(header_widget)
 		#endregion
 
 		#region СЕКТОР 3: Главный контент (Main Content)
 		content_widget = QWidget()
-		content_widget.setObjectName("Content")
 
 		content_layout = QHBoxLayout(content_widget)
 		
@@ -66,14 +60,10 @@ class MainMenu(QWidget):
 		sidebar_expand_w = MathScripts.coordinate_scaling(self._coordinate.sidebar_expanded_width)[0]
 		mm_scroll_area_width = self.manager.get_screen_geometry().width() - sidebar_expand_w - 2*content_margin
 		mm_scroll_area = SwipeScrollArea(width=mm_scroll_area_width, manager=self.manager, parent=content_widget)
-		content_layout.addWidget(mm_scroll_area)
-		
-		body_layout.addWidget(content_widget)
 		#endregion
 
 		#region СЕКТОР 4: Нижняя панель (Footer)
 		footer_widget = QWidget()
-		footer_widget.setObjectName("Footer")
 		footer_widget.setFixedHeight(*MathScripts.coordinate_scaling(self._coordinate.footer_height))
 
 		footer_layout = QHBoxLayout(footer_widget)
@@ -87,13 +77,20 @@ class MainMenu(QWidget):
 		creator_lbl.setFont(Fnt.shantell_sans(self._coordinate.version_font_size))
 		
 		btn_language = LanguageDropdown(parent=footer_widget)
-
+		#endregion
+		
+		header_layout.addStretch()
+		header_layout.addWidget(btn_theme)
+		
+		content_layout.addWidget(mm_scroll_area)
+		
 		footer_layout.addWidget(btn_language)
 		footer_layout.addStretch()
 		footer_layout.addWidget(creator_lbl)
-
+		
+		body_layout.addWidget(header_widget)
+		body_layout.addWidget(content_widget)
 		body_layout.addWidget(footer_widget)
-		#endregion
 
 	def update_theme(self):
 		self.setStyleSheet(f'''

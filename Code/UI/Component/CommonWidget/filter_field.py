@@ -37,7 +37,6 @@ class FilterButton(RoundedTextButton):
 		self._index = new_index
 
 	def clear_state(self):
-		self.filter_changed.emit(self._index, FilterState(2))
 		self._filter_state = FilterState(0)
 		self.set_color(Clr.filter_bg(self._filter_state))
 
@@ -56,7 +55,7 @@ class FilterField(QScrollArea):
 		self._generator: dict[FilterState, IdGenerator] = {FilterState.NEUTRAL: IdGenerator(), FilterState.DISABLE: IdGenerator(), FilterState.ENABLE: IdGenerator()}
 
 		if width is not None:
-			self.setFixedHeight(width)
+			self.setFixedWidth(width)
 		if height is not None:
 			self.setFixedHeight(height)
 
@@ -111,8 +110,23 @@ class FilterField(QScrollArea):
 		self._generator[state].release_id(index)
 
 	def clear_filter(self):
-		for btn in self._all_btn:
-			btn.clear_state()
+		for key in list(self._filter[FilterState.ENABLE].keys()):
+			btn_id = self._generator[FilterState.NEUTRAL].get_id()
+			self._filter[FilterState.NEUTRAL][btn_id] = self._filter[FilterState.ENABLE][key]
+			self._filter[FilterState.NEUTRAL][btn_id].change_index(btn_id)
+			self._filter[FilterState.NEUTRAL][btn_id].clear_state()
+			
+			del self._filter[FilterState.ENABLE][key]
+			self._generator[FilterState.ENABLE].release_id(key)
+			
+		for key in list(self._filter[FilterState.DISABLE].keys()):
+			btn_id = self._generator[FilterState.NEUTRAL].get_id()
+			self._filter[FilterState.NEUTRAL][btn_id] = self._filter[FilterState.DISABLE][key]
+			self._filter[FilterState.NEUTRAL][btn_id].change_index(btn_id)
+			self._filter[FilterState.NEUTRAL][btn_id].clear_state()
+			
+			del self._filter[FilterState.DISABLE][key]
+			self._generator[FilterState.DISABLE].release_id(key)
 
 	def resizeEvent(self, event):
 		super().resizeEvent(event)
