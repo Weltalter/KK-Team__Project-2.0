@@ -49,15 +49,15 @@ class ElementViewModeManager(QWidget):
 			self._modes[mode] = new_btn
 			self.main_layout.addWidget(new_btn)
 
+	def update_theme(self):
+		for btn in list(self._modes.values()):
+			btn.set_color(Clr.sub_bg())
+	
 	def paintEvent(self, event):
 		opt = QStyleOption()
 		opt.initFrom(self)
 		painter = QPainter(self)
 		self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
-	
-	def update_theme(self):
-		for btn in list(self._modes.values()):
-			btn.set_color(Clr.sub_bg())
 	
 	def showEvent(self, event):
 		super().showEvent(event)

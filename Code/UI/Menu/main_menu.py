@@ -4,6 +4,8 @@ from PyQt6.QtWidgets import (
 	QHBoxLayout,
 	QLabel,
 )
+from PyQt6.QtWidgets import QStyle, QStyleOption
+from PyQt6.QtGui import QPainter
 from Code.Utils.Scripts.math_scripts import MathScripts
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
@@ -19,6 +21,8 @@ class MainMenu(QWidget):
 		super().__init__()
 		self._coordinate = Coordinate()
 		self._message = Message()
+		
+		self.setObjectName("MainMenu")
 		
 		#region ПРОМЕЖУТОЧНЫЙ LAYOUT (Для разделения на основной контент и низ)
 		body_layout = QVBoxLayout(self)
@@ -93,13 +97,7 @@ class MainMenu(QWidget):
 
 	def update_theme(self):
 		self.setStyleSheet(f'''
-			#Header {{
-				background-color: {Clr.main_bg()};
-			}}
-			#Content {{
-				background-color: {Clr.main_bg()};
-			}}
-			#Footer {{
+			#MainMenu {{
 				background-color: {Clr.main_bg()};
 			}}
 			#VersionLabel {{
@@ -107,6 +105,12 @@ class MainMenu(QWidget):
 			}}
 		''')
 
+	def paintEvent(self, event):
+		opt = QStyleOption()
+		opt.initFrom(self)
+		painter = QPainter(self)
+		self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
+	
 	def showEvent(self, event):
 		super().showEvent(event)
 		self.update_theme()
