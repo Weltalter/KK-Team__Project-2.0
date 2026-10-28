@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (
 	QWidget,
 	QScrollArea,
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QTimer
+from PyQt6.QtCore import Qt, pyqtSignal
 from Code.Utils.Constants.coordinate import Coordinate
 from Code.Utils.Constants.theme import Clr, Fnt
 from Code.Utils.Scripts.id_generator import IdGenerator
@@ -19,11 +19,14 @@ class FilterButton(RoundedTextButton):
 	def __init__(self, index: int, text: str):
 		self._coordinate = Coordinate()
 
-		width, height = Fnt.px_size(Fnt.shantell_sans(10), text)
-		btn_width_margin = self._coordinate.button_margin * 6
-		btn_height_margin = self._coordinate.button_margin * 3
+		width, height = Fnt.px_size(Fnt.shantell_sans(self._coordinate.filter_btn_font_size), text)
+		btn_width_margin = self._coordinate.filter_width_margin
+		btn_height_margin = self._coordinate.filter_height_margin
 
-		super().__init__(width=width+btn_width_margin, height=height+btn_height_margin, radius=(height+btn_height_margin)//2, border_flag=False, font_size=10)
+		super().__init__(width=width+btn_width_margin,
+						 height=height+btn_height_margin,
+						 radius=(height+btn_height_margin)//2,
+						 border_flag=False, font_size=self._coordinate.filter_btn_font_size)
 
 		self._index = index
 		self.set_text(text)
@@ -34,7 +37,7 @@ class FilterButton(RoundedTextButton):
 		self._index = new_index
 
 	def clear_state(self):
-		self.filter_changed.emit(self._index, FilterState(1))
+		self.filter_changed.emit(self._index, FilterState(2))
 		self._filter_state = FilterState(0)
 		self.set_color(Clr.filter_bg(self._filter_state))
 
@@ -44,15 +47,19 @@ class FilterButton(RoundedTextButton):
 		self.set_color(Clr.filter_bg(self._filter_state))
 
 class FilterField(QScrollArea):
-	def __init__(self, height=100):
+	def __init__(self, width=None, height=None):
 		super().__init__()
 		self._coordinate = Coordinate()
 
 		self._filter: dict[FilterState, dict[int, FilterButton]] = {FilterState.NEUTRAL: {}, FilterState.DISABLE: {}, FilterState.ENABLE: {}}
 		self._all_btn: list[FilterButton] = []
 		self._generator: dict[FilterState, IdGenerator] = {FilterState.NEUTRAL: IdGenerator(), FilterState.DISABLE: IdGenerator(), FilterState.ENABLE: IdGenerator()}
-		
-		self.setFixedHeight(height)
+
+		if width is not None:
+			self.setFixedHeight(width)
+		if height is not None:
+			self.setFixedHeight(height)
+
 		self.setWidgetResizable(True)
 		self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 		self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -77,7 +84,7 @@ class FilterField(QScrollArea):
 			self.flow_layout.addWidget(btn, 0, 0)
 
 	def _reposition_buttons(self):
-		padding = 10
+		padding = self._coordinate.filter_btn_padding
 		x_cor = padding
 		y_cor = padding
 		max_width = self.viewport().width()

@@ -80,7 +80,7 @@ class MainMenu(QWidget):
 
 		creator_lbl = QLabel(self._message.m_version)
 		creator_lbl.setObjectName("VersionLabel")
-		creator_lbl.setFont(Fnt.shantell_sans(14))
+		creator_lbl.setFont(Fnt.shantell_sans(self._coordinate.version_font_size))
 		
 		btn_language = LanguageDropdown(parent=footer_widget)
 

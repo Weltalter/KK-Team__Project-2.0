@@ -2,15 +2,14 @@ from PyQt6.QtWidgets import (
 	QWidget,
 	QHBoxLayout,
 	QVBoxLayout,
-	QLabel,
 )
 from PyQt6.QtCore import Qt
 from Code.Utils.Constants.coordinate import Coordinate
-from Code.Utils.Constants.theme import Clr, Fnt
+from Code.Utils.Constants.theme import Clr
 from Code.Utils.Constants.message import Message
 from Code.UI.Component.element_view_mode_manager import ElementViewModeManager
 from Code.UI.Component.hashtag_filter_manager import HashtagFilterManager
-from Code.Utils.Constants.enum import ElementViewMode, FilterState
+from Code.Utils.Constants.enum import ElementViewMode
 
 
 class MovieMenu(QWidget):

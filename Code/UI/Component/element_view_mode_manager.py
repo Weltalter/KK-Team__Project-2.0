@@ -1,14 +1,12 @@
 from PyQt6.QtWidgets import (
 	QWidget,
 	QHBoxLayout,
-	QVBoxLayout,
-	QLabel,
 )
 from PyQt6.QtWidgets import QStyle, QStyleOption
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtGui import QPainter
 from Code.Utils.Constants.coordinate import Coordinate
-from Code.Utils.Constants.theme import Clr, Fnt
+from Code.Utils.Constants.theme import Clr
 from Code.Utils.Constants.message import Message
 from Code.Utils.Constants.enum import ElementViewMode
 from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
@@ -35,15 +33,16 @@ class ElementViewModeManager(QWidget):
 		self._message = Message()
 		
 		self.main_layout = QHBoxLayout(self)
-		self.main_layout.setContentsMargins(5, 5, 5, 5) # TODO: Поменять на файловые константы
-		self.main_layout.setSpacing(5)
+		margin = self._coordinate.view_mode_manager_margin
+		self.main_layout.setContentsMargins(margin, margin, margin, margin)
+		self.main_layout.setSpacing(self._coordinate.view_mode_btn_spacing)
 
 	def register_modes(self, modes: list[ElementViewMode]):
 		for mode in modes:
 			new_btn = ElementViewModeButton(mode=mode,
-											width=50, # TODO: Поменять на файловые константы
-											height=50,
-											radius=10,
+											width=self._coordinate.view_mode_btn_width,
+											height=self._coordinate.view_mode_btn_height,
+											radius=self._coordinate.view_mode_btn_radius,
 											parent=self)
 			new_btn.set_text(str(mode.value)) # TODO: Поменять на иконки
 			new_btn.raise_()

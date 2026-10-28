@@ -10,8 +10,8 @@ from Code.UI.Component.CommonWidget.rounded_text_button import RoundedTextButton
 
 
 class LanguageSubButton(RoundedTextButton):
-	def __init__(self, language_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, language_button=None, parent=None):
-		super().__init__(width=width, height=height, radius=radius, border_flag=True, parent=parent)
+	def __init__(self, language_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, font_size: int = 14, language_button=None, parent=None):
+		super().__init__(width=width, height=height, radius=radius, border_flag=True, font_size=font_size, parent=parent)
 		self.id = language_id
 		self._language_button = language_button
 		
@@ -50,6 +50,7 @@ class LanguageDropdown(RoundedTextButton):
 										width=self._width,
 										height=self._height,
 										radius=self._radius,
+										font_size=self._coordinate.language_btn_font_size,
 										language_button=self,
 										parent=self._parent)
 			new_btn.set_text(self._texts[index])

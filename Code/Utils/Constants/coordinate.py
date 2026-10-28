@@ -53,8 +53,27 @@ class Coordinate(metaclass=MetaSingleton):
 			self.footer_language_btn_height = self._config.getint('footer', 'language_btn_height')
 			self.footer_language_btn_radius = self._config.getint('footer', 'language_btn_radius')
 			self.footer_language_btn_offset = self._config.getint('footer', 'language_btn_offset')
+			self.language_btn_font_size = self._config.getint('footer', 'language_btn_font_size')
+			self.version_font_size = self._config.getint('footer', 'version_font_size')
 		else:
 			logging.critical('Секция "footer" не найдена')
+
+		if 'common_widget' in self._config:
+			self.view_mode_manager_margin = self._config.getint('common_widget', 'view_mode_manager_margin')
+			self.view_mode_btn_width = self._config.getint('common_widget', 'view_mode_btn_width')
+			self.view_mode_btn_height = self._config.getint('common_widget', 'view_mode_btn_height')
+			self.view_mode_btn_radius = self._config.getint('common_widget', 'view_mode_btn_radius')
+			self.view_mode_btn_spacing = self._config.getint('common_widget', 'view_mode_btn_spacing')
+			
+			self.hashtag_filter_manager_margin = self._config.getint('common_widget', 'hashtag_filter_manager_margin')
+			self.hashtag_filter_manager_height = self._config.getint('common_widget', 'hashtag_filter_manager_height')
+			
+			self.filter_width_margin = self._config.getint('common_widget', 'filter_width_margin')
+			self.filter_height_margin = self._config.getint('common_widget', 'filter_height_margin')
+			self.filter_btn_font_size = self._config.getint('common_widget', 'filter_btn_font_size')
+			self.filter_btn_padding = self._config.getint('common_widget', 'filter_btn_padding')
+		else:
+			logging.critical('Секция "common_widget" не найдена')
 
 		if 'main_menu' in self._config:
 			self.main_menu_margin = self._config.getint('main_menu', 'margin')
@@ -62,5 +81,6 @@ class Coordinate(metaclass=MetaSingleton):
 			self.main_menu_swipe_width = self._config.getint('main_menu', 'swipe_width')
 			self.main_menu_swipe_radius = self._config.getint('main_menu', 'swipe_radius')
 			self.main_menu_swipe_spacing = self._config.getint('main_menu', 'swipe_spacing')
+			self.swipe_font_size = self._config.getint('main_menu', 'swipe_font_size')
 		else:
 			logging.critical('Секция "main_menu" не найдена')
