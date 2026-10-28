@@ -72,6 +72,14 @@ class Clr():
 		return cls.all_theme[cls._current_theme_id][ColorName.FONT]
 
 	@classmethod
+	def black(cls) -> str:
+		return '#000000'
+
+	@classmethod
+	def white(cls) -> str:
+		return '#ffffff'
+
+	@classmethod
 	def filter_bg(cls, state: FilterState) -> str:
 		return cls.filter_field[state]
 	
