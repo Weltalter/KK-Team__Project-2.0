@@ -40,19 +40,8 @@ class MovieMenu(QWidget):
 		search_filter_area_layout.setSpacing(0)
 
 		#region Область поисковой строки
-		search_area_widget = QWidget()
-		search_area_widget.setStyleSheet("background-color: transparent;")
-
-		search_area_layout = QHBoxLayout(search_area_widget)
-		search_area_layout.setContentsMargins(0, 0, 0, 0)
-		search_area_layout.setSpacing(10)
-
-		test = RoundedTextButton(width=40, height=40, radius=5, border_flag=True)
-		test.set_text("X")
-		test.set_color(Clr.black())
-
-		test_line = SearchLine(width=600, height=40)
-		test_line.setStyleSheet("background-color: red;")
+		search_line_widget = SearchLine(width=600, height=50)
+		search_line_widget.init_content()
 		#endregion
 		
 		#region Область фильтра
@@ -66,8 +55,6 @@ class MovieMenu(QWidget):
 		#region Область хэштегов
 		hashtag_choice_widget = HashtagFilterManager()
 		hashtag_choice_widget.setStyleSheet("background-color: transparent;")
-		
-		test.clicked.connect(hashtag_choice_widget.filter_field.clear_filter)
 		#endregion
 
 		#region Область размера иконок
@@ -90,13 +77,10 @@ class MovieMenu(QWidget):
 		content_area_layout.setSpacing(0)
 		#endregion
 
-		search_area_layout.addWidget(test, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
-		search_area_layout.addWidget(test_line, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
-
 		filter_area_layout.addWidget(hashtag_choice_widget, stretch=1)
 		filter_area_layout.addWidget(element_view_mode_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
 
-		search_filter_area_layout.addWidget(search_area_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
+		search_filter_area_layout.addWidget(search_line_widget, stretch=0, alignment=Qt.AlignmentFlag.AlignHCenter)
 		search_filter_area_layout.addWidget(filter_area_widget, stretch=1)
 
 		main_layout.addWidget(search_filter_area_widget, stretch=0)

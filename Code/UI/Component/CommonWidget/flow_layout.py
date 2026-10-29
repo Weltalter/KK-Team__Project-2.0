@@ -3,10 +3,12 @@ from PyQt6.QtCore import QSize, QRect
 
 
 class FlowItem:
-	def __init__(self, item: QWidgetItem, x: int, y: int):
+	def __init__(self, item: QWidgetItem, x: int, y: int, fill_width: bool = False, fill_height: bool = False):
 		self.item = item
 		self.x = x
 		self.y = y
+		self.fill_width = fill_width
+		self.fill_height = fill_height
 
 class FlowLayout(QLayout):
 	def __init__(self, parent=None):
@@ -18,12 +20,12 @@ class FlowLayout(QLayout):
 		while item:
 			item = self.takeAt(0)
 
-	def addWidget(self, widget, x: int = 0, y: int = 0):
+	def addWidget(self, widget, x: int = 0, y: int = 0, fill_width: bool = False, fill_height: bool = False):
 		self.addChildWidget(widget)
-		self.addItem(QWidgetItem(widget), x, y)
+		self.addItem(QWidgetItem(widget), x, y, fill_width, fill_height)
 
-	def addItem(self, item: QWidgetItem, x: int = 0, y: int = 0):
-		self._items.append(FlowItem(item, x, y))
+	def addItem(self, item: QWidgetItem, x: int = 0, y: int = 0, fill_width: bool = False, fill_height: bool = False):
+		self._items.append(FlowItem(item, x, y, fill_width, fill_height))
 		self.invalidate()
 
 	def count(self) -> int:
@@ -45,12 +47,27 @@ class FlowLayout(QLayout):
 		
 		for coord_item in self._items:
 			item_size = coord_item.item.sizeHint()
+			
+			if coord_item.fill_width:
+				actual_width = rect.width() - coord_item.x
+				actual_x = rect.x() + coord_item.x
+			else:
+				actual_width = item_size.width()
+				actual_x = rect.x() + coord_item.x
+
+			if coord_item.fill_height:
+				actual_height = rect.height() - coord_item.y
+				actual_y = rect.y() + coord_item.y
+			else:
+				actual_height = item_size.height()
+				actual_y = rect.y() + coord_item.y
+			
 			coord_item.item.setGeometry(
 				QRect(
-					rect.x() + coord_item.x, 
-					rect.y() + coord_item.y, 
-					item_size.width(), 
-					item_size.height()
+					actual_x, 
+					actual_y, 
+					actual_width, 
+					actual_height
 				)
 			)
 
