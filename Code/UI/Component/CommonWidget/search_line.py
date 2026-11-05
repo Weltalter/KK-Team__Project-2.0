@@ -28,7 +28,8 @@ class SearchLine(QWidget):
 		
 		self.main_layout = FlowLayout(self)
 		self.search_input = QLineEdit()
-		self.test = RoundedTextButton(30, 30, 10, True, 12)
+		self.test = RoundedTextButton(25, 25, 12, True, 12)
+		self.test1 = RoundedTextButton(25, 25, 12, True, 12)
 
 	def init_content(self):
 		self.search_input.setObjectName("SearchImput")
@@ -38,10 +39,11 @@ class SearchLine(QWidget):
 		self.search_input.setFixedHeight(40)
 
 		self.test.set_text('1')
-		self.test.set_color("#0bc141c0")
+		self.test1.set_text('2')
 
 		self.main_layout.addWidget(self.search_input, 5, 5, fill_width=True, fill_height=True)
-		self.main_layout.addWidget(self.test, 12, 12)
+		self.main_layout.addWidget(self.test, 10, 15, align_right=True)
+		self.main_layout.addWidget(self.test1, 40, 15, align_right=True)
 	
 	def update_theme(self):
 		self.setStyleSheet(f'''
@@ -53,6 +55,8 @@ class SearchLine(QWidget):
 				padding: 5px 75px 5px 8px;                  /* Внутренние отступы, чтобы текст не прилипал к краям */
 			}}
 		''')
+		self.test.set_color(Clr.sub_bg())
+		self.test1.set_color(Clr.sub_bg())
 		#self.setStyleSheet("background-color: red;")
 	
 	def paintEvent(self, event):

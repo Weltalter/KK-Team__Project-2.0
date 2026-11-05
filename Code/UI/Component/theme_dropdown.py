@@ -11,7 +11,8 @@ from Code.UI.Component.CommonWidget.rounded_icon_button import RoundedIconButton
 
 class ThemeSubButton(RoundedIconButton):
 	def __init__(self, theme_id: int = 0, width: int = 20, height: int = 20, radius: int = 20, path_to_icon: str = None, theme_button=None, parent=None):
-		super().__init__(width=width, height=height, radius=radius, path_to_icon=path_to_icon, parent=parent)
+		super().__init__(width=width, height=height, radius=radius, path_to_icon=path_to_icon, border_flag=True, parent=parent)
+		self.setIcon()
 		self.id = theme_id
 		self._theme_button = theme_button
 		
@@ -32,7 +33,7 @@ class ThemeDropdown(RoundedIconButton):
 		self._height = MathScripts.coordinate_scaling(self._coordinate.header_theme_btn_height)[0]
 		self._radius = MathScripts.coordinate_scaling(self._coordinate.header_theme_btn_radius)[0]
 
-		super().__init__(width=self._width, height=self._height, radius=self._radius, parent=self._parent)
+		super().__init__(width=self._width, height=self._height, radius=self._radius, border_flag=True, parent=self._parent)
 		
 		self._spawned_btn: dict[int, ThemeSubButton] = {}
 		self._icons: dict[int, str] = {i: self._icon.i_themes[i] for i in range(len(self._icon.i_themes))}

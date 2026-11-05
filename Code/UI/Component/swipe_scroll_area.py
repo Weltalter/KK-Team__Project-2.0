@@ -33,7 +33,8 @@ class SwipeWidget(QWidget):
 		self.lbl = None
 	
 	def set_button(self, width: int = 20, height: int = 20, radius: int = 10, path_to_icon=None):
-		self.btn = RoundedIconButton(width=width, height=height, radius=radius, path_to_icon=path_to_icon)
+		self.btn = RoundedIconButton(width=width, height=height, radius=radius, path_to_icon=path_to_icon, border_flag=True)
+		self.btn.setIcon()
 		self.swipe_layout.addWidget(self.btn)
 
 	def set_label(self, text: str = ''):

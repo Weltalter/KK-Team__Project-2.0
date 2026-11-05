@@ -9,7 +9,7 @@ from Code.Utils.Constants.icon import Icon
 
 
 class RoundedIconButton(QPushButton):
-	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, path_to_icon: str = None, parent=None):
+	def __init__(self, width: int = 20, height: int = 20, radius: int = 0, path_to_icon: str = None, border_flag: bool = False, parent=None):
 		super().__init__(parent=parent)
 		self.setFixedSize(width, height)
 
@@ -17,18 +17,28 @@ class RoundedIconButton(QPushButton):
 		self._icon = Icon()
 
 		self.radius = radius
+		self._icon_path = path_to_icon
+		self._border_flag = border_flag
 		self._current_pixmap = None
 		self._base_pixmap = None
 		self._hover_pixmap = None
 		self._pressed_pixmap = None
 
+		self._bg_color = None
+
 		if path_to_icon:
 			self.setIcon(path_to_icon)
 
-	def setIcon(self, path_to_icon: str):
+	def setIcon(self, path_to_icon: str = None, bg_color: str = None):
+		_icon: str = None
 		if path_to_icon is None:
-			path_to_icon = self._icon.i_reload
-		if path_to_icon.lower().endswith('.svg'):
+			_icon = self._icon_path
+		else:
+			_icon = path_to_icon
+
+		if _icon is None:
+			_icon = self._icon.i_reload
+		if _icon.lower().endswith('.svg'):
 			screen = self.screen() if self.window() else None
 			dpr = screen.devicePixelRatio() if screen else 1.0
 			
@@ -36,14 +46,17 @@ class RoundedIconButton(QPushButton):
 			target_height = int(self.height() * dpr)
 			
 			base = QPixmap(target_width, target_height)
-			base.fill(Qt.GlobalColor.transparent)
+			if bg_color is None:
+				base.fill(Qt.GlobalColor.transparent)
+			else:
+				base.fill(QColor(bg_color))
 			
-			renderer = QSvgRenderer(path_to_icon)
+			renderer = QSvgRenderer(_icon)
 			painter = QPainter(base)
 			painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 			painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
 			
-			padding = 4.0 * dpr
+			padding = 0
 			
 			render_rect = QRectF(
 				padding, 
@@ -57,7 +70,7 @@ class RoundedIconButton(QPushButton):
 			
 			base.setDevicePixelRatio(dpr)
 		else:
-			base = QPixmap(path_to_icon)
+			base = QPixmap(_icon)
 			if base.isNull():
 				return
 		
@@ -79,7 +92,7 @@ class RoundedIconButton(QPushButton):
 		painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 		painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
 
-		rect = QRectF(1.0, 1.0, float(self.width() - 2), float(self.height() - 2))
+		rect = QRectF(1, 1, float(self.width()) - 2, float(self.height()) - 2)
 		path = QPainterPath()
 		path.addRoundedRect(rect, self.radius, self.radius)
 
@@ -98,10 +111,10 @@ class RoundedIconButton(QPushButton):
 			painter.drawPixmap(target_rect, self._current_pixmap, QRectF(self._current_pixmap.rect()))
 			painter.restore()
 
-		pen = QPen(QColor(Clr.main_brd()), 2)
-		painter.setPen(pen)
-		
-		painter.drawPath(path)
+		if self._border_flag:
+			pen = QPen(QColor(Clr.main_brd()), 2)
+			painter.setPen(pen)
+			painter.drawPath(path)
 
 		painter.end()
 

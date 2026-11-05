@@ -41,7 +41,7 @@ class RoundedTextButton(QPushButton):
 		painter = QPainter(self)
 		painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
-		rect = QRectF(0, 0, float(self.width()), float(self.height()))
+		rect = QRectF(1, 1, float(self.width()) - 2, float(self.height()) - 2)
 		path = QPainterPath()
 		path.addRoundedRect(rect, self.radius, self.radius)
 
